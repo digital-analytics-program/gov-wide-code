@@ -9,6 +9,7 @@
  * v1.5 121122 : Change to sub-domain level visits (cookies). _DOMReady delays tracking so goes last. ECereto Review. JSHinted
  * v1.6 130107 : Added Agency, sub-agency and Cookie timeout variables and functions
  * v1.61 130115 : Fix for (elm in ... now for (var elm = 0 Added Agency, sub-agency and Cookie timeout variables and functions
+ * v1.62 130123 : Using Slots 33, 34, 35 for Page Level Custom Vars
 
  Brian Katz, Cardinal Path - Google Analytics Government Wide Site Usage Measurement
  
@@ -20,8 +21,8 @@ var _gas = _gas || [];
 var GSA_CPwrapGA = (function () {
          
         var oCONFIG = {
-  			// System parameters - don't change without discussion with CP
-            VERSION : 'v1.61 130115 : Agency, sub-agency, Cookie timeout variables & functions Fix for (elm in ...',
+				// System parameters - don't change without discussion with GSA
+            VERSION : 'v1.62 130123 : Using Slots 33, 34, 35 for Page Level Custom Vars',
             GAS_PATH : '',
             SEARCH_PARAMS : 'querytext|nasaInclude|k|QT', // ver 1.4 Normalize query params
             HOST_DOMAIN_OR : document.location.hostname, // only required if tracking at a sub-domain level eg sub.example.gov and not at example.gov
@@ -43,9 +44,9 @@ var GSA_CPwrapGA = (function () {
 			// Object for centralized control of all Custom Variables reported in this sript file.
 			// Since GSA code only ever sets page level CVs, scope is always 3
         var oCVs = {
-            agency		: { key : 'Agency', slot : 3, scope : 3},
-            sub_agency	: { key : 'Sub-Agency',slot : 4, scope : 3},
-            version		: { key : 'Code Ver',slot : 5, scope : 3
+            agency		: { key : 'Agency', slot : 33, scope : 3},
+            sub_agency	: { key : 'Sub-Agency',slot : 34, scope : 3},
+            version		: { key : 'Code Ver',slot : 35, scope : 3
           }
         }
         
