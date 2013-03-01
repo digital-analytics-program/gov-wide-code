@@ -1,5 +1,5 @@
-*
-Brian Katz, Cardinal Path - Google Analytics Government Wide Site Usage Measurement
+/*
+ 
  * v0.1 121011 : First Test Version
  * v1.0 121012 : Added Cookie Synchronizing and filtered out Outbound tracking of cross- and sub-domain links
  * v1.1 121015 : Changed cross-domain to use setAllowAnchor and fixed problem with some links
@@ -8,16 +8,21 @@ Brian Katz, Cardinal Path - Google Analytics Government Wide Site Usage Measurem
  * v1.4 121015-4 : Multiple Search parameters and XDT links tracked as events
  * v1.5 121122 : Change to sub-domain level visits (cookies). _DOMReady delays tracking so goes last. ECereto Review. JSHinted
  * v1.6 130107 : Added Agency, sub-agency and Cookie timeout variables and functions
- */
+ * v1.61 130115 : Fix for (elm in ... now for (var elm = 0 Added Agency, sub-agency and Cookie timeout variables and functions
+ * v1.62 130123 : Using Slots 33, 34, 35 for Page Level Custom Vars
+
+ Brian Katz, Cardinal Path - Google Analytics Government Wide Site Usage Measurement
+ 
+  */
 
 var _gaq = _gaq || [];
 var _gas = _gas || [];
 
 var GSA_CPwrapGA = (function () {
-        
+         
         var oCONFIG = {
-  			// System parameters - don't change without discussion with CP
-            VERSION : 'v1.6 130107 : Agency, sub-agency, Cookie timeout variables & functions',
+				// System parameters - don't change without discussion with GSA
+            VERSION : 'v1.62 130123 : Using Slots 33, 34, 35 for Page Level Custom Vars',
             GAS_PATH : '',
             SEARCH_PARAMS : 'querytext|nasaInclude|k|QT', // ver 1.4 Normalize query params
             HOST_DOMAIN_OR : document.location.hostname, // only required if tracking at a sub-domain level eg sub.example.gov and not at example.gov
@@ -35,13 +40,13 @@ var GSA_CPwrapGA = (function () {
         
         var instance = this;
 		var domainHash;
-		
+
 			// Object for centralized control of all Custom Variables reported in this sript file.
 			// Since GSA code only ever sets page level CVs, scope is always 3
         var oCVs = {
-            agency		: { key : 'Agency', slot : 3, scope : 3},
-            sub_agency	: { key : 'Sub-Agency',slot : 4, scope : 3},
-            version		: { key : 'Code Ver',slot : 5, scope : 3
+            agency		: { key : 'Agency', slot : 33, scope : 3},
+            sub_agency	: { key : 'Sub-Agency',slot : 34, scope : 3},
+            version		: { key : 'Code Ver',slot : 35, scope : 3
           }
         }
         
@@ -56,7 +61,7 @@ var GSA_CPwrapGA = (function () {
             if (!oCONFIG.HOST_DOMAIN_OR)
                 oCONFIG.HOST_DOMAIN_OR = getDomainNameGovMil();
             oCONFIG.HOST_DOMAIN_OR = oCONFIG.HOST_DOMAIN_OR.replace(/^www\./i, '');
-			
+
             var ary = setHashAndPeriod(oCONFIG.HOST_DOMAIN_OR);
             oCONFIG.LEADING_PERIOD = ary[1];
             
@@ -65,7 +70,7 @@ var GSA_CPwrapGA = (function () {
 				_gaq.push (['_gat._anonymizeIp']);
 			}
             _gas.push(['GSA_CP._setDomainName', oCONFIG.LEADING_PERIOD + oCONFIG.HOST_DOMAIN_OR]);
-			
+
 			setGAcookieTimeouts();
             
             if (ary[0]) {
@@ -96,7 +101,7 @@ var GSA_CPwrapGA = (function () {
                         }
                     }
                 ]);
-				
+
             // Add hook to _trackPageview to standardize search parameters
             _gas.push(['_addHook', '_trackPageview', function (pageName) {
                         var re = new RegExp('([?&])(' + oCONFIG.SEARCH_PARAMS + ')(=[^&]*)', 'i');
@@ -109,7 +114,7 @@ var GSA_CPwrapGA = (function () {
             
         };
         
-		
+
         /**
          *  Sets the cookie timeouts if values have been set in oCONFIG at the top of this file
          *
@@ -120,8 +125,8 @@ var GSA_CPwrapGA = (function () {
             if (oCONFIG.VISITOR_TIMEOUT > -1) _gaq.push(['GSA_CP._setVisitorCookieTimeout', oCONFIG.VISITOR_TIMEOUT*1000*60*60*24*30.416667]);	// Specified in months - GA uses 30.416.. as the number of days/month
             if (oCONFIG.CAMPAIGN_TIMEOUT > -1) _gaq.push(['GSA_CP._setCampaignCookieTimeout', oCONFIG.CAMPAIGN_TIMEOUT*1000*60*60*24*30.416667]);	// Specified in months
 		}
-		
-		
+
+
         /**
          *  Returns the domain and top-level domain  - eg example.com, example.ca example.co.uk, example.com.au or ipaddress
          *
@@ -196,7 +201,7 @@ var GSA_CPwrapGA = (function () {
             
             domainHash = getDomainHash(strCookieDomain);
             
-            for (var elm in utmaCookies) {
+            for (var elm = 0; elm < utmaCookies.length ; elm++) {
                 utmaCookies[elm] = utmaCookies[elm].substr(7); // strip __utma= leaving only the hash
                 
                 // look for the cookie with the matching domain hash
@@ -216,7 +221,7 @@ var GSA_CPwrapGA = (function () {
             
             return retVals;
         };
-		
+
         /**
          *  Sets the Custom Variables for Agency and sub-Agency based on the agency and sub_agency objects in oCVs
          *
@@ -240,10 +245,10 @@ var GSA_CPwrapGA = (function () {
          */
         var setCustomVar = function (value, oCV) {
 			if (!value) return;
-			
+
 			var pageTracker = _gat._getTrackerByName(); // Gets the default tracker.
 			var visitorCustomVarValue = pageTracker._getVisitorCustomVar(oCV.slot);
-			
+
 			if (!visitorCustomVarValue)
 				_gas.push(['GSA_CP._setCustomVar', oCV.slot, oCV.key, value, oCV.scope]); // Record version in Page Level (oCV.scope ) Custom Variable specified in oCV.slot
         }
@@ -347,7 +352,7 @@ var GSA_CPwrapGA = (function () {
                 .replace(/\ +$/, '')
                 .replace(/\s+/g, '_')
                 .replace(/[áàâãåäæª]/g, 'a')
-                .replace(/[éèêë?€]/g, 'e')
+                .replace(/[éèêë?]/g, 'e')
                 .replace(/[íìîï]/g, 'i')
                 .replace(/[óòôõöøº]/g, 'o')
                 .replace(/[úùûü]/g, 'u')
@@ -2074,4 +2079,5 @@ _gas.push(function () {
             });
     });
 
+ 
  
