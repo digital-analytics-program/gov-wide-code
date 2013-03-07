@@ -10,6 +10,7 @@
  * v1.6 130107 : Added Agency, sub-agency and Cookie timeout variables and functions
  * v1.61 130115 : Fix for (elm in ... now for (var elm = 0 Added Agency, sub-agency and Cookie timeout variables and functions
  * v1.62 130123 : Using Slots 33, 34, 35 for Page Level Custom Vars
+ * v1.63 130307 : Added mp4 ext to downloads
 
  Brian Katz, Cardinal Path - Google Analytics Government Wide Site Usage Measurement
  
@@ -854,7 +855,7 @@ var GSA_CPwrapGA = (function () {
             opts['category'] = opts['category'] || 'Download';
             
             var ext = 'xls,xlsx,doc,docx,ppt,pptx,pdf,txt,zip';
-            ext += ',rar,7z,exe,wma,mov,avi,wmv,mp3,csv,tsv';
+            ext += ',rar,7z,exe,wma,mov,avi,wmv,mp3,mp4,csv,tsv';
             ext = ext.split(',');
             opts['extensions'] = opts['extensions'].concat(ext);
             
