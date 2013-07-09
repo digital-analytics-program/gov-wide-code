@@ -9,10 +9,11 @@
  * v1.6 130107 : Added Agency, sub-agency and Cookie timeout variables and functions
  * v1.61 130115 : Fix for (elm in ... now for (var elm = 0 Added Agency, sub-agency and Cookie timeout variables and functions
  * v1.62 130123 : Using Slots 33, 34, 35 for Page Level Custom Vars
+ * v1.7 130503 : Single File Version
 */
 /**
  * @preserve
- * v1.7 130503 : Single File Version
+ * v1.71 130708 : Single File s/d Ver and AGENCY/SUB defaulting to hostnames instead of 'unspecified'
  * Brian Katz, Cardinal Path - Google Analytics Government Wide Site Usage Measurement
 **/
 
@@ -21,16 +22,20 @@ var _gas = _gas || [];
 
 var GSA_CPwrapGA = (function () {
     
+        var instance = this;
+  	var domainHash;
+		var dlh = document.location.hostname;
+		
         var oCONFIG = {
-  			// System parameters - don't change without discussion with CP
-            VERSION : 'v1.7 130503 : Single File Version',
+				// System parameters - don't change without discussion with CP
+            VERSION : 'v1.71 130708 : Single File sd Ver and AGENCY/SUB defaulting to hostnames',
             GAS_PATH : '',
             SEARCH_PARAMS : 'querytext|nasaInclude|k|QT', // ver 1.4 Normalize query params
-            HOST_DOMAIN_OR : document.location.hostname, // only required if tracking at a sub-domain level eg sub.example.gov and not at example.gov
+            HOST_DOMAIN_OR : dlh, // default is to track sub-domains individually - override set in _setParams()
             LEADING_PERIOD : '.',
             GWT_UAID 	   : 'UA-33523145-1',
 
-				// GSA Configurable parameters - ver 1.6
+				// GSA Configurable parameters - ver 1.6 - 
             AGENCY : '',				// Singular, consistent, succinct, user-friendly abbreviation for the agency.  E.g. DOJ, DOI, Commerce
             VISITOR_TIMEOUT 	: -1,	// Specified in months, 0 = session = when browser closes, -1 = don't change default (24 months)
             CAMPAIGN_TIMEOUT 	: -1,	// Specified in months, 0 = session = when browser closes, -1 = don't change default (6 months)
@@ -38,12 +43,8 @@ var GSA_CPwrapGA = (function () {
             VISIT_TIMEOUT		: -1,	// Specified in minutes, 0 = session = when browser closes, -1 = don't change default (30 minutes)
 			ANONYMIZE_IP		: true,	// only change to false in rare circumustances where GeoIP location accuracy is critical
 			YOUTUBE 			: false
-
 		};
         
-        var instance = this;
-		var domainHash;
-		
 			// Object for centralized control of all Custom Variables reported in this sript file.
 			// Since GSA code only ever sets page level CVs, scope is always 3
         var oCVs = {
@@ -61,10 +62,7 @@ var GSA_CPwrapGA = (function () {
         var _init = function () {
             
 			_setParams();
-			
-            // Returns domain name, not sub-domains and with no leading period e.g.  returns usa.gov on http://xyz.usa.gov
-            if (!oCONFIG.HOST_DOMAIN_OR)
-                oCONFIG.HOST_DOMAIN_OR = getDomainNameGovMil();
+							
             oCONFIG.HOST_DOMAIN_OR = oCONFIG.HOST_DOMAIN_OR.replace(/^www\./i, '');
 			
             var ary = setHashAndPeriod(oCONFIG.HOST_DOMAIN_OR);
@@ -132,7 +130,7 @@ var GSA_CPwrapGA = (function () {
          * @param {string} strURL a hostname or full url
          */
         var getDomainNameGovMil = function (strURL) {
-            strURL = strURL || document.location.hostname;
+            strURL = strURL || dlh;
             
             // extract the host name since full url may have been provided
             strURL = strURL.match(/^(?:https?:\/\/)?([^\/:]+)/)[1]; // this cannot error unless running as file://
@@ -193,12 +191,12 @@ var GSA_CPwrapGA = (function () {
             var utmaCookies = document.cookie.match(/__utma=[^.]+/g);
             var retVals = [false, '']; // setAllowHash = false and leading period = ''
             
-            // if no cookies found
+				// if no cookies found
             if (!utmaCookies)
                 return retVals;
             
             domainHash = getDomainHash(strCookieDomain);
-            
+			
             for (var elm = 0; elm < utmaCookies.length ; elm++) {
                 utmaCookies[elm] = utmaCookies[elm].substr(7); // strip __utma= leaving only the hash
                 
@@ -305,26 +303,30 @@ var GSA_CPwrapGA = (function () {
 						oCONFIG.CAMPAIGN_TIMEOUT = parseInt(param[1]);
 					} else if ('pua' == param[0]) {
 						oCONFIG.PARALLEL_UA = param[1].toUpperCase();
+					} else if ('devua' == param[0]) {
+						oCONFIG.GWT_UAID = param[1].toUpperCase();
 					} else if ('aip' == param[0]) {
 						oCONFIG.ANONYMIZE_IP = ('true' == param[1]) ? true : !('false' == param[1]);
 					} else if ('yt' == param[0]) {
 						oCONFIG.YOUTUBE = ('true' == param[1]) ? true : !('false' == param[1]);
+					} else if ('sdor' == param[0]) {	// subdomain override 
+							// default is false - tracking will be at the sub-domain level
+						if (('true' == param[1]) ? true : !('false' == param[1])) {
+							// getDomainNameGovMil() returns domain name, not sub-domains and with no leading period e.g.  returns usa.gov on http://xyz.usa.gov
+							oCONFIG.HOST_DOMAIN_OR = getDomainNameGovMil();
+						} else {
+							oCONFIG.HOST_DOMAIN_OR = dlh;
+						}
 					}
 				}
 			}
 			
 				// Defaults for Agency and Sub-Agency.  Others are in the oCONFIG object
-			if (oCONFIG.AGENCY) {
-				if (oCONFIG.SUB_AGENCY) {
-					oCONFIG.SUB_AGENCY = oCONFIG.AGENCY + ' - ' + oCONFIG.SUB_AGENCY;
-				} else {
-					oCONFIG.SUB_AGENCY = oCONFIG.AGENCY + ' - ' + document.location.hostname;
-				}
-			} else {
-				oCONFIG.AGENCY = 'unspecified';
-			}
-			oCONFIG.SUB_AGENCY = oCONFIG.SUB_AGENCY || 'unspecified';
+			oCONFIG.AGENCY = oCONFIG.AGENCY || 'unspecified:' + oCONFIG.HOST_DOMAIN_OR;
+			oCONFIG.SUB_AGENCY = oCONFIG.SUB_AGENCY || 'unspecified:' + dlh;
 			
+			oCONFIG.SUB_AGENCY = oCONFIG.AGENCY + ' - ' + oCONFIG.SUB_AGENCY
+
 			oCONFIG.CAMPAIGN_TIMEOUT = Math.min(oCONFIG.CAMPAIGN_TIMEOUT, oCONFIG.VISITOR_TIMEOUT);
 		}
         _init();
@@ -893,7 +895,7 @@ var _trackDownloads = function (opts) {
     opts['category'] = opts['category'] || 'Download';
 
     var ext = 'xls,xlsx,doc,docx,ppt,pptx,pdf,txt,zip';
-    ext += ',rar,7z,exe,wma,mov,avi,wmv,mp3,mp4,csv,tsv';
+    ext += ',rar,7z,gz,tgz,exe,wma,mov,avi,wmv,mp3,mp4,csv,tsv';
     ext = ext.split(',');
     opts['extensions'] = opts['extensions'].concat(ext);
 
