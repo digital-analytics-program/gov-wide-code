@@ -23,7 +23,7 @@ var _gas = _gas || [];
 var GSA_CPwrapGA = (function () {
     
         var instance = this;
-  	var domainHash;
+		var domainHash;
 		var dlh = document.location.hostname;
 		
         var oCONFIG = {
@@ -895,7 +895,7 @@ var _trackDownloads = function (opts) {
     opts['category'] = opts['category'] || 'Download';
 
     var ext = 'xls,xlsx,doc,docx,ppt,pptx,pdf,txt,zip';
-    ext += ',rar,7z,gz,tgz,exe,wma,mov,avi,wmv,mp3,mp4,csv,tsv';
+    ext += ',rar,7z,gz,tgz,exe,wma,mov,avi,wmv,mp3,mp4,csv,tsv,mobi,epub';
     ext = ext.split(',');
     opts['extensions'] = opts['extensions'].concat(ext);
 
