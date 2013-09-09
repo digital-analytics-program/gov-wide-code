@@ -11,32 +11,31 @@
  * v1.62 130123 : Using Slots 33, 34, 35 for Page Level Custom Vars
  * v1.7 130503 : Single File Version
  * v1.71 130708 : Single File s/d Ver and AGENCY/SUB defaulting to hostnames instead of 'unspecified'
+ * v1.72 130719 : SFS PUAs and exts
 */
 /**
  * @preserve
- * v1.72 130719 : SFS PUAs and exts
- * Brian Katz, Cardinal Path - Google Analytics Government Wide Site Usage Measurement
+ * Google Analytics Government Wide Site Usage Measurement Reference:Brian Katz, Cardinal Path
+ * v1.73 130827 : Final Katz-CP Version. exts, multiple devuas
 **/
 
 var _gaq = _gaq || [];
 var _gas = _gas || [];
 
 var GSA_CPwrapGA = (function () {
-    
-        var instance = this;
+
 		var domainHash;
 		var dlh = document.location.hostname;
 		
         var oCONFIG = {
 				// System parameters - don't change without discussion with CP
-            VERSION : 'v1.72 130719 : SFS PUAs and exts',
-            GAS_PATH : '',
+            VERSION : 'v1.73 130827 : Final Katz-CP Version. exts, multiple devuas',
             SEARCH_PARAMS : 'querytext|nasaInclude|k|QT', // ver 1.4 Normalize query params
             HOST_DOMAIN_OR : dlh, // default is to track sub-domains individually - override set in _setParams()
             LEADING_PERIOD : '.',
-            GWT_UAID 	   : 'UA-33523145-1',
+            GWT_UAID 	   : ['UA-33523145-1'],
 
-				// GSA Configurable parameters - ver 1.6 - 
+				// GSA Configurable parameters - ver 1.6 - extended in 1.7x with external parameters
             AGENCY : '',				// Singular, consistent, succinct, user-friendly abbreviation for the agency.  E.g. DOJ, DOI, Commerce
             VISITOR_TIMEOUT 	: -1,	// Specified in months, 0 = session = when browser closes, -1 = don't change default (24 months)
             CAMPAIGN_TIMEOUT 	: -1,	// Specified in months, 0 = session = when browser closes, -1 = don't change default (6 months)
@@ -69,10 +68,15 @@ var GSA_CPwrapGA = (function () {
             var ary = setHashAndPeriod(oCONFIG.HOST_DOMAIN_OR);
             oCONFIG.LEADING_PERIOD = ary[1];
             
-            _gas.push(['GSA_CP1._setAccount', oCONFIG.GWT_UAID]);
+
+            // ver 1.73 allows QS UA ids: _gas.push(['GSA_CP1._setAccount', oCONFIG.GWT_UAID]);
+			for (var i=0;i<oCONFIG.GWT_UAID.length;i++) {
+				_gas.push(['GSA_CP' + (i+1) + '._setAccount', oCONFIG.GWT_UAID[i]]);
+			}
+			
 			if (oCONFIG.PARALLEL_UA && !oCONFIG.DEBUG_MODE)
-				for (var i=0;i<oCONFIG.PARALLEL_UA.length;i++) {
-					_gas.push(['GSA_CP' + (i+2) + '._setAccount', oCONFIG.PARALLEL_UA[i]]);
+				for (i=oCONFIG.GWT_UAID.length;i<oCONFIG.PARALLEL_UA.length + oCONFIG.GWT_UAID.length;i++) {
+					_gas.push(['GSA_CP' + (i+1) + '._setAccount', oCONFIG.PARALLEL_UA[i]]);
 				}
 			
             if (oCONFIG.ANONYMIZE_IP) {
@@ -168,10 +172,10 @@ var GSA_CPwrapGA = (function () {
          */
         var getDomainHash = function (strCookieDomain) {
             
-            fromGaJs_h = function (e) {
+            var fromGaJs_h = function (e) {
                 return undefined == e || "-" == e || "" == e;
             };
-            fromGaJs_s =
+            var fromGaJs_s =
             function (e) {
                 var k = 1,
                 a = 0,
@@ -316,6 +320,7 @@ var GSA_CPwrapGA = (function () {
 						oCONFIG.PARALLEL_UA = oCONFIG.PARALLEL_UA.split(',');
 					} else if ('devua' == param[0]) {
 						oCONFIG.GWT_UAID = param[1].toUpperCase();
+						oCONFIG.GWT_UAID = oCONFIG.GWT_UAID.split(',');
 						oCONFIG.DEBUG_MODE = true;
 					} else if ('exts' == param[0]) {
 						oCONFIG.EXTS = param[1].toLowerCase();
@@ -338,7 +343,7 @@ var GSA_CPwrapGA = (function () {
 			
 				// Defaults for Agency and Sub-Agency.  Others are in the oCONFIG object
 			oCONFIG.AGENCY = oCONFIG.AGENCY || 'unspecified:' + oCONFIG.HOST_DOMAIN_OR;
-			oCONFIG.SUB_AGENCY = oCONFIG.SUB_AGENCY || 'unspecified:' + dlh;
+			oCONFIG.SUB_AGENCY = oCONFIG.SUB_AGENCY || ('' + dlh);
 			
 			oCONFIG.SUB_AGENCY = oCONFIG.AGENCY + ' - ' + oCONFIG.SUB_AGENCY
 
@@ -910,7 +915,7 @@ var _trackDownloads = function (opts) {
     opts['category'] = opts['category'] || 'Download';
 
     var ext = 'xls,xlsx,doc,docx,ppt,pptx,pdf,txt,zip';
-    ext += ',rar,7z,gz,tgz,exe,wma,mov,avi,wmv,mp3,mp4,csv,tsv,mobi,epub.swf';
+    ext += ',rar,7z,gz,tgz,exe,wma,mov,avi,wmv,mp3,mp4,csv,tsv,mobi,epub,swf';
     ext = ext.split(',');
     opts['extensions'] = opts['extensions'].concat(ext);
 
@@ -1327,4 +1332,3 @@ _gas.push(function () {
                 }
             });
     });
-
