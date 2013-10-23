@@ -19,6 +19,11 @@
  * v1.73 130827 : Final Katz-CP Version. exts, multiple devuas
 **/
 
+/*
+* Begin E-Nor
+* v1.74 131022 : Fix for multiple PUA loop
+*/
+
 var _gaq = _gaq || [];
 var _gas = _gas || [];
 
@@ -29,7 +34,7 @@ var GSA_CPwrapGA = (function () {
 		
         var oCONFIG = {
 				// System parameters - don't change without discussion with CP
-            VERSION : 'v1.73 130827 : Final Katz-CP Version. exts, multiple devuas',
+            VERSION : 'v1.74 131022 : Fix for multiple PUA loop',
             SEARCH_PARAMS : 'querytext|nasaInclude|k|QT', // ver 1.4 Normalize query params
             HOST_DOMAIN_OR : dlh, // default is to track sub-domains individually - override set in _setParams()
             LEADING_PERIOD : '.',
@@ -76,7 +81,7 @@ var GSA_CPwrapGA = (function () {
 			
 			if (oCONFIG.PARALLEL_UA && !oCONFIG.DEBUG_MODE)
 				for (i=oCONFIG.GWT_UAID.length;i<oCONFIG.PARALLEL_UA.length + oCONFIG.GWT_UAID.length;i++) {
-					_gas.push(['GSA_CP' + (i+1) + '._setAccount', oCONFIG.PARALLEL_UA[i]]);
+					_gas.push(['GSA_CP' + (i+1) + '._setAccount', oCONFIG.PARALLEL_UA[i-1]]);
 				}
 			
             if (oCONFIG.ANONYMIZE_IP) {
