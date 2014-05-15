@@ -22,6 +22,8 @@
 /*
 * Begin E-Nor
 * v1.74 131022 : Fix for multiple PUA loop
+* v1.75 140221 : Added option to use dc.js for demographic data
+* v1.76 140514 : Fix for bug in routine triggered by sdor=true. Routine wrote an extra sub-domain cookie in addition to the cross-sub-domain cookie.
 */
 
 var _gaq = _gaq || [];
@@ -34,8 +36,8 @@ var GSA_CPwrapGA = (function () {
 		
         var oCONFIG = {
 				// System parameters - don't change without discussion with CP
-            VERSION : 'v1.74 131022 : Fix for multiple PUA loop',
-            SEARCH_PARAMS : 'querytext|nasaInclude|k|QT', // ver 1.4 Normalize query params
+            VERSION : 'v1.76 140514 : Fix for extra sub-domain cookie in cross-sub-domain tracking',
+            SEARCH_PARAMS : 'q|querytext|nasaInclude|k|QT', // ver 1.4 Normalize query params
             HOST_DOMAIN_OR : dlh, // default is to track sub-domains individually - override set in _setParams()
             LEADING_PERIOD : '.',
             GWT_UAID 	   : ['UA-33523145-1'],
@@ -47,9 +49,10 @@ var GSA_CPwrapGA = (function () {
 										// CAMPAIGN_TIMEOUT must be <= VISITOR_TIMEOUT
             VISIT_TIMEOUT		: -1,	// Specified in minutes, 0 = session = when browser closes, -1 = don't change default (30 minutes)
 			ANONYMIZE_IP		: true,	// only change to false in rare circumustances where GeoIP location accuracy is critical
-			YOUTUBE 			: false
+			YOUTUBE 			: true,
+
 		};
-        
+    
 			// Object for centralized control of all Custom Variables reported in this sript file.
 			// Since GSA code only ever sets page level CVs, scope is always 3
         var oCVs = {
@@ -88,6 +91,8 @@ var GSA_CPwrapGA = (function () {
 				_gaq.push (['_gat._anonymizeIp']);
 			}
             _gas.push(['_setDomainName', oCONFIG.LEADING_PERIOD + oCONFIG.HOST_DOMAIN_OR]);
+			_gaq.push(['_setDomainName', oCONFIG.LEADING_PERIOD + oCONFIG.HOST_DOMAIN_OR]);
+			
 			
 			setGAcookieTimeouts();
             
@@ -357,6 +362,10 @@ var GSA_CPwrapGA = (function () {
         _init();
         
     });
+
+
+
+
 
 // -- End of federated-analytics.js ----
 // To make the instructions and implementation as easy as possible for all agencies, gas.js has been included below
@@ -1299,17 +1308,44 @@ while (_gas._queue.length > 0) {
 }
 
 // Import ga.js
+
+var IsDCEnabled = getParameterByName('display-advertising');
+
+
+function getParameterByName(name)
+{
+	var AllScripts = document.getElementsByTagName('script'); 
+ThisScriptPath = AllScripts[ AllScripts.length-1 ].src; 
+  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+  var regexS = "[\\?&#038;]" + name + "=([^&#]*)";
+  var regex = new RegExp(regexS);
+  var results = regex.exec(ThisScriptPath);
+  if(results == null)
+    return "Not Set";
+  else
+    return decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+
+
 if (typeof window._gat === 'undefined') {
     (function () {
         var ga = document.createElement('script');
         ga.type = 'text/javascript';
         ga.async = true;
-        ga.src = (
+       if (IsDCEnabled=='true'){ga.src = (
+            'https:' === document.location.protocol ?
+                'https://' :
+                'http://'
+        ) +
+            'stats.g.doubleclick.net/dc.js';}
+	   else{ga.src = (
             'https:' === document.location.protocol ?
                 'https://ssl' :
                 'http://www'
         ) +
-            '.google-analytics.com/ga.js';
+            '.google-analytics.com/ga.js';}
+	   
         var s = document.getElementsByTagName('script')[0];
         s.parentNode.insertBefore(ga, s);
     }());
