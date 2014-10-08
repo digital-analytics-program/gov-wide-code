@@ -33,8 +33,7 @@ var oCONFIG = {
     PARALLEL_CODEVERSION_CUSTOM_DIMENSION_SLOT: 'dimension3',
     SEARCH_PARAMS: 'q|querytext|nasaInclude|k|QT|',
     HOST_DOMAIN_OR: _mHostName,
-    GWT_UAID: ['UA-38209789-1'],	//testing
-//  GWT_UAID: ['UA-33523145-1'],	//production
+    GWT_UAID: ['UA-33523145-1'],	//production
     COOKIE_TIMEOUT: 24,
     ANONYMIZE_IP: true,
     /* only change to false in rare circumustances where GeoIP location accuracy is critical*/
