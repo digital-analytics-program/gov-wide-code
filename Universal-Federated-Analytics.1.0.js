@@ -9,7 +9,7 @@
 Copyright 2014 by E-Nor Inc.
 Author: Mohamed Adel
 Universal Federated Analytics: Google Analytics Government Wide Site Usage Measurement.
-09/04/2014 Version: 1.00
+10/22/2014 Version: 1.01
 ***********************************************************************************************************/
 
 _mHostName = document.location.hostname.match(/(([^.\/]+\.[^.\/]{2,3}\.[^.\/]{2})|(([^.\/]+\.)[^.\/]{2,4}))(\/.*)?$/)[1];
@@ -20,7 +20,7 @@ _mHostName = document.location.hostname.match(/(([^.\/]+\.[^.\/]{2,3}\.[^.\/]{2}
  * in the query string when referencing this file.
  */
 var oCONFIG = {
-    VERSION: '20140904 v1.00 - Universal Analytics',
+    VERSION: '20141022 v1.01 - Universal Analytics',
     AGENCY: '',
     SUB_AGENCY: '',
     USE_MAIN_CUSTOM_DIMENSIONS: true,
@@ -33,7 +33,7 @@ var oCONFIG = {
     PARALLEL_CODEVERSION_CUSTOM_DIMENSION_SLOT: 'dimension3',
     SEARCH_PARAMS: 'q|querytext|nasaInclude|k|QT|',
     HOST_DOMAIN_OR: _mHostName,
-    GWT_UAID: ['UA-33523145-1'],	//production
+	GWT_UAID: ['UA-33523145-1'],	
     COOKIE_TIMEOUT: 24,
     ANONYMIZE_IP: true,
     /* only change to false in rare circumustances where GeoIP location accuracy is critical*/
@@ -254,29 +254,6 @@ function _sendEvent(_cat, _act, _lbl, _val) {
     }
 }
 
-/*
- * name: _sendExceptionEvent
- * usage: to set hit type to Event with proper parameters, event category 'Exception'
- */
-function _sendExceptionEvent(_act, _lbl, _val) {
-	var _cat = 'Exception';
-    if (_cat != '' && _act != '') {
-        if (_val == '') {
-            _val = 0;
-        }
-        if (_lbl == '') {
-            _lbl == '';
-        }
-
-        for (var dfev = 0; dfev < oCONFIG.GWT_UAID.length; dfev++) {
-            if (dfev == 0) {
-                gascp('send', 'event', _cat, _act, _lbl, _val);
-            } else {
-                gascp(oCONFIG.PUA_NAME + dfev + '.send', 'event', _cat, _act, _lbl, _val);
-            }
-        }
-   }
-}
 
 /*
  * name: _sendPageview
@@ -293,6 +270,8 @@ function _sendPageview(_virtualPath, _virtualTitle) {
                     gascp('set', 'title', document.title);
                 }
                 gascp('send', 'pageview', _virtualPath);
+
+
             } else {
                 if (_virtualTitle != '') {
                     gascp(oCONFIG.PUA_NAME + dfev + '.set', 'title', _virtualTitle);
@@ -540,7 +519,7 @@ function _initAutoTracker() {
                 }
 
             }
-        } catch (ePR) { _sendExceptionEvent('AutoTracker : Invlid Link Structure',document.location.href,0);}
+        } catch (ePR) { }
     }
 
 
@@ -554,7 +533,7 @@ function _initAutoTracker() {
  */
 function _isDownload(url, extensions) {
     if (url.toLowerCase().match(new RegExp("^(.*)(" + extensions + ")(.*)$")) != null) return true;
-    else return false;
+    else {return false};
 }
 
 /*
@@ -571,7 +550,7 @@ function _getDownloadExt(url, extensions) {
  */
 function _isEmailAddr(url) {
     if (url.toLowerCase().match(/^mailto\:[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,4})/g)) return true;
-    else return false;
+    else {return false};
 }
 
 /*
@@ -596,7 +575,7 @@ function _getEmailAddrHost(_emailaddr) {
  */
 function _isTelNum(url){
     if (url.toLowerCase().match(/^tel\:(.*)([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/g)) return true;
-    else return false;
+    else {return false};
 }
 
 /*
@@ -733,7 +712,7 @@ function _initYouTubeTracker() {
     var _iframes = document.getElementsByTagName('iframe');
     var vArray = 0;
     for (var ytifrm = 0; ytifrm < _iframes.length; ytifrm++) {
-        _thisVideoObj = _iframes[ytifrm]
+        _thisVideoObj = _iframes[ytifrm];
         var _thisSrc = _thisVideoObj.src;
         if (IsYouTube(_thisSrc)) {
             _thisVideoObj.src = YTUrlHandler(_thisSrc);
