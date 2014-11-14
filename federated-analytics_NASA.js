@@ -287,7 +287,6 @@ var GSA_CPwrapGA = (function () {
  * GAS - Google Analytics on Steroids
  * https://github.com/CardinalPath/gas
  *
- * @author Eduardo Cereto <eduardocereto@gmail.com>
  * Licensed under the GPLv3 license.
  */
 (function (window, undefined) {
@@ -299,7 +298,6 @@ var GSA_CPwrapGA = (function () {
          * Copyright 2011, Cardinal Path and Direct Performance
          * Licensed under the MIT license.
          *
-         * @author Eduardo Cereto <eduardocereto@gmail.com>
          */
         
         /**
@@ -468,7 +466,6 @@ var GSA_CPwrapGA = (function () {
          * Copyright 2011, Cardinal Path and Direct Performance
          * Licensed under the MIT license.
          *
-         * @author Eduardo Cereto <eduardocereto@gmail.com>
          */
         
         /**
@@ -793,7 +790,6 @@ var GSA_CPwrapGA = (function () {
          * Copyright 2011, Cardinal Path and Direct Performance
          * Licensed under the GPLv3 license.
          *
-         * @author Eduardo Cereto <eduardocereto@gmail.com>
          */
         
         /**
@@ -894,7 +890,6 @@ var GSA_CPwrapGA = (function () {
          * Copyright 2012, Cardinal Path and Direct Performance
          * Licensed under the GPLv3 license.
          *
-         * @author Eduardo Cereto <eduardocereto@gmail.com>
          */
         
         function _gasMetaEcommerce() {
@@ -974,7 +969,6 @@ var GSA_CPwrapGA = (function () {
          * Copyright 2011, Cardinal Path and Direct Performance
          * Licensed under the GPLv3 license.
          *
-         * @author Eduardo Cereto <eduardocereto@gmail.com>
          */
         
         /**
@@ -1055,7 +1049,6 @@ var GSA_CPwrapGA = (function () {
          * Copyright 2011, Cardinal Path
          * Licensed under the GPLv3 license.
          *
-         * @author Eduardo Cereto <eduardocereto@gmail.com>
          */
         
         /**
@@ -1118,7 +1111,6 @@ var GSA_CPwrapGA = (function () {
          * Copyright 2012, Cardinal Path and Direct Performance
          * Licensed under the GPLv3 license.
          *
-         * @author Eduardo Cereto <eduardocereto@gmail.com>
          */
         
         /**
@@ -1276,7 +1268,6 @@ var GSA_CPwrapGA = (function () {
          * Copyright 2011, Cardinal Path and Direct Performance
          * Licensed under the GPLv3 license.
          *
-         * @author Eduardo Cereto <eduardocereto@gmail.com>
          */
         
         var _maxScrollOpts;
@@ -1390,7 +1381,6 @@ var GSA_CPwrapGA = (function () {
          * Copyright 2011, Cardinal Path and Direct Performance
          * Licensed under the GPLv3 license.
          *
-         * @author Eduardo Cereto <eduardocereto@gmail.com>
          */
         
         /**
@@ -1573,7 +1563,6 @@ var GSA_CPwrapGA = (function () {
          * Copyright 2011, Cardinal Path and Direct Performance
          * Licensed under the GPLv3 license.
          *
-         * @author Eduardo Cereto <eduardocereto@gmail.com>
          */
         
         /**
@@ -1628,7 +1617,6 @@ var GSA_CPwrapGA = (function () {
          * Copyright 2011, Cardinal Path and Direct Performance
          * Licensed under the GPLv3 license.
          *
-         * @author Eduardo Cereto <eduardocereto@gmail.com>
          */
         
         var _vimeoTimeTriggers = [];
@@ -1808,7 +1796,6 @@ var GSA_CPwrapGA = (function () {
          * Copyright 2011, Cardinal Path and Direct Performance
          * Licensed under the GPLv3 license.
          *
-         * @author Eduardo Cereto <eduardocereto@gmail.com>
          */
         
         /**
