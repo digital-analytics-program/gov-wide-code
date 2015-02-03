@@ -9,7 +9,7 @@
 Copyright 2014 by E-Nor Inc.
 Author: Mohamed Adel
 Universal Federated Analytics: Google Analytics Government Wide Site Usage Measurement.
-10/22/2014 Version: 1.01
+01/27/2015 Version: 1.02
 ***********************************************************************************************************/
 
 _mHostName = document.location.hostname.match(/(([^.\/]+\.[^.\/]{2,3}\.[^.\/]{2})|(([^.\/]+\.)[^.\/]{2,4}))(\/.*)?$/)[1];
@@ -20,7 +20,7 @@ _mHostName = document.location.hostname.match(/(([^.\/]+\.[^.\/]{2,3}\.[^.\/]{2}
  * in the query string when referencing this file.
  */
 var oCONFIG = {
-    VERSION: '20141022 v1.01 - Universal Analytics',
+    VERSION: '20150127 v1.02 - Universal Analytics',
     AGENCY: '',
     SUB_AGENCY: '',
     USE_MAIN_CUSTOM_DIMENSIONS: true,
@@ -36,14 +36,13 @@ var oCONFIG = {
 	GWT_UAID: ['UA-33523145-1'],	
     COOKIE_TIMEOUT: 24,
     ANONYMIZE_IP: true,
-    /* only change to false in rare circumustances where GeoIP location accuracy is critical*/
     YOUTUBE: true,
     AUTOTRACKER: true,
     EXTS: 'doc|docx|xls|xlsx|xlsm|ppt|pptx|exe|zip|pdf|js|txt|csv|dxf|dwgd|rfa|rvt|dwfx|dwg|wmv|jpg|msi|7z|gz|tgz|wma|mov|avi|mp3|mp4|csv|mobi|epub|swf|rar',
     SUBDOMAIN_BASED: true,
     DOUNBLECLICK_LINK: false,
     ENHANCED_LINK: false,
-    FORCE_SSL: false,
+    FORCE_SSL: true,
     OPTOUT_PAGE: false,
     PUA_NAME: 'GSA_CP'
 };
@@ -77,9 +76,6 @@ function _initElements() {
         } else if (_thisElement.split('=')[0] == 'dclink') {
             _thisElement = _unionParams(_thisElement.split('=')[1]);
             oCONFIG.DOUNBLECLICK_LINK = ('true' == _thisElement) ? true : false;
-        } else if (_thisElement.split('=')[0] == 'aip') {
-            _thisElement = _unionParams(_thisElement.split('=')[1]);
-            oCONFIG.ANONYMIZE_IP = ('true' == _thisElement) ? true : !('false' == _thisElement);
         } else if (_thisElement.indexOf('pua') > -1) {
             _thisElement = _thisElement.split('=')[1];
             var _thisElementSplit = _thisElement.split(',');
@@ -94,9 +90,6 @@ function _initElements() {
         } else if (_thisElement.split('=')[0] == 'autotracker') {
             _thisElement = _unionParams(_thisElement.split('=')[1]);
             oCONFIG.AUTOTRACKER = ('true' == _thisElement) ? true : !('false' == _thisElement);
-        } else if (_thisElement.split('=')[0] == 'forcessl') {
-            _thisElement = _unionParams(_thisElement.split('=')[1]);
-            oCONFIG.FORCE_SSL = ('true' == _thisElement) ? true : false;
         } else if (_thisElement.split('=')[0] == 'optout') {
             _thisElement = _unionParams(_thisElement.split('=')[1]);
             oCONFIG.OPTOUT_PAGE = ('true' == _thisElement) ? true : false;
@@ -470,7 +463,7 @@ for (var dpv = 0; dpv < oCONFIG.GWT_UAID.length; dpv++) {
  */
 function _initAutoTracker() {
     var aSETTINGS = {
-        DEBUGGING_MODE: false,
+        DEBUGGING_MODE: true,
         TRACK_OUTBOUND_DOWNLOADS: true,
         TRACK_OUTBOUND_EMAILS: true,
         DOWNLOADS_EXTs: oCONFIG.EXTS,
@@ -745,7 +738,7 @@ function onYouTubeIframeAPIReady() {
  * function added for compatibility of Youtube tracker API
  */
 function onPlayerReady(event){
-	// left blank on purpose
+	/* left blank on purpose */
 }
 
 /* 
