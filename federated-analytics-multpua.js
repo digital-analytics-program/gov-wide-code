@@ -370,7 +370,6 @@ var GSA_CPwrapGA = (function () {
  * GAS - Google Analytics on Steroids
  * https://github.com/CardinalPath/gas
  *
- * @author Eduardo Cereto <eduardocereto@gmail.com>
  * Licensed under the GPLv3 license.
  */
 (function(window, undefined) {  
@@ -382,7 +381,6 @@ var GSA_CPwrapGA = (function () {
  * Copyright 2011, Cardinal Path and Direct Performance
  * Licensed under the MIT license.
  *
- * @author Eduardo Cereto <eduardocereto@gmail.com>
  */
 
 /**
@@ -549,7 +547,6 @@ GasHelper.prototype._DOMReady = function (callback) {
  * Copyright 2011, Cardinal Path and Direct Performance
  * Licensed under the MIT license.
  *
- * @author Eduardo Cereto <eduardocereto@gmail.com>
  */
  /*global document:true*/
 
@@ -864,7 +861,6 @@ _gas.push(['_addHook', '_trackEvent', function () {
  * Copyright 2011, Cardinal Path and Direct Performance
  * Licensed under the GPLv3 license.
  *
- * @author Eduardo Cereto <eduardocereto@gmail.com>
  */
 
 /**
@@ -960,7 +956,6 @@ _gas.push(['_addHook', '_trackDownloads', _trackDownloads]);
  * Copyright 2011, Cardinal Path and Direct Performance
  * Licensed under the GPLv3 license.
  *
- * @author Eduardo Cereto <eduardocereto@gmail.com>
  */
 
 /**
@@ -1061,7 +1056,6 @@ _gas.push(['_addHook', '_trackMailto', _gasTrackMailto]);
  * Copyright 2011, Cardinal Path and Direct Performance
  * Licensed under the GPLv3 license.
  *
- * @author Eduardo Cereto <eduardocereto@gmail.com>
  */
 
 /**
