@@ -6,10 +6,10 @@
 				   `"88888"          o888o o888o  `Y8bod8P"   d888b      
 
 ***********************************************************************************************************
-Copyright 2014 by E-Nor Inc.
+Copyright 2015 by E-Nor Inc.
 Author: Mohamed Adel
 Universal Federated Analytics: Google Analytics Government Wide Site Usage Measurement.
-01/27/2015 Version: 1.02
+02/26/2015 Version: 1.03
 ***********************************************************************************************************/
 
 _mHostName = document.location.hostname.match(/(([^.\/]+\.[^.\/]{2,3}\.[^.\/]{2})|(([^.\/]+\.)[^.\/]{2,4}))(\/.*)?$/)[1];
@@ -20,7 +20,7 @@ _mHostName = document.location.hostname.match(/(([^.\/]+\.[^.\/]{2,3}\.[^.\/]{2}
  * in the query string when referencing this file.
  */
 var oCONFIG = {
-    VERSION: '20150127 v1.02 - Universal Analytics',
+    VERSION: '20150226 v1.03 - Universal Analytics',
     AGENCY: '',
     SUB_AGENCY: '',
     USE_MAIN_CUSTOM_DIMENSIONS: true,
@@ -44,7 +44,7 @@ var oCONFIG = {
     ENHANCED_LINK: false,
     FORCE_SSL: true,
     OPTOUT_PAGE: false,
-    PUA_NAME: 'GSA_CP'
+    PUA_NAME: 'GSA_ENOR'
 };
 
 /*
@@ -176,11 +176,11 @@ function _sendCustomDimension(_slotNo, _val) {
         for (var dfev = 0; dfev < oCONFIG.GWT_UAID.length; dfev++) {
             if (dfev == 0) {
                 if (_slotNo[0] != 'dimension0') {
-                    gascp('set', _slotNo[0], _val);
+                    ga('GSA_ENOR0.set', _slotNo[0], _val);
                 }
             } else {
                 if (_slotNo[1] != undefined && _slotNo[1] != 'dimension0')
-                    gascp(oCONFIG.PUA_NAME + dfev + '.set', _slotNo[1], _val);
+                    ga(oCONFIG.PUA_NAME + dfev + '.set', _slotNo[1], _val);
             }
 
         }
@@ -208,11 +208,11 @@ function _sendCustomMetrics(_slotNo, _val) {
         for (var dfev = 0; dfev < oCONFIG.GWT_UAID.length; dfev++) {
             if (dfev == 0) {
                 if (_slotNo[0] != 'dimension0') {
-                    gascp('set', _slotNo[0], _val);
+                    ga('GSA_ENOR0.set', _slotNo[0], _val);
                 }
             } else {
                 if (_slotNo[1] != undefined && _slotNo[1] != 'metric0')
-                    gascp(oCONFIG.PUA_NAME + dfev + '.set', _slotNo[1], _val);
+                    ga(oCONFIG.PUA_NAME + dfev + '.set', _slotNo[1], _val);
             }
 
         }
@@ -236,9 +236,9 @@ function _sendEvent(_cat, _act, _lbl, _val) {
 
         for (var dfev = 0; dfev < oCONFIG.GWT_UAID.length; dfev++) {
             if (dfev == 0) {
-                gascp('send', 'event', _cat, _act, _lbl, _val);
+                ga('GSA_ENOR0.send', 'event', _cat, _act, _lbl, _val);
             } else {
-                gascp(oCONFIG.PUA_NAME + dfev + '.send', 'event', _cat, _act, _lbl, _val);
+                ga(oCONFIG.PUA_NAME + dfev + '.send', 'event', _cat, _act, _lbl, _val);
             }
 
         }
@@ -258,20 +258,20 @@ function _sendPageview(_virtualPath, _virtualTitle) {
         for (var dfev = 0; dfev < oCONFIG.GWT_UAID.length; dfev++) {
             if (dfev == 0) {
                 if (_virtualTitle != '') {
-                    gascp('set', 'title', _virtualTitle);
+                    ga('GSA_ENOR0.set', 'title', _virtualTitle);
                 } else {
-                    gascp('set', 'title', document.title);
+                    ga('GSA_ENOR0.set', 'title', document.title);
                 }
-                gascp('send', 'pageview', _virtualPath);
+                ga('GSA_ENOR0.send', 'pageview', _virtualPath);
 
 
             } else {
                 if (_virtualTitle != '') {
-                    gascp(oCONFIG.PUA_NAME + dfev + '.set', 'title', _virtualTitle);
+                    ga(oCONFIG.PUA_NAME + dfev + '.set', 'title', _virtualTitle);
                 } else {
-                    gascp(oCONFIG.PUA_NAME + dfev + '.set', 'title', document.title);
+                    ga(oCONFIG.PUA_NAME + dfev + '.set', 'title', document.title);
                 }
-                gascp(oCONFIG.PUA_NAME + dfev + '.send', 'pageview', _virtualPath);
+                ga(oCONFIG.PUA_NAME + dfev + '.send', 'pageview', _virtualPath);
             }
 
         }
@@ -349,7 +349,7 @@ function _URIHandler(pageName) {
     a.async = 1;
     a.src = g;
     m.parentNode.insertBefore(a, m)
-})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'gascp');
+})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
 for (var dpv = 0; dpv < oCONFIG.GWT_UAID.length; dpv++) {
 
@@ -360,12 +360,13 @@ for (var dpv = 0; dpv < oCONFIG.GWT_UAID.length; dpv++) {
             window['ga-disable-' + oCONFIG.GWT_UAID[dpv]] = true;
         }
         if (!oCONFIG.SUBDOMAIN_BASED) {
-            gascp('create', oCONFIG.GWT_UAID[dpv], oCONFIG.HOST_DOMAIN_OR, {
+            ga('create', oCONFIG.GWT_UAID[dpv], oCONFIG.HOST_DOMAIN_OR, {
+				'name': 'GSA_ENOR0',
                 'allowLinker': true,
                 'cookieExpires': parseInt(oCONFIG.COOKIE_TIMEOUT)
             });
-            gascp('require', 'linker');
-            gascp('linker:autoLink', [oCONFIG.HOST_DOMAIN_OR]);
+            ga('GSA_ENOR0.require', 'linker');
+            ga('GSA_ENOR0.linker:autoLink', [oCONFIG.HOST_DOMAIN_OR]);
         } else {
 			var _ObtHostName = '';
 		try{
@@ -378,30 +379,31 @@ for (var dpv = 0; dpv < oCONFIG.GWT_UAID.length; dpv++) {
 		
         
 
-            gascp('create', oCONFIG.GWT_UAID[dpv], _ObtHostName, {
+            ga('create', oCONFIG.GWT_UAID[dpv], _ObtHostName, {
+				'name': 'GSA_ENOR0',
                 'cookieExpires': parseInt(oCONFIG.COOKIE_TIMEOUT)
             });
         }
 
         if (oCONFIG.ANONYMIZE_IP) {
-            gascp('set', 'anonymizeIp', oCONFIG.ANONYMIZE_IP);
+            ga('GSA_ENOR0.set', 'anonymizeIp', oCONFIG.ANONYMIZE_IP);
         }
         if (oCONFIG.DOUNBLECLICK_LINK) {
-            gascp('require', 'displayfeatures');
+            ga('GSA_ENOR0.require', 'displayfeatures');
         }
         if (oCONFIG.ENHANCED_LINK) {
-            gascp('require', 'linkid', 'linkid.js');
+            ga('GSA_ENOR0.require', 'linkid', 'linkid.js');
         }
         if (oCONFIG.FORCE_SSL) {
-            gascp('set', 'forceSSL', true);
+            ga('GSA_ENOR0.set', 'forceSSL', true);
         }
         if (oCONFIG.USE_MAIN_CUSTOM_DIMENSIONS) {
-            gascp('set', oCONFIG.MAIN_AGENCY_CUSTOM_DIMENSION_SLOT, oCONFIG.AGENCY);
-            gascp('set', oCONFIG.MAIN_SUBAGENCY_CUSTOM_DIMENSION_SLOT, oCONFIG.SUB_AGENCY);
-            gascp('set', oCONFIG.MAIN_CODEVERSION_CUSTOM_DIMENSION_SLOT, oCONFIG.VERSION);
+            ga('GSA_ENOR0.set', oCONFIG.MAIN_AGENCY_CUSTOM_DIMENSION_SLOT, oCONFIG.AGENCY);
+            ga('GSA_ENOR0.set', oCONFIG.MAIN_SUBAGENCY_CUSTOM_DIMENSION_SLOT, oCONFIG.SUB_AGENCY);
+            ga('GSA_ENOR0.set', oCONFIG.MAIN_CODEVERSION_CUSTOM_DIMENSION_SLOT, oCONFIG.VERSION);
         }
 
-        gascp('send', 'pageview', _adjPageUri);
+        ga('GSA_ENOR0.send', 'pageview', _adjPageUri);
 
     } else {
         if (oCONFIG.OPTOUT_PAGE) {
@@ -409,38 +411,38 @@ for (var dpv = 0; dpv < oCONFIG.GWT_UAID.length; dpv++) {
         };
 
         if (!oCONFIG.SUBDOMAIN_BASED) {
-            gascp('create', oCONFIG.GWT_UAID[dpv], oCONFIG.HOST_DOMAIN_OR, {
+            ga('create', oCONFIG.GWT_UAID[dpv], oCONFIG.HOST_DOMAIN_OR, {
                 'name': oCONFIG.PUA_NAME + dpv,
                 'allowLinker': true,
                 'cookieExpires': parseInt(oCONFIG.COOKIE_TIMEOUT)
             });
 
 
-            gascp(oCONFIG.PUA_NAME + dpv + '.require', 'linker');
-            gascp(oCONFIG.PUA_NAME + dpv + '.linker:autoLink', [oCONFIG.HOST_DOMAIN_OR]);
+            ga(oCONFIG.PUA_NAME + dpv + '.require', 'linker');
+            ga(oCONFIG.PUA_NAME + dpv + '.linker:autoLink', [oCONFIG.HOST_DOMAIN_OR]);
         } else {
-            gascp('create', oCONFIG.GWT_UAID[dpv], oCONFIG.HOST_DOMAIN_OR, {
+            ga('create', oCONFIG.GWT_UAID[dpv], oCONFIG.HOST_DOMAIN_OR, {
                 'name': oCONFIG.PUA_NAME + dpv,
                 'cookieExpires': parseInt(oCONFIG.COOKIE_TIMEOUT)
             });
         }
 
         if (oCONFIG.ANONYMIZE_IP) {
-            gascp(oCONFIG.PUA_NAME + dpv + '.set', 'anonymizeIp', oCONFIG.ANONYMIZE_IP);
+            ga(oCONFIG.PUA_NAME + dpv + '.set', 'anonymizeIp', oCONFIG.ANONYMIZE_IP);
         }
         if (oCONFIG.DOUNBLECLICK_LINK) {
-            gascp(oCONFIG.PUA_NAME + dpv + '.require', 'displayfeatures');
+            ga(oCONFIG.PUA_NAME + dpv + '.require', 'displayfeatures');
         }
         if (oCONFIG.ENHANCED_LINK) {
-            gascp(oCONFIG.PUA_NAME + dpv + '.require', 'linkid', 'linkid.js');
+            ga(oCONFIG.PUA_NAME + dpv + '.require', 'linkid', 'linkid.js');
         }
         if (oCONFIG.FORCE_SSL) {
-            gascp(oCONFIG.PUA_NAME + dpv + '.set', 'forceSSL', true);
+            ga(oCONFIG.PUA_NAME + dpv + '.set', 'forceSSL', true);
         }
         if (oCONFIG.USE_PARALLEL_CUSTOM_DIMENSIONS) {
-            gascp(oCONFIG.PUA_NAME + dpv + '.set', oCONFIG.PARALLEL_AGENCY_CUSTOM_DIMENSION_SLOT, oCONFIG.AGENCY);
-            gascp(oCONFIG.PUA_NAME + dpv + '.set', oCONFIG.PARALLEL_SUBAGENCY_CUSTOM_DIMENSION_SLOT, oCONFIG.SUB_AGENCY);
-            gascp(oCONFIG.PUA_NAME + dpv + '.set', oCONFIG.PARALLEL_CODEVERSION_CUSTOM_DIMENSION_SLOT, oCONFIG.VERSION);
+            ga(oCONFIG.PUA_NAME + dpv + '.set', oCONFIG.PARALLEL_AGENCY_CUSTOM_DIMENSION_SLOT, oCONFIG.AGENCY);
+            ga(oCONFIG.PUA_NAME + dpv + '.set', oCONFIG.PARALLEL_SUBAGENCY_CUSTOM_DIMENSION_SLOT, oCONFIG.SUB_AGENCY);
+            ga(oCONFIG.PUA_NAME + dpv + '.set', oCONFIG.PARALLEL_CODEVERSION_CUSTOM_DIMENSION_SLOT, oCONFIG.VERSION);
         }
 		if (document.title.search(/404|not found/i) !== -1)
 		{
@@ -448,15 +450,13 @@ for (var dpv = 0; dpv < oCONFIG.GWT_UAID.length; dpv++) {
 			_adjPageUri = vpv404.replace(/\/\//g, '/') + '/' + document.referrer;
 			
 			}
-        gascp(oCONFIG.PUA_NAME + dpv + '.send', 'pageview', _adjPageUri);
+        ga(oCONFIG.PUA_NAME + dpv + '.send', 'pageview', _adjPageUri);
 
 
     }
 
 }
 /**** End Basic Tracker *******/
-
-
 /*
  * name: _initAutoTracker
  * usage: to automatically tag outbound links / e-mails / downloads
@@ -482,15 +482,15 @@ function _initAutoTracker() {
             var _ThisLink = _allDocLinks[iki].getAttribute('href');
             var _thisObject = _allDocLinks[iki];
             var _thisHostName = _thisObject.hostname;
-            var _thisPathName = _thisObject.pathname;
+			var _thisPathName = _thisObject.href.split(_thisHostName)[1].split(/[#?&?]/)[0];
             var _thisProtocol = _thisObject.protocol;
             if (!_thisHostName.match(/(.*)\.(.*)\.(.*)/g)) {
                 _thisHostName = 'www.' + _thisHostName;
             }
-            var _completeURL = _thisProtocol + "//" + _thisHostName + _thisPathName;
+            var _completeURL = _thisProtocol + "//" + _thisHostName + _thisPathName; 
             if (_thisHostName != '' && _thisPathName != '' && _thisHostName != 'www.') { /* Major Case (Link) #1*/
                 if (_thisHostName.toLowerCase().indexOf(aSETTINGS.WEBSITE_HOSTNAME) > -1) { /* Minor Case - Internal Link #1/1 */
-                    _isDownload(_thisPathName, aSETTINGS.DOWNLOADS_EXTs) == true ? _addEventListener(_thisObject, aSETTINGS.DEBUGGING_MODE, aSETTINGS.DOWNLOADS_CATEGORY, _getDownloadExt(_thisPathName, aSETTINGS.DOWNLOADS_EXTs), _completeURL, 0) : false;
+					_isDownload(_thisPathName, aSETTINGS.DOWNLOADS_EXTs) == true ? _addEventListener(_thisObject, aSETTINGS.DEBUGGING_MODE, aSETTINGS.DOWNLOADS_CATEGORY, _getDownloadExt(_thisPathName, aSETTINGS.DOWNLOADS_EXTs), _completeURL, 0) : false;
                 } else { /* Minor Case - Externak Link (Outbound) #1/2 */
                     _isDownload(_thisPathName, aSETTINGS.DOWNLOADS_EXTs) && aSETTINGS.TRACK_OUTBOUND_DOWNLOADS == true ? _addEventListener(_thisObject, aSETTINGS.DEBUGGING_MODE, aSETTINGS.OUTBOUND_DOWNLOAD_CATEGORY, _getDownloadExt(_thisPathName, aSETTINGS.DOWNLOADS_EXTs), _completeURL, 0) : _addEventListener(_thisObject, aSETTINGS.DEBUGGING_MODE, aSETTINGS.OUTBOUND_LINK_CATEGORY, _thisHostName, _thisPathName, 0);
                 }
@@ -619,6 +619,8 @@ function _isValidUANum(_stringVal){
  */
 function _addEventListener(evObj, evAppendType, evCat, evAct, evLbl, evVal){
         if (evAppendType == true) {
+			/* This is used to see how the event will look like */
+			/*evObj.innerHTML += "&nbsp;&nbsp;&nbsp;&nbsp;" + "(CAT=" + evCat + ")&nbsp;" + "(ACT=" + evAct + ")&nbsp;" + "(LBL=" + evLbl + ")&nbsp;";*/
             var currentOnMouseDown = evObj.getAttribute('onmousedown');
             evObj.setAttribute('onmousedown', "_sendEvent('" + evCat + "','" + evAct + "','" + evLbl + "'," + evVal + ");" + (currentOnMouseDown != null ? currentOnMouseDown : ""));
 			} else if (evAppendType == false) {
