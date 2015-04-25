@@ -12,7 +12,7 @@ Universal Federated Analytics: Google Analytics Government Wide Site Usage Measu
 04/16/2015 Version: 1.04
 ***********************************************************************************************************/
 
-var oCONFIG={GWT_UAID:['UA-33523145-1'],FORCE_SSL:true,ANONYMIZE_IP:true,AGENCY:'',SUB_AGENCY:'',VERSION:'20150416 v1.04 - Universal Analytics',USE_MAIN_CUSTOM_DIMENSIONS:true,MAIN_AGENCY_CUSTOM_DIMENSION_SLOT:'dimension1',MAIN_SUBAGENCY_CUSTOM_DIMENSION_SLOT:'dimension2',MAIN_CODEVERSION_CUSTOM_DIMENSION_SLOT:'dimension3',USE_PARALLEL_CUSTOM_DIMENSIONS:false,PARALLEL_AGENCY_CUSTOM_DIMENSION_SLOT:'dimension1',PARALLEL_SUBAGENCY_CUSTOM_DIMENSION_SLOT:'dimension2',PARALLEL_CODEVERSION_CUSTOM_DIMENSION_SLOT:'dimension3',COOKIE_DOMAIN:location.hostname.replace('www.','').toLowerCase(),COOKIE_TIMEOUT:60*60*24*2*365,SEARCH_PARAMS:'q|querytext|nasaInclude|k|qt',YOUTUBE:true,AUTOTRACKER:true,EXTS:'doc|docx|xls|xlsx|xlsm|ppt|pptx|exe|zip|pdf|js|txt|csv|dxf|dwgd|rfa|rvt|dwfx|dwg|wmv|jpg|msi|7z|gz|tgz|wma|mov|avi|mp3|mp4|csv|mobi|epub|swf|rar',SUBDOMAIN_BASED:true,DOUNBLECLICK_LINK:false,ENHANCED_LINK:false,OPTOUT_PAGE:false,PUA_NAME:'GSA_ENOR'};function _onEveryPage(){_updateConfig();_defineCookieDomain();_defineAgencyCDsValues();}
+var oCONFIG={GWT_UAID:['UA-33523145-1'],FORCE_SSL:true,ANONYMIZE_IP:true,AGENCY:'',SUB_AGENCY:'',VERSION:'20150416 v1.04 - Universal Analytics',USE_MAIN_CUSTOM_DIMENSIONS:true,MAIN_AGENCY_CUSTOM_DIMENSION_SLOT:'dimension1',MAIN_SUBAGENCY_CUSTOM_DIMENSION_SLOT:'dimension2',MAIN_CODEVERSION_CUSTOM_DIMENSION_SLOT:'dimension3',USE_PARALLEL_CUSTOM_DIMENSIONS:false,PARALLEL_AGENCY_CUSTOM_DIMENSION_SLOT:'dimension1',PARALLEL_SUBAGENCY_CUSTOM_DIMENSION_SLOT:'dimension2',PARALLEL_CODEVERSION_CUSTOM_DIMENSION_SLOT:'dimension3',COOKIE_DOMAIN:location.hostname.replace('www.','').toLowerCase(),COOKIE_TIMEOUT:60*60*24*2*365,SEARCH_PARAMS:'q|querytext|nasaInclude|k|qt',YOUTUBE:true,AUTOTRACKER:true,EXTS:'doc|docx|xls|xlsx|xlsm|ppt|pptx|exe|zip|pdf|js|txt|csv|dxf|dwgd|rfa|rvt|dwfx|dwg|wmv|jpg|msi|7z|gz|tgz|wma|mov|avi|mp3|mp4|csv|mobi|epub|swf|rar',SUBDOMAIN_BASED:true,DOUBLECLICK_LINK:false,ENHANCED_LINK:false,OPTOUT_PAGE:false,PUA_NAME:'GSA_ENOR'};function _onEveryPage(){_updateConfig();_defineCookieDomain();_defineAgencyCDsValues();}
 _onEveryPage();function _defineCookieDomain()
 {var domainPattern=/(([^.\/]+\.[^.\/]{2,3}\.[^.\/]{2})|(([^.\/]+\.)[^.\/]{2,4}))(\/.*)?$/;if(domainPattern.test(oCONFIG.SUBDOMAIN_BASED.toString()))
 {oCONFIG.COOKIE_DOMAIN=oCONFIG.SUBDOMAIN_BASED.toLowerCase().replace('www.','');oCONFIG.SUBDOMAIN_BASED=true;}
@@ -43,7 +43,7 @@ oCONFIG.PARALLEL_SUBAGENCY_CUSTOM_DIMENSION_SLOT=_value.toLowerCase();break;case
 oCONFIG.PARALLEL_CODEVERSION_CUSTOM_DIMENSION_SLOT=_value.toLowerCase();break;case'cto':oCONFIG.COOKIE_TIMEOUT=parseInt(_value)*2628000;break;case'sp':oCONFIG.SEARCH_PARAMS+='|'+_value.replace(/,/g,'|');break;case'exts':oCONFIG.EXTS+='|'+_value.replace(/,/g,'|');break;case'yt':_value=_cleanBooleanParam(_value);if('true'==_value||'false'==_value)
 oCONFIG.YOUTUBE=_value;break;case'autotracker':_value=_cleanBooleanParam(_value);if('true'==_value||'false'==_value)
 oCONFIG.AUTOTRACKER=_value;break;case'sdor':oCONFIG.SUBDOMAIN_BASED=_cleanBooleanParam(_value);break;case'dclink':_value=_cleanBooleanParam(_value);if('true'==_value||'false'==_value)
-oCONFIG.DOUNBLECLICK_LINK=_value;break;case'enhlink':_value=_cleanBooleanParam(_value);if('true'==_value||'false'==_value)
+oCONFIG.DOUBLECLICK_LINK=_value;break;case'enhlink':_value=_cleanBooleanParam(_value);if('true'==_value||'false'==_value)
 oCONFIG.ENHANCED_LINK=_value;break;case'optout':_value=_cleanBooleanParam(_value);if('true'==_value||'false'==_value)
 oCONFIG.OPTOUT_PAGE=_value;break;default:break;}}}
 function _sendCustomDimensions(_slotNums,_val)
@@ -133,7 +133,7 @@ createTracker(true);function createTracker(sendPv)
 {for(var dpv=0;dpv<oCONFIG.GWT_UAID.length;dpv++)
 {var _adjPageUri=_URIHandler(document.location.pathname+document.location.search+document.location.hash);if(oCONFIG.OPTOUT_PAGE)
 {window['ga-disable-'+oCONFIG.GWT_UAID[dpv]]=true;};window[window['GoogleAnalyticsObject']]('create',oCONFIG.GWT_UAID[dpv],oCONFIG.COOKIE_DOMAIN,{'name':oCONFIG.PUA_NAME+dpv,'allowLinker':true,'cookieExpires':parseInt(oCONFIG.COOKIE_TIMEOUT)});if(oCONFIG.ANONYMIZE_IP){window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME+dpv+'.set','anonymizeIp',oCONFIG.ANONYMIZE_IP);}
-if(oCONFIG.DOUNBLECLICK_LINK){window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME+dpv+'.require','displayfeatures');}
+if(oCONFIG.DOUBLECLICK_LINK){window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME+dpv+'.require','displayfeatures');}
 if(oCONFIG.ENHANCED_LINK){window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME+dpv+'.require','linkid','linkid.js');}
 if(oCONFIG.FORCE_SSL){window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME+dpv+'.set','forceSSL',true);}
 if(oCONFIG.USE_MAIN_CUSTOM_DIMENSIONS&&dpv==0){window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME+dpv+'.set',oCONFIG.MAIN_AGENCY_CUSTOM_DIMENSION_SLOT,oCONFIG.AGENCY);window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME+dpv+'.set',oCONFIG.MAIN_SUBAGENCY_CUSTOM_DIMENSION_SLOT,oCONFIG.SUB_AGENCY);window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME+dpv+'.set',oCONFIG.MAIN_CODEVERSION_CUSTOM_DIMENSION_SLOT,oCONFIG.VERSION);}
