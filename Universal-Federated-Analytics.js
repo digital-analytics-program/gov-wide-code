@@ -44,13 +44,11 @@ var oCONFIG = {
     AUTOTRACKER: true,
     EXTS: 'doc|docx|xls|xlsx|xlsm|ppt|pptx|exe|zip|pdf|js|txt|csv|dxf|dwgd|rfa|rvt|dwfx|dwg|wmv|jpg|msi|7z|gz|tgz|wma|mov|avi|mp3|mp4|csv|mobi|epub|swf|rar',
     SUBDOMAIN_BASED: true,
-    DOUNBLECLICK_LINK: false,
+    DOUBLECLICK_LINK: false,
     ENHANCED_LINK: false,
     OPTOUT_PAGE: false,
     PUA_NAME: 'GSA_ENOR'
 };
-
-
 /*
  * name: _onEveryPage
  * usage: to populate settings gathered from the Federated tag parameters to the configuration array and trackers
@@ -249,7 +247,7 @@ function _updateConfig() {
             case 'dclink':
                 _value = _cleanBooleanParam(_value);
                 if ('true' == _value || 'false' == _value) /* only override the default if a valid value is passed */
-                    oCONFIG.DOUNBLECLICK_LINK = _value;
+                    oCONFIG.DOUBLECLICK_LINK = _value;
                 break;
             case 'enhlink':
                 _value = _cleanBooleanParam(_value);
@@ -531,7 +529,7 @@ function createTracker(sendPv)
 		if (oCONFIG.ANONYMIZE_IP) {
 			window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + dpv + '.set', 'anonymizeIp', oCONFIG.ANONYMIZE_IP);
 		}
-		if (oCONFIG.DOUNBLECLICK_LINK) {
+		if (oCONFIG.DOUBLECLICK_LINK) {
 			window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + dpv + '.require', 'displayfeatures');
 		}
 		if (oCONFIG.ENHANCED_LINK) {
