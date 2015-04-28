@@ -42,7 +42,7 @@ var oCONFIG = {
 
     YOUTUBE: true,
     AUTOTRACKER: true,
-    EXTS: 'doc|docx|xls|xlsx|xlsm|ppt|pptx|exe|zip|pdf|js|txt|csv|dxf|dwgd|rfa|rvt|dwfx|dwg|wmv|jpg|msi|7z|gz|tgz|wma|mov|avi|mp3|mp4|csv|mobi|epub|swf|rar',
+    EXTS: 'doc|docx|xls|xlsx|xlsm|ppt|pptx|ott|ods|mdb|pub|sas|ris|exe|zip|ps|pdf|js|azw|iba|bbeb|prc|md|rtf|txt|csv|dxf|dwgd|rfa|rvt|dwfx|dwg|wmv|jpg|png|ico|webp|cab|msi|tar|warc|7z|gz|tgz|wma|mov|avi|mp3|3gp|wav|m4a|alac|flac|webm|ogg|ogv|opus|stt|vtt|vob|sub|img|nrg|nra|iso|part|disk|dump|mp4|csv|mobi|epub|swf|rar',
     SUBDOMAIN_BASED: true,
     DOUNBLECLICK_LINK: false,
     ENHANCED_LINK: false,
