@@ -7,9 +7,8 @@
 
 ***********************************************************************************************************
 Copyright 2015 by E-Nor Inc.
-Authors: Ahmed Awwad & Mohamed Adel
 Universal Federated Analytics: Google Analytics Government Wide Site Usage Measurement.
-04/16/2015 Version: 1.04
+04/23/2015 Version: 2.0
 ***********************************************************************************************************/
 
 /*
@@ -24,7 +23,7 @@ var oCONFIG = {
 
     AGENCY: '',
     SUB_AGENCY: '',
-    VERSION: '20150416 v1.04 - Universal Analytics',
+    VERSION: '20150423 v2.0 - Universal Analytics',
 
     USE_MAIN_CUSTOM_DIMENSIONS: true,
     MAIN_AGENCY_CUSTOM_DIMENSION_SLOT: 'dimension1',
@@ -624,11 +623,11 @@ function _initAutoTracker()
 			if (arr[i].href.toLowerCase().indexOf("mailto:") != -1 && arr[i].href.toLowerCase().indexOf("tel:") == -1) 
 			{
 				var gaUri = arr[i].href.match(/[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/);
-				_addEventListener(arr[i],'Mailto', gaUri[0], '', 0); 
+				_tagClicks(arr[i],'Mailto', gaUri[0], '', 0); 
 			}
 			else if (arr[i].href.toLowerCase().indexOf("mailto:") == -1 && arr[i].href.toLowerCase().indexOf("tel:") != -1) 
 			{
-				_addEventListener(arr[i],'Telephone Clicks', arr[i].href.split("tel:")[1], '', 0); 
+				_tagClicks(arr[i],'Telephone Clicks', arr[i].href.split("tel:")[1], '', 0); 
 			}
 			else if(arr[i].href.toLowerCase().indexOf("mailto:") == -1 && arr[i].href.toLowerCase().indexOf("tel:") == -1)
 			{
@@ -640,7 +639,7 @@ function _initAutoTracker()
 					if(ext[0].toLowerCase() == extDoc[j]) 
 					{
 						// Tracking internal downloads - doc, xls, pdf, exe, zip
-						_addEventListener(arr[i],'Download', ext[0].toLowerCase(), arr[i].href.split(/[#?&?]/)[0], 0);
+						_tagClicks(arr[i],'Download', ext[0].toLowerCase(), arr[i].href.split(/[#?&?]/)[0], 0);
 						break;
 					}
 					
@@ -658,7 +657,7 @@ function _initAutoTracker()
 				{
 					// Tracking outbound downloads - doc, xls, pdf, exe, zip
 					var gaUri = arr[i].href.split(extDoc[l]);
-					_addEventListener(arr[i],'Outbound Downloads', ext[0].toLowerCase(), arr[i].href.split(/[#?&?]/)[0], 0);
+					_tagClicks(arr[i],'Outbound Downloads', ext[0].toLowerCase(), arr[i].href.split(/[#?&?]/)[0], 0);
 					break;
 				}
 				else if(ext[0].toLowerCase() != extDoc[l])
@@ -669,18 +668,18 @@ function _initAutoTracker()
 						if(arr[i].href.toLowerCase().indexOf("mailto:") == -1 && arr[i].href.toLowerCase().indexOf("tel:") == -1)
 						{
 							// Tracking outbound links 
-							_addEventListener(arr[i],'Outbound', arr[i].hostname, arr[i].pathname, 0);
+							_tagClicks(arr[i],'Outbound', arr[i].hostname, arr[i].pathname, 0);
 						}
 						else if (extDoc.length && arr[i].href.toLowerCase().indexOf("mailto:") != -1 && arr[i].href.toLowerCase().indexOf("tel:") == -1)
 						{
 							// Tracking outbound emails 
 							var gaUri = arr[i].href.match(/[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/);
-							_addEventListener(arr[i],'Outbound MailTo', gaUri[0], '', 0); 
+							_tagClicks(arr[i],'Outbound MailTo', gaUri[0], '', 0); 
 						}
 						else if (extDoc.length && arr[i].href.toLowerCase().indexOf("mailto:") == -1 && arr[i].href.toLowerCase().indexOf("tel:") != -1)
 						{
 							// Tracking Telephone clicks
-							_addEventListener(arr[i],'Telephone Clicks', arr[i].href.split("tel:")[1], '', 0); 
+							_tagClicks(arr[i],'Telephone Clicks', arr[i].href.split("tel:")[1], '', 0); 
 						}
 				
 					}
@@ -696,190 +695,212 @@ function _initAutoTracker()
 }
 
 /*
- * name: _addEventListener
+ * name: _tagClicks
  * usage: 
  * add event listener to an HTML element
-*/
-function _addEventListener(evObj, evCat, evAct, evLbl, evVal){
-            evObj.addEventListener('mousedown', function() {
-                _sendEvent(evCat, evAct, evLbl, evVal);
-            });       
+*/	
+	
+	function _tagClicks(evObj, evCat, evAct, evLbl, evVal)
+	{
+		if (evObj.addEventListener) 
+		{ 
+			evObj.addEventListener('mousedown', function() {
+                _sendEvent(evCat, evAct, evLbl, evVal); });       
+		} 
+		else if (evObj.attachEvent) 
+		{ 
+			evObj.attachEvent('onmousedown', function() {
+                _sendEvent(evCat, evAct, evLbl, evVal); });       
+		} 
     }
 	
+	
 /*** Start YouTube Tracking - Used for Youtube video tracking (Play / Pause / Watch to End ***/
-var videoArray_fed = new Array();
+	
+if(oCONFIG.YOUTUBE.toString() == 'true')
+{
+	var videoArray_fed = new Array();
 	var playerArray_fed = new Array();
 	var _f33 = false;
 	var _f66 = false;
 	var _f90 = false;
 	
-
-		var tag = document.createElement('script');
+	
+	var tag = document.createElement('script');
 	tag.src = "//www.youtube.com/player_api";
 	var firstScriptTag = document.getElementsByTagName('script')[0];
 	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 	
-
-/*
- * name: youtube_parser_fed
- * usage: to extract YouTube video id from YouTube URI
- */
-function youtube_parser_fed(url) {
-    var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-    var match = url.match(regExp);
-    if (match && match[2].length == 11) {
-        return match[2];
-    } else {}
-}
-
-/*
- * name: IsYouTube_fed
- * usage: to check if the string is a valid YouTube URL
- */
-function IsYouTube_fed(url) {
-    var YouTubeLink_regEx = /^.*((youtu.be\/)|(\/v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
-    var match = url.match(YouTubeLink_regEx);
-    if (match != null && match.length > 0) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-/*
- * name: YTUrlHandler_fed
- * usage: to correct minor errors in YouTube URLs
- */
-function YTUrlHandler_fed(url)
-	{
-	url = url.replace(/origin\=(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})\&?/ig,'origin='+document.location.protocol+'//'+document.location.host);
 	
-	stAdd = '';
-	adFlag = false;
-	if (url.indexOf('https')==-1){url = url.replace('http','https');}
-	if (url.indexOf('?')==-1){stAdd = '?flag=1';}
-	if (url.indexOf('enablejsapi')==-1){stAdd +='&enablejsapi=1'; adFlag = true;}
-	if (url.indexOf('html5')==-1){stAdd +='&html5=1'; adFlag = true;}	
-	if (url.indexOf('origin')==-1){stAdd +='&origin='+document.location.protocol+'//'+document.location.host;adFlag = true;}
+	/*
+	 * name: youtube_parser_fed
+	 * usage: to extract YouTube video id from YouTube URI
+	 */
+	function youtube_parser_fed(url) {
+		var regExp = /^(https?\:)?(\/\/)?(www\.)?(youtu\.be\/|youtube(\-nocookie)?\.([A-Za-z]{2,4}|[A-Za-z]{2,3}\.[A-Za-z]{2})\/)(watch|embed\/|vi?\/)?(\?vi?\=)?([^#\&\?\/]{11}).*$/;
+		var match = url.match(regExp);
+		if (match && match[9].length == 11) {
+			return match[9];
+		} else {}
+	}
+	
+	/*
+	 * name: IsYouTube_fed
+	 * usage: to check if the string is a valid YouTube URL
+	 */
+	
+	function IsYouTube_fed(url) {
+		var YouTubeLink_regEx = /^(https?\:)?(\/\/)?(www\.)?(youtu\.be\/|youtube(\-nocookie)?\.([A-Za-z]{2,4}|[A-Za-z]{2,3}\.[A-Za-z]{2})\/)(watch|embed\/|vi?\/)?(\?vi?\=)?([^#\&\?\/]{11}).*$/;
+		if(YouTubeLink_regEx.test(url.toString()))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+			}
+	}
+	
+	/*
+	 * name: YTUrlHandler_fed
+	 * usage: to correct minor errors in YouTube URLs
+	 */
+	function YTUrlHandler_fed(url)
+		{
+		url = url.replace(/origin\=(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})\&?/ig,'origin='+document.location.protocol+'//'+document.location.host);
 		
-
-if (adFlag == true)
-{
-	return url+stAdd;
-	}
-	else
-	{return url;}
+		stAdd = '';
+		adFlag = false;
+		if (url.indexOf('https')==-1){url = url.replace('http','https');}
+		if (url.indexOf('?')==-1){stAdd = '?flag=1';}
+		if (url.indexOf('enablejsapi')==-1){stAdd +='&enablejsapi=1'; adFlag = true;}
+		if (url.indexOf('html5')==-1){stAdd +='&html5=1'; adFlag = true;}	
+		if (url.indexOf('origin')==-1){stAdd +='&origin='+document.location.protocol+'//'+document.location.host;adFlag = true;}
+			
 	
-	}
-
-/*
- * name: _initYouTubeTracker
- * usage: initiate YouTube tracker libraries and loop over all YouTube iframes
- */
-
-function _initYouTubeTracker() {
-    var _iframes = document.getElementsByTagName('iframe');
-    var vArray = 0;
-    for (var ytifrm = 0; ytifrm < _iframes.length; ytifrm++) {
-        _thisVideoObj = _iframes[ytifrm];
-        var _thisSrc = _thisVideoObj.src;
-        if (IsYouTube_fed(_thisSrc)) {
-            _thisVideoObj.src = YTUrlHandler_fed(_thisSrc);
-            var youtubeid = youtube_parser_fed(_thisSrc);
-            _thisVideoObj.setAttribute('id', youtubeid);
-            videoArray_fed[vArray] = youtubeid;
-            vArray++;
-        }
-    }
-}
-
-/*
- * name: onYouTubeIframeAPIReady
- * usage: to assign video array items to player array of YouTube Tracker API
- */
-function onYouTubePlayerAPIReady() {
-    for (var i = 0; i < videoArray_fed.length; i++) {
-        playerArray_fed[i] = new YT.Player(videoArray_fed[i], {
-            events: {
-                'onReady': onFedPlayerReady,
-                'onStateChange': onFedPlayerStateChange
-            }
-        });
-    }
-}
-
-/*
- * name: onPlayerReady
- * usage: fired when the player is ready
- * function added for compatibility of YouTube tracker API
- */
-function onFedPlayerReady(event){
-	/* left blank on purpose */
-}
-
-/* 
- * name: onPlayerStateChange
- * usage: fired when user interacts with the video player
- * such as pressing play/pause buttons
- * and sends proper Events to GA
- */
-function onFedPlayerStateChange(event) {
+	if (adFlag == true)
+	{
+		return url+stAdd;
+		}
+		else
+		{return url;}
+		
+		}
 	
-    var videoURL = event.target.getIframe().getAttribute('src');
-    var videoId = youtube_parser_fed(videoURL);
-	_thisDuration = ((parseInt(event.target.getCurrentTime()) / parseInt(event.target.getDuration())) * 100).toFixed();
-	if (typeof onPlayerStateChange != "undefined") { onPlayerStateChange(event); }
-    if (parseInt(event.data) == parseInt(YT.PlayerState.PLAYING)) {
-        if (_thisDuration == 0) {
-            _f33 = false;
-            _f66 = false;
-            _f90 = false;
-        }
-        _sendEvent('YouTube Video', 'play', videoURL, 0);
-    } else if (event.data == YT.PlayerState.ENDED) {
-        _sendEvent('YouTube Video', 'finish', videoURL, 0);
-    } else if (event.data == YT.PlayerState.PAUSED) {
-        _sendEvent('YouTube Video', 'pause', videoURL, 0);
-        var duration = _thisDuration;
-        if (duration < 100) {
-            var precentage = _thisDuration;
-            if (precentage > 0 && precentage <= 33 && _f33 == false) {
-                _sendEvent('YouTube Video', '33%', videoURL, 0);
-            } else if (precentage > 0 && precentage <= 66 && _f66 == false) {
-                _sendEvent('YouTube Video', '66%', videoURL, 0);
-            } else if (precentage > 0 && precentage <= 90 && _f90 == false) {
-                _sendEvent('YouTube Video', '90%', videoURL, 0);
-            }
-        }
-    }
+	/*
+	 * name: _initYouTubeTracker
+	 * usage: initiate YouTube tracker libraries and loop over all YouTube iframes
+	 */
+	
+	function _initYouTubeTracker() {
+		var _iframes = document.getElementsByTagName('iframe');
+		var vArray = 0;
+		for (var ytifrm = 0; ytifrm < _iframes.length; ytifrm++) {
+			_thisVideoObj = _iframes[ytifrm];
+			var _thisSrc = _thisVideoObj.src;
+			if (IsYouTube_fed(_thisSrc)) {
+				_thisVideoObj.src = YTUrlHandler_fed(_thisSrc);
+				var youtubeid = youtube_parser_fed(_thisSrc);
+				_thisVideoObj.setAttribute('id', youtubeid);
+				videoArray_fed[vArray] = youtubeid;
+				vArray++;
+			}
+		}
+	}
+	
+	/*
+	 * name: onYouTubeIframeAPIReady
+	 * usage: to assign video array items to player array of YouTube Tracker API
+	 */
+	function onYouTubePlayerAPIReady() {
+		for (var i = 0; i < videoArray_fed.length; i++) {
+			playerArray_fed[i] = new YT.Player(videoArray_fed[i], {
+				events: {
+					'onReady': onFedPlayerReady,
+					'onStateChange': onFedPlayerStateChange
+				}
+			});
+		}
+	}
+	
+	/*
+	 * name: onPlayerReady
+	 * usage: fired when the player is ready
+	 * function added for compatibility of YouTube tracker API
+	 */
+	function onFedPlayerReady(event){
+		/* left blank on purpose */
+	}
+	
+	/* 
+	 * name: onPlayerStateChange
+	 * usage: fired when user interacts with the video player
+	 * such as pressing play/pause buttons
+	 * and sends proper Events to GA
+	 */
+	function onFedPlayerStateChange(event) {
+		
+		var videoURL = event.target.getIframe().getAttribute('src');
+		var videoId = youtube_parser_fed(videoURL);
+		_thisDuration = ((parseInt(event.target.getCurrentTime()) / parseInt(event.target.getDuration())) * 100).toFixed();
+		if (typeof onPlayerStateChange != "undefined") { onPlayerStateChange(event); }
+		if (parseInt(event.data) == parseInt(YT.PlayerState.PLAYING)) {
+			if (_thisDuration == 0) {
+				_f33 = false;
+				_f66 = false;
+				_f90 = false;
+			}
+			_sendEvent('YouTube Video', 'play', videoURL, 0);
+		} else if (event.data == YT.PlayerState.ENDED) {
+			_sendEvent('YouTube Video', 'finish', videoURL, 0);
+		} else if (event.data == YT.PlayerState.PAUSED) {
+			_sendEvent('YouTube Video', 'pause', videoURL, 0);
+			var duration = _thisDuration;
+			if (duration < 100) {
+				var precentage = _thisDuration;
+				if (precentage > 0 && precentage <= 33 && _f33 == false) {
+					_sendEvent('YouTube Video', '33%', videoURL, 0);
+				} else if (precentage > 0 && precentage <= 66 && _f66 == false) {
+					_sendEvent('YouTube Video', '66%', videoURL, 0);
+				} else if (precentage > 0 && precentage <= 90 && _f90 == false) {
+					_sendEvent('YouTube Video', '90%', videoURL, 0);
+				}
+			}
+		}
+	}
 }
-
 
 /*** End YouTube Tracking - Used for Youtube video tracking (Play / Pause / Watch to End ***/
-/*
- * name: _initIdAssigner
- * usage: assign unique ID to HTML elements without any ID.
- * useful for Enhanced Link Attribution
- */
-function _initIdAssigner() {
-    var _allDocLinks = document.getElementsByTagName('a');
-    for (var sid = 0; sid < _allDocLinks.length; sid++) {
-        var currentId = _allDocLinks[sid].getAttribute('id');
-        if (currentId == null || currentId == '') {
-            _allDocLinks[sid].setAttribute('id', 'anch_' + sid);
-        }
-    }
-}
+
 
 /*
  * once the document is loaded and ready
  * call enabled functions according to oConfig settings
  */
-document.addEventListener('DOMContentLoaded', function() {
+ 
+if (document.addEventListener) 
+{ 
+	document.addEventListener('DOMContentLoaded', function() {
 	if (tObjectCheck != window["GoogleAnalyticsObject"])
 	{createTracker(false)}
 	
-    oCONFIG.ENHANCED_LINK == true ? _initIdAssigner() : '';
-    oCONFIG.AUTOTRACKER == true ? _initAutoTracker() : '';
-    oCONFIG.YOUTUBE == true ? _initYouTubeTracker() : '';
-});
+	oCONFIG.ENHANCED_LINK == true ? _initIdAssigner() : '';
+	oCONFIG.AUTOTRACKER == true ? _initAutoTracker() : '';
+	oCONFIG.YOUTUBE == true ? _initYouTubeTracker() : '';
+	});   
+} 
+else if (document.attachEvent) 
+{ 
+	document.attachEvent('onreadystatechange', function() {
+		if ( document.readyState === "complete" ) 
+		{	
+			if (tObjectCheck != window["GoogleAnalyticsObject"])
+			{createTracker(false)}
+			
+			oCONFIG.ENHANCED_LINK == true ? _initIdAssigner() : '';
+			oCONFIG.AUTOTRACKER == true ? _initAutoTracker() : '';
+			oCONFIG.YOUTUBE == true ? _initYouTubeTracker() : '';
+		}
+	});
+} 
+ 
