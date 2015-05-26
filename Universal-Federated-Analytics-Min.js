@@ -8,10 +8,10 @@
 ***********************************************************************************************************
 Copyright 2015 by E-Nor Inc.
 Universal Federated Analytics: Google Analytics Government Wide Site Usage Measurement.
-04/23/2015 Version: 2.0
+05/19/2015 Version: 2.01
 ***********************************************************************************************************/
 
-var oCONFIG={GWT_UAID:['UA-33523145-1'],FORCE_SSL:true,ANONYMIZE_IP:true,AGENCY:'',SUB_AGENCY:'',VERSION:'20150423 v2.0 - Universal Analytics',USE_MAIN_CUSTOM_DIMENSIONS:true,MAIN_AGENCY_CUSTOM_DIMENSION_SLOT:'dimension1',MAIN_SUBAGENCY_CUSTOM_DIMENSION_SLOT:'dimension2',MAIN_CODEVERSION_CUSTOM_DIMENSION_SLOT:'dimension3',USE_PARALLEL_CUSTOM_DIMENSIONS:false,PARALLEL_AGENCY_CUSTOM_DIMENSION_SLOT:'dimension1',PARALLEL_SUBAGENCY_CUSTOM_DIMENSION_SLOT:'dimension2',PARALLEL_CODEVERSION_CUSTOM_DIMENSION_SLOT:'dimension3',COOKIE_DOMAIN:location.hostname.replace('www.','').toLowerCase(),COOKIE_TIMEOUT:60*60*24*2*365,SEARCH_PARAMS:'q|querytext|nasaInclude|k|qt',YOUTUBE:true,AUTOTRACKER:true,EXTS:'doc|docx|xls|xlsx|xlsm|ppt|pptx|exe|zip|pdf|js|txt|csv|dxf|dwgd|rfa|rvt|dwfx|dwg|wmv|jpg|msi|7z|gz|tgz|wma|mov|avi|mp3|mp4|csv|mobi|epub|swf|rar',SUBDOMAIN_BASED:true,DOUNBLECLICK_LINK:false,ENHANCED_LINK:false,OPTOUT_PAGE:false,PUA_NAME:'GSA_ENOR'};function _onEveryPage(){_updateConfig();_defineCookieDomain();_defineAgencyCDsValues();}
+var oCONFIG={GWT_UAID:['UA-33523145-1'],FORCE_SSL:true,ANONYMIZE_IP:true,AGENCY:'',SUB_AGENCY:'',VERSION:'20150519 v2.01 - Universal Analytics',USE_MAIN_CUSTOM_DIMENSIONS:true,MAIN_AGENCY_CUSTOM_DIMENSION_SLOT:'dimension1',MAIN_SUBAGENCY_CUSTOM_DIMENSION_SLOT:'dimension2',MAIN_CODEVERSION_CUSTOM_DIMENSION_SLOT:'dimension3',USE_PARALLEL_CUSTOM_DIMENSIONS:false,PARALLEL_AGENCY_CUSTOM_DIMENSION_SLOT:'dimension1',PARALLEL_SUBAGENCY_CUSTOM_DIMENSION_SLOT:'dimension2',PARALLEL_CODEVERSION_CUSTOM_DIMENSION_SLOT:'dimension3',COOKIE_DOMAIN:location.hostname.replace('www.','').toLowerCase(),COOKIE_TIMEOUT:60*60*24*2*365,SEARCH_PARAMS:'q|querytext|nasaInclude|k|qt',YOUTUBE:false,AUTOTRACKER:true,EXTS:'doc|docx|xls|xlsx|xlsm|ppt|pptx|exe|zip|pdf|js|txt|csv|dxf|dwgd|rfa|rvt|dwfx|dwg|wmv|jpg|msi|7z|gz|tgz|wma|mov|avi|mp3|mp4|csv|mobi|epub|swf|rar',SUBDOMAIN_BASED:true,DOUNBLECLICK_LINK:false,ENHANCED_LINK:false,OPTOUT_PAGE:false,PUA_NAME:'GSA_ENOR'};function _onEveryPage(){_updateConfig();_defineCookieDomain();_defineAgencyCDsValues();}
 _onEveryPage();function _defineCookieDomain()
 {var domainPattern=/(([^.\/]+\.[^.\/]{2,3}\.[^.\/]{2})|(([^.\/]+\.)[^.\/]{2,4}))(\/.*)?$/;if(domainPattern.test(oCONFIG.SUBDOMAIN_BASED.toString()))
 {oCONFIG.COOKIE_DOMAIN=oCONFIG.SUBDOMAIN_BASED.toLowerCase().replace('www.','');oCONFIG.SUBDOMAIN_BASED=true;}
@@ -143,7 +143,7 @@ if(sendPv)
 {window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME+dpv+'.send','pageview',_adjPageUri);}}}
 function _initAutoTracker()
 {var mainDomain=oCONFIG.COOKIE_DOMAIN;var extDoc=oCONFIG.EXTS.split("|");var arr=document.getElementsByTagName("a");for(i=0;i<arr.length;i++)
-{var flag=0;var flagExt=0;var doname="";var mailPattern=/^mailto\:[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/;var urlPattern=/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;var telPattern=/^tel\:(.*)([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;if(mailPattern.test(arr[i].href)||urlPattern.test(arr[i].href)||telPattern.test(arr[i].href))
+{var flag=0;var flagExt=0;var doname="";var mailPattern=/^mailto\:[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/;var urlPattern=/^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;var telPattern=/^tel\:(.*)([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;if(mailPattern.test(arr[i].href)||urlPattern.test(arr[i].href)||telPattern.test(arr[i].href))
 {try
 {if(urlPattern.test(arr[i].href))
 {doname=arr[i].hostname.toLowerCase().replace("www.","");}
@@ -178,13 +178,7 @@ else if(ext[0].toLowerCase()!=extDoc[l])
 else if(extDoc.length&&arr[i].href.toLowerCase().indexOf("mailto:")!=-1&&arr[i].href.toLowerCase().indexOf("tel:")==-1)
 {var gaUri=arr[i].href.match(/[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/);_tagClicks(arr[i],'Outbound MailTo',gaUri[0],'',0);}
 else if(extDoc.length&&arr[i].href.toLowerCase().indexOf("mailto:")==-1&&arr[i].href.toLowerCase().indexOf("tel:")!=-1)
-{_tagClicks(arr[i],'Telephone Clicks',arr[i].href.split("tel:")[1],'',0);}}}}}
-var currentId=arr[i].getAttribute('id');if(currentId==null||currentId==''||currentId==undefined){arr[i].setAttribute('id','anch_'+i);}}}
-function _tagClicks(evObj,evCat,evAct,evLbl,evVal)
-{if(evObj.addEventListener)
-{evObj.addEventListener('mousedown',function(){_sendEvent(evCat,evAct,evLbl,evVal);});}
-else if(evObj.attachEvent)
-{evObj.attachEvent('onmousedown',function(){_sendEvent(evCat,evAct,evLbl,evVal);});}}
+{_tagClicks(arr[i],'Telephone Clicks',arr[i].href.split("tel:")[1],'',0);}}}}}}}
 if(oCONFIG.YOUTUBE.toString()=='true')
 {var videoArray_fed=new Array();var playerArray_fed=new Array();var _f33=false;var _f66=false;var _f90=false;var tag=document.createElement('script');tag.src="//www.youtube.com/player_api";var firstScriptTag=document.getElementsByTagName('script')[0];firstScriptTag.parentNode.insertBefore(tag,firstScriptTag);function youtube_parser_fed(url){var regExp=/^(https?\:)?(\/\/)?(www\.)?(youtu\.be\/|youtube(\-nocookie)?\.([A-Za-z]{2,4}|[A-Za-z]{2,3}\.[A-Za-z]{2})\/)(watch|embed\/|vi?\/)?(\?vi?\=)?([^#\&\?\/]{11}).*$/;var match=url.match(regExp);if(match&&match[9].length==11){return match[9];}else{}}
 function IsYouTube_fed(url){var YouTubeLink_regEx=/^(https?\:)?(\/\/)?(www\.)?(youtu\.be\/|youtube(\-nocookie)?\.([A-Za-z]{2,4}|[A-Za-z]{2,3}\.[A-Za-z]{2})\/)(watch|embed\/|vi?\/)?(\?vi?\=)?([^#\&\?\/]{11}).*$/;if(YouTubeLink_regEx.test(url.toString()))
@@ -207,12 +201,18 @@ function onFedPlayerReady(event){}
 function onFedPlayerStateChange(event){var videoURL=event.target.getIframe().getAttribute('src');var videoId=youtube_parser_fed(videoURL);_thisDuration=((parseInt(event.target.getCurrentTime())/ parseInt(event.target.getDuration()))*100).toFixed();if(typeof onPlayerStateChange!="undefined"){onPlayerStateChange(event);}
 if(parseInt(event.data)==parseInt(YT.PlayerState.PLAYING)){if(_thisDuration==0){_f33=false;_f66=false;_f90=false;}
 _sendEvent('YouTube Video','play',videoURL,0);}else if(event.data==YT.PlayerState.ENDED){_sendEvent('YouTube Video','finish',videoURL,0);}else if(event.data==YT.PlayerState.PAUSED){_sendEvent('YouTube Video','pause',videoURL,0);var duration=_thisDuration;if(duration<100){var precentage=_thisDuration;if(precentage>0&&precentage<=33&&_f33==false){_sendEvent('YouTube Video','33%',videoURL,0);}else if(precentage>0&&precentage<=66&&_f66==false){_sendEvent('YouTube Video','66%',videoURL,0);}else if(precentage>0&&precentage<=90&&_f90==false){_sendEvent('YouTube Video','90%',videoURL,0);}}}}}
+function _initIdAssigner(){var _allDocLinks=document.getElementsByTagName('a');for(var sid=0;sid<_allDocLinks.length;sid++){var currentId=_allDocLinks[sid].getAttribute('id');if(currentId==null||currentId==''||currentId==undefined){_allDocLinks[sid].setAttribute('id','anch_'+sid);}}}
+function _tagClicks(evObj,evCat,evAct,evLbl,evVal)
+{if(evObj.addEventListener)
+{evObj.addEventListener('mousedown',function(){_sendEvent(evCat,evAct,evLbl,evVal);});}
+else if(evObj.attachEvent)
+{evObj.attachEvent('onmousedown',function(){_sendEvent(evCat,evAct,evLbl,evVal);});}}
 if(document.addEventListener)
 {document.addEventListener('DOMContentLoaded',function(){if(tObjectCheck!=window["GoogleAnalyticsObject"])
-{createTracker(false)}
-oCONFIG.ENHANCED_LINK==true?_initIdAssigner():'';oCONFIG.AUTOTRACKER==true?_initAutoTracker():'';oCONFIG.YOUTUBE==true?_initYouTubeTracker():'';});}
+{createTracker(false);}
+oCONFIG.ENHANCED_LINK.toString()=='true'?_initIdAssigner():'';oCONFIG.AUTOTRACKER.toString()=='true'?_initAutoTracker():'';oCONFIG.YOUTUBE.toString()=='true'?_initYouTubeTracker():'';});}
 else if(document.attachEvent)
 {document.attachEvent('onreadystatechange',function(){if(document.readyState==="complete")
 {if(tObjectCheck!=window["GoogleAnalyticsObject"])
-{createTracker(false)}
-oCONFIG.ENHANCED_LINK==true?_initIdAssigner():'';oCONFIG.AUTOTRACKER==true?_initAutoTracker():'';oCONFIG.YOUTUBE==true?_initYouTubeTracker():'';}});}
+{createTracker(false);}
+oCONFIG.ENHANCED_LINK.toString()=='true'?_initIdAssigner():'';oCONFIG.AUTOTRACKER.toString()=='true'?_initAutoTracker():'';oCONFIG.YOUTUBE.toString()=='true'?_initYouTubeTracker():'';}});}
