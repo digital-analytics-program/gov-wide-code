@@ -8,7 +8,7 @@
 ***********************************************************************************************************
 Copyright 2015 by E-Nor Inc.
 Universal Federated Analytics: Google Analytics Government Wide Site Usage Measurement.
-04/23/2015 Version: 2.0
+05/19/2015 Version: 2.01
 ***********************************************************************************************************/
 
 /*
@@ -23,7 +23,7 @@ var oCONFIG = {
 
     AGENCY: '',
     SUB_AGENCY: '',
-    VERSION: '20150423 v2.0 - Universal Analytics',
+    VERSION: '20150519 v2.01 - Universal Analytics',
 
     USE_MAIN_CUSTOM_DIMENSIONS: true,
     MAIN_AGENCY_CUSTOM_DIMENSION_SLOT: 'dimension1',
@@ -39,9 +39,9 @@ var oCONFIG = {
     COOKIE_TIMEOUT: 60 * 60 * 24 * 2 * 365,
     SEARCH_PARAMS: 'q|querytext|nasaInclude|k|qt',
 
-    YOUTUBE: true,
+    YOUTUBE: false,
     AUTOTRACKER: true,
-    EXTS: 'doc|docx|xls|xlsx|xlsm|ppt|pptx|ott|ods|mdb|pub|sas|ris|exe|zip|ps|pdf|js|azw|iba|bbeb|prc|md|rtf|txt|csv|dxf|dwgd|rfa|rvt|dwfx|dwg|wmv|jpg|png|ico|webp|cab|msi|tar|warc|7z|gz|tgz|wma|mov|avi|mp3|3gp|wav|m4a|alac|flac|webm|ogg|ogv|opus|stt|vtt|vob|sub|img|nrg|nra|iso|part|disk|dump|mp4|csv|mobi|epub|swf|rar',
+    EXTS: 'doc|docx|xls|xlsx|xlsm|ppt|pptx|exe|zip|pdf|js|txt|csv|dxf|dwgd|rfa|rvt|dwfx|dwg|wmv|jpg|msi|7z|gz|tgz|wma|mov|avi|mp3|mp4|csv|mobi|epub|swf|rar',
     SUBDOMAIN_BASED: true,
     DOUNBLECLICK_LINK: false,
     ENHANCED_LINK: false,
@@ -562,6 +562,8 @@ function createTracker(sendPv)
 	}	
 }
 /**** End Basic Tracker *******/
+
+
 /*
  * name: _initAutoTracker
  * usage: to automatically tag outbound links / e-mails / downloads
@@ -577,7 +579,7 @@ function _initAutoTracker()
 		var flagExt = 0;
 		var doname = ""; 
 		var mailPattern = /^mailto\:[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/;
-		var urlPattern = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+		var urlPattern = /^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 		var telPattern = /^tel\:(.*)([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
 		if(mailPattern.test(arr[i].href) || urlPattern.test(arr[i].href) || telPattern.test(arr[i].href))
 		{
@@ -686,35 +688,11 @@ function _initAutoTracker()
 				}
 			}
 		}
-		
-		var currentId = arr[i].getAttribute('id');
-        if (currentId == null || currentId == '' || currentId == undefined) {
-            arr[i].setAttribute('id', 'anch_' + i);
-        }
 	}
 }
+/*** End AutoTracker  ***/
 
-/*
- * name: _tagClicks
- * usage: 
- * add event listener to an HTML element
-*/	
-	
-	function _tagClicks(evObj, evCat, evAct, evLbl, evVal)
-	{
-		if (evObj.addEventListener) 
-		{ 
-			evObj.addEventListener('mousedown', function() {
-                _sendEvent(evCat, evAct, evLbl, evVal); });       
-		} 
-		else if (evObj.attachEvent) 
-		{ 
-			evObj.attachEvent('onmousedown', function() {
-                _sendEvent(evCat, evAct, evLbl, evVal); });       
-		} 
-    }
-	
-	
+
 /*** Start YouTube Tracking - Used for Youtube video tracking (Play / Pause / Watch to End ***/
 	
 if(oCONFIG.YOUTUBE.toString() == 'true')
@@ -874,6 +852,44 @@ if(oCONFIG.YOUTUBE.toString() == 'true')
 
 
 /*
+ * name: _initIdAssigner
+ * usage: assign unique Id to HTML elements without any id.
+ * useful for Enhanced Link Attribution
+ */
+function _initIdAssigner() {
+    var _allDocLinks = document.getElementsByTagName('a');
+    for (var sid = 0; sid < _allDocLinks.length; sid++) {
+        var currentId = _allDocLinks[sid].getAttribute('id');
+        if (currentId == null || currentId == '' || currentId == undefined) {
+            _allDocLinks[sid].setAttribute('id', 'anch_' + sid);
+        }
+    }
+}
+
+
+/*
+ * name: _tagClicks
+ * usage: 
+ * add event listener to an HTML element
+*/	
+	
+	function _tagClicks(evObj, evCat, evAct, evLbl, evVal)
+	{
+		if (evObj.addEventListener) 
+		{ 
+			evObj.addEventListener('mousedown', function() {
+                _sendEvent(evCat, evAct, evLbl, evVal); });       
+		} 
+		else if (evObj.attachEvent) 
+		{ 
+			evObj.attachEvent('onmousedown', function() {
+                _sendEvent(evCat, evAct, evLbl, evVal); });       
+		} 
+    }
+	
+	
+
+/*
  * once the document is loaded and ready
  * call enabled functions according to oConfig settings
  */
@@ -882,11 +898,12 @@ if (document.addEventListener)
 { 
 	document.addEventListener('DOMContentLoaded', function() {
 	if (tObjectCheck != window["GoogleAnalyticsObject"])
-	{createTracker(false)}
-	
-	oCONFIG.ENHANCED_LINK == true ? _initIdAssigner() : '';
-	oCONFIG.AUTOTRACKER == true ? _initAutoTracker() : '';
-	oCONFIG.YOUTUBE == true ? _initYouTubeTracker() : '';
+	{
+		createTracker(false);
+		}
+	oCONFIG.ENHANCED_LINK.toString() == 'true' ? _initIdAssigner() : '';
+	oCONFIG.AUTOTRACKER.toString() == 'true' ? _initAutoTracker() : '';
+	oCONFIG.YOUTUBE.toString() == 'true' ? _initYouTubeTracker() : '';
 	});   
 } 
 else if (document.attachEvent) 
@@ -895,11 +912,12 @@ else if (document.attachEvent)
 		if ( document.readyState === "complete" ) 
 		{	
 			if (tObjectCheck != window["GoogleAnalyticsObject"])
-			{createTracker(false)}
-			
-			oCONFIG.ENHANCED_LINK == true ? _initIdAssigner() : '';
-			oCONFIG.AUTOTRACKER == true ? _initAutoTracker() : '';
-			oCONFIG.YOUTUBE == true ? _initYouTubeTracker() : '';
+			{
+				createTracker(false);
+				}
+			oCONFIG.ENHANCED_LINK.toString() == 'true' ? _initIdAssigner() : '';
+			oCONFIG.AUTOTRACKER.toString() == 'true'? _initAutoTracker() : '';
+			oCONFIG.YOUTUBE.toString() == 'true' ? _initYouTubeTracker() : '';
 		}
 	});
 } 
