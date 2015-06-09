@@ -929,9 +929,11 @@ if (_setUpTrackersIfReady()) {
 }
 else if (document.addEventListener)
 {
-	document.addEventListener('DOMContentLoaded', _setUpTrackers);
+  // modern browser
+  document.addEventListener('DOMContentLoaded', _setUpTrackers);
 }
 else if (document.attachEvent)
 {
-	document.attachEvent('onreadystatechange', _setUpTrackersIfReady);
+  // old browser
+  document.attachEvent('onreadystatechange', _setUpTrackersIfReady);
 }
