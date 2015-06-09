@@ -18,7 +18,7 @@ Agencies are encouraged to use the following HTML snippet to participate in the 
 
 ```html
 <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
-<script id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js"></script>
+<script id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js" async></script>
 ```
 
 #### Transport security
