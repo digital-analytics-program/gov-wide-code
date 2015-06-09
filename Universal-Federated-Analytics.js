@@ -905,33 +905,18 @@ function _setUpTrackers() {
 
 
 /*
- * name: _setUpTrackersIfReady
- * usage:
- * initializes the enabled trackers, if the DOM is ready
- */
-function _setUpTrackersIfReady() {
-  if ( document.readyState === "complete" )
-  {
-    _setUpTrackers();
-    return true;
-  } else {
-    return false;
-  }
-}
-
-
-/*
  * once the document is loaded and ready
  * call enabled functions according to oConfig settings
  */
-if (_setUpTrackersIfReady()) {
+if ( document.readyState === 'interactive' || document.readyState === 'complete' ) {
   // DOM already loaded
+  _setUpTrackers();
 }
 else if (document.addEventListener)
 {
-	document.addEventListener('DOMContentLoaded', _setUpTrackers);
+  document.addEventListener('DOMContentLoaded', _setUpTrackers);
 }
 else if (document.attachEvent)
 {
-	document.attachEvent('onreadystatechange', _setUpTrackersIfReady);
+  document.attachEvent('onreadystatechange', _setUpTrackers);
 }
