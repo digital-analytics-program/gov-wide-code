@@ -2,8 +2,8 @@
 				    .ooooo.          ooo. .oo.     .ooooo.    oooo d8b
 				   d88" `88b         `888P"Y88b   d88" `88b   `888""8P
 				   888888888  88888   888   888   888   888    888
-				   888        88888   888   888   888   888    888       
-				   `"88888"          o888o o888o  `Y8bod8P"   d888b      
+				   888        88888   888   888   888   888    888
+				   `"88888"          o888o o888o  `Y8bod8P"   d888b
 
 ***********************************************************************************************************
 Copyright 2015 by E-Nor Inc.
@@ -76,7 +76,7 @@ function _defineCookieDomain()
 	}
 	else
 	{
-		if (oCONFIG.SUBDOMAIN_BASED.toString() == 'false') 
+		if (oCONFIG.SUBDOMAIN_BASED.toString() == 'false')
 		{
 			oCONFIG.COOKIE_DOMAIN = document.location.hostname.match(/(([^.\/]+\.[^.\/]{2,3}\.[^.\/]{2})|(([^.\/]+\.)[^.\/]{2,4}))(\/.*)?$/)[1];
 			oCONFIG.SUBDOMAIN_BASED = true;
@@ -271,15 +271,15 @@ function _updateConfig() {
  /* name: _sendCustomDimensions
  * usage: to set custom dimensions before sending the hit */
 
-function _sendCustomDimensions(_slotNums, _val) 
+function _sendCustomDimensions(_slotNums, _val)
 {
-    if (_slotNums.length > 0 && _val != '' && _val != undefined) 
+    if (_slotNums.length > 0 && _val != '' && _val != undefined)
 	{
 		if (tObjectCheck != window['GoogleAnalyticsObject'])
 		{
 			createTracker(false);
 		}
-        for (var i = 0; i < oCONFIG.GWT_UAID.length; i++) 
+        for (var i = 0; i < oCONFIG.GWT_UAID.length; i++)
 		{
 			if(_slotNums[i] != 'dimension0')
 			{
@@ -298,15 +298,15 @@ function _sendCustomDimensions(_slotNums, _val)
  * name: _sendCustomMetrics
  * usage: to set custom metrics before sending the hit
  */
-function _sendCustomMetrics(_slotNums, _val) 
+function _sendCustomMetrics(_slotNums, _val)
 {
-    if (_slotNums.length > 0 && _val != '' && _val != undefined) 
+    if (_slotNums.length > 0 && _val != '' && _val != undefined)
 	{
 		if (tObjectCheck != window['GoogleAnalyticsObject'])
 		{
 			createTracker(false);
 		}
-        for (var i = 0; i < oCONFIG.GWT_UAID.length; i++) 
+        for (var i = 0; i < oCONFIG.GWT_UAID.length; i++)
 		{
 			if(_slotNums[i] != 'metric0')
 			{
@@ -326,19 +326,19 @@ function _sendCustomMetrics(_slotNums, _val)
  * usage: to set hit type to Event
  */
 function _sendEvent(_cat, _act, _lbl, _val, _nonInteraction) {
-    if (_cat != '' && _cat != undefined && _act != '' && _act != undefined) 
+    if (_cat != '' && _cat != undefined && _act != '' && _act != undefined)
 	{
 		if (tObjectCheck != window['GoogleAnalyticsObject'])
 		{
 			createTracker(false);
 		}
-        for (var i = 0; i < oCONFIG.GWT_UAID.length; i++) 
+        for (var i = 0; i < oCONFIG.GWT_UAID.length; i++)
 		{
 			try
 			{
 				window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + i + '.send', 'event', _cat, _act, ((_lbl != undefined) ? _lbl : ''), ((_val != '' || !isNaN(_val) || _val != undefined) ? parseInt(_val) : 0), {'nonInteraction': _nonInteraction});
 			}
-			catch(err) 
+			catch(err)
 			{
 			}
         }
@@ -347,23 +347,23 @@ function _sendEvent(_cat, _act, _lbl, _val, _nonInteraction) {
 
 
 /* name: _sendPageview
- * usage: to set hit type to Pageview. 
+ * usage: to set hit type to Pageview.
  */
-function _sendPageview(_virtualPath, _virtualTitle) 
+function _sendPageview(_virtualPath, _virtualTitle)
 {
-    if (_virtualPath != '' && _virtualPath != undefined) 
+    if (_virtualPath != '' && _virtualPath != undefined)
 	{
 		if (tObjectCheck != window['GoogleAnalyticsObject'])
 		{
 			createTracker(false);
 		}
-        for (var i = 0; i < oCONFIG.GWT_UAID.length; i++) 
+        for (var i = 0; i < oCONFIG.GWT_UAID.length; i++)
 		{
-			try 
+			try
 			{
 				window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + i + '.send', 'pageview', {'page': _virtualPath, 'title': ((_virtualTitle != '' || _virtualTitle != undefined) ? _virtualTitle : document.title)});
 			}
-			catch(err) 
+			catch(err)
 			{
 			}
         }
@@ -373,24 +373,24 @@ function _sendPageview(_virtualPath, _virtualTitle)
 /* name: gas
  * usage: to set hit parameters or send hits.
  * This is the only public function that should be called by users. */
-function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5) 
+function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5)
 {
 	/*making sure the required parameters are passed*/
 	if(_command != undefined && _command != '' && _hitType != undefined && _hitType != '' && _param1 != undefined && _param1 != '')
     {
-		if (_hitType.toLowerCase() == 'pageview') 
+		if (_hitType.toLowerCase() == 'pageview')
 		{
-			try 
+			try
 			{
 				_sendPageview(_param1, ((_param2 != '' || _param2 != undefined) ? _param2 : document.title));
 			}
-			catch(err) 
+			catch(err)
 			{
 			}
-		} 
-		else if (_hitType.toLowerCase() == 'event' && _param2 != undefined && _param2 != '') 
+		}
+		else if (_hitType.toLowerCase() == 'event' && _param2 != undefined && _param2 != '')
 		{
-			try 
+			try
 			{
 				var _nonInteraction = 'false';
 				if (_param5 == undefined)
@@ -403,13 +403,13 @@ function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5)
 				}
 				_sendEvent(_param1, _param2, ((_param3 != undefined) ? _param3 : ''), ((_param4 != '' || !isNaN(_param4) || _param4 != undefined) ? parseInt(_param4) : 0), ((_nonInteraction == 'true') ? 1 : 0));
 			}
-			catch(err) 
+			catch(err)
 			{
 			}
-		} 
-		else if (_hitType.toLowerCase().indexOf('dimension') != -1) 
+		}
+		else if (_hitType.toLowerCase().indexOf('dimension') != -1)
 		{
-			try 
+			try
 			{
 				var cdsTmpArr = _hitType.toLowerCase().split(',');
 				var cdsArr = [];
@@ -418,14 +418,14 @@ function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5)
 				{
 					if(dimsPattern.test(cdsTmpArr[ix]))
 					{
-						cdsArr.push(cdsTmpArr[ix]);						
+						cdsArr.push(cdsTmpArr[ix]);
 					}
 					else
 					{
 						var tmpDim = 'dimension'+cdsTmpArr[ix].match(/\d+$/g)[0];
 						if(dimsPattern.test(tmpDim) || tmpDim == 'dimension0')
 						{
-							cdsArr.push(tmpDim);						
+							cdsArr.push(tmpDim);
 						}
 					}
 				}
@@ -434,13 +434,13 @@ function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5)
 					_sendCustomDimensions(cdsArr, ((_param1 != undefined) ? _param1 : ''));
 				}
 			}
-			catch(err) 
+			catch(err)
 			{
 			}
-		} 
-		else if (_hitType.toLowerCase().indexOf('metric') != -1) 
+		}
+		else if (_hitType.toLowerCase().indexOf('metric') != -1)
 		{
-			try 
+			try
 			{
 				var mtrcsTmpArr = _hitType.toLowerCase().split(',');
 				var mtrcsArr = [];
@@ -449,7 +449,7 @@ function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5)
 				{
 					if(mtrcsPattern.test(mtrcsTmpArr[ixx]))
 					{
-						mtrcsArr.push(mtrcsTmpArr[ixx]);						
+						mtrcsArr.push(mtrcsTmpArr[ixx]);
 					}
 					else
 					{
@@ -465,7 +465,7 @@ function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5)
 					_sendCustomMetrics(mtrcsArr, ((_param1 != '' || _param1 != undefined || !isNaN(_param1)) ? parseFloat(_param1) : 1));
 				}
 			}
-			catch(err) 
+			catch(err)
 			{
 			}
 		}
@@ -485,12 +485,12 @@ function _URIHandler(pageName) {
 /**** Start Basic Tracker *******/
 /*
  * build GA tracking code
- * according to configurations saved in oConfig 
+ * according to configurations saved in oConfig
  */
  var tObjectCheck ;
  if (typeof  window['GoogleAnalyticsObject']=='undefined')
 {
-	
+
 (function(i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r;
     i[r] = i[r] || function() {
@@ -514,11 +514,11 @@ createTracker(true);
 
 function createTracker(sendPv)
 {
-	for (var dpv = 0; dpv < oCONFIG.GWT_UAID.length; dpv++) 
+	for (var dpv = 0; dpv < oCONFIG.GWT_UAID.length; dpv++)
 	{
-	
+
 		var _adjPageUri = _URIHandler(document.location.pathname + document.location.search + document.location.hash);
-		if (oCONFIG.OPTOUT_PAGE) 
+		if (oCONFIG.OPTOUT_PAGE)
 		{
 			window['ga-disable-' + oCONFIG.GWT_UAID[dpv]] = true;
 		};
@@ -553,13 +553,13 @@ function createTracker(sendPv)
 		{
 			var vpv404 = '/vpv404/' + _adjPageUri;
 			_adjPageUri = vpv404.replace(/\/\//g, '/') + '/' + document.referrer;
-			
+
 		}
 		if (sendPv)
 		{
 		window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + dpv + '.send', 'pageview', _adjPageUri);
 		}
-	}	
+	}
 }
 /**** End Basic Tracker *******/
 
@@ -577,7 +577,7 @@ function _initAutoTracker()
 	 {
 		var flag = 0;
 		var flagExt = 0;
-		var doname = ""; 
+		var doname = "";
 		var mailPattern = /^mailto\:[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/;
 		var urlPattern = /^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 		var telPattern = /^tel\:(.*)([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
@@ -587,7 +587,7 @@ function _initAutoTracker()
 			{
 				if(urlPattern.test(arr[i].href))
 				{
-					doname = arr[i].hostname.toLowerCase().replace("www.","");			
+					doname = arr[i].hostname.toLowerCase().replace("www.","");
 				}
 				else if(mailPattern.test(arr[i].href))
 				{
@@ -597,7 +597,7 @@ function _initAutoTracker()
 				{
 					doname = arr[i].href;
 					doname = doname.toLowerCase();
-				}  
+				}
 			}
 			catch(err)
 			{
@@ -605,57 +605,57 @@ function _initAutoTracker()
 			}
 		}
 		else
-		{   
-			continue; 
+		{
+			continue;
 		}
-		
+
 		var condition = false;
 
-		if (oCONFIG.SUBDOMAIN_BASED) 
+		if (oCONFIG.SUBDOMAIN_BASED)
 		{
 			condition = (doname.indexOf(mainDomain) != -1);
-		} else 
+		} else
 		{
 			condition = (doname == mainDomain);
 		}
-		
+
 		if(condition)
 		{
-			// Tracking internal email clicks		
-			if (arr[i].href.toLowerCase().indexOf("mailto:") != -1 && arr[i].href.toLowerCase().indexOf("tel:") == -1) 
+			// Tracking internal email clicks
+			if (arr[i].href.toLowerCase().indexOf("mailto:") != -1 && arr[i].href.toLowerCase().indexOf("tel:") == -1)
 			{
 				var gaUri = arr[i].href.match(/[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/);
-				_tagClicks(arr[i],'Mailto', gaUri[0], '', 0); 
+				_tagClicks(arr[i],'Mailto', gaUri[0], '', 0);
 			}
-			else if (arr[i].href.toLowerCase().indexOf("mailto:") == -1 && arr[i].href.toLowerCase().indexOf("tel:") != -1) 
+			else if (arr[i].href.toLowerCase().indexOf("mailto:") == -1 && arr[i].href.toLowerCase().indexOf("tel:") != -1)
 			{
-				_tagClicks(arr[i],'Telephone Clicks', arr[i].href.split("tel:")[1], '', 0); 
+				_tagClicks(arr[i],'Telephone Clicks', arr[i].href.split("tel:")[1], '', 0);
 			}
 			else if(arr[i].href.toLowerCase().indexOf("mailto:") == -1 && arr[i].href.toLowerCase().indexOf("tel:") == -1)
 			{
-				
-				for(var j = 0; j < extDoc.length; j++) 
+
+				for(var j = 0; j < extDoc.length; j++)
 				{
 					var arExt = arr[i].href.split(".");
 					var ext = arExt[arExt.length-1].split(/[#?&?]/);
-					if(ext[0].toLowerCase() == extDoc[j]) 
+					if(ext[0].toLowerCase() == extDoc[j])
 					{
 						// Tracking internal downloads - doc, xls, pdf, exe, zip
 						_tagClicks(arr[i],'Download', ext[0].toLowerCase(), arr[i].href.split(/[#?&?]/)[0], 0);
 						break;
 					}
-					
+
 				}
-				
+
 			}
 		}
 		else
 		{
-			for(var l = 0; l < extDoc.length; l++) 
+			for(var l = 0; l < extDoc.length; l++)
 			{
 				var arExt = arr[i].href.split(".");
 				var ext = arExt[arExt.length-1].split(/[#?]/);
-				if(ext[0].toLowerCase() == extDoc[l]) 
+				if(ext[0].toLowerCase() == extDoc[l])
 				{
 					// Tracking outbound downloads - doc, xls, pdf, exe, zip
 					var gaUri = arr[i].href.split(extDoc[l]);
@@ -669,21 +669,21 @@ function _initAutoTracker()
 					{
 						if(arr[i].href.toLowerCase().indexOf("mailto:") == -1 && arr[i].href.toLowerCase().indexOf("tel:") == -1)
 						{
-							// Tracking outbound links 
+							// Tracking outbound links
 							_tagClicks(arr[i],'Outbound', arr[i].hostname, arr[i].pathname, 0);
 						}
 						else if (extDoc.length && arr[i].href.toLowerCase().indexOf("mailto:") != -1 && arr[i].href.toLowerCase().indexOf("tel:") == -1)
 						{
-							// Tracking outbound emails 
+							// Tracking outbound emails
 							var gaUri = arr[i].href.match(/[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/);
-							_tagClicks(arr[i],'Outbound MailTo', gaUri[0], '', 0); 
+							_tagClicks(arr[i],'Outbound MailTo', gaUri[0], '', 0);
 						}
 						else if (extDoc.length && arr[i].href.toLowerCase().indexOf("mailto:") == -1 && arr[i].href.toLowerCase().indexOf("tel:") != -1)
 						{
 							// Tracking Telephone clicks
-							_tagClicks(arr[i],'Telephone Clicks', arr[i].href.split("tel:")[1], '', 0); 
+							_tagClicks(arr[i],'Telephone Clicks', arr[i].href.split("tel:")[1], '', 0);
 						}
-				
+
 					}
 				}
 			}
@@ -694,7 +694,7 @@ function _initAutoTracker()
 
 
 /*** Start YouTube Tracking - Used for Youtube video tracking (Play / Pause / Watch to End ***/
-	
+
 if(oCONFIG.YOUTUBE.toString() == 'true')
 {
 	var videoArray_fed = new Array();
@@ -702,14 +702,14 @@ if(oCONFIG.YOUTUBE.toString() == 'true')
 	var _f33 = false;
 	var _f66 = false;
 	var _f90 = false;
-	
-	
+
+
 	var tag = document.createElement('script');
 	tag.src = "//www.youtube.com/player_api";
 	var firstScriptTag = document.getElementsByTagName('script')[0];
 	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-	
-	
+
+
 	/*
 	 * name: youtube_parser_fed
 	 * usage: to extract YouTube video id from YouTube URI
@@ -721,12 +721,12 @@ if(oCONFIG.YOUTUBE.toString() == 'true')
 			return match[9];
 		} else {}
 	}
-	
+
 	/*
 	 * name: IsYouTube_fed
 	 * usage: to check if the string is a valid YouTube URL
 	 */
-	
+
 	function IsYouTube_fed(url) {
 		var YouTubeLink_regEx = /^(https?\:)?(\/\/)?(www\.)?(youtu\.be\/|youtube(\-nocookie)?\.([A-Za-z]{2,4}|[A-Za-z]{2,3}\.[A-Za-z]{2})\/)(watch|embed\/|vi?\/)?(\?vi?\=)?([^#\&\?\/]{11}).*$/;
 		if(YouTubeLink_regEx.test(url.toString()))
@@ -738,7 +738,7 @@ if(oCONFIG.YOUTUBE.toString() == 'true')
 			return false;
 			}
 	}
-	
+
 	/*
 	 * name: YTUrlHandler_fed
 	 * usage: to correct minor errors in YouTube URLs
@@ -746,30 +746,30 @@ if(oCONFIG.YOUTUBE.toString() == 'true')
 	function YTUrlHandler_fed(url)
 		{
 		url = url.replace(/origin\=(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})\&?/ig,'origin='+document.location.protocol+'//'+document.location.host);
-		
+
 		stAdd = '';
 		adFlag = false;
 		if (url.indexOf('https')==-1){url = url.replace('http','https');}
 		if (url.indexOf('?')==-1){stAdd = '?flag=1';}
 		if (url.indexOf('enablejsapi')==-1){stAdd +='&enablejsapi=1'; adFlag = true;}
-		if (url.indexOf('html5')==-1){stAdd +='&html5=1'; adFlag = true;}	
+		if (url.indexOf('html5')==-1){stAdd +='&html5=1'; adFlag = true;}
 		if (url.indexOf('origin')==-1){stAdd +='&origin='+document.location.protocol+'//'+document.location.host;adFlag = true;}
-			
-	
+
+
 	if (adFlag == true)
 	{
 		return url+stAdd;
 		}
 		else
 		{return url;}
-		
+
 		}
-	
+
 	/*
 	 * name: _initYouTubeTracker
 	 * usage: initiate YouTube tracker libraries and loop over all YouTube iframes
 	 */
-	
+
 	function _initYouTubeTracker() {
 		var _iframes = document.getElementsByTagName('iframe');
 		var vArray = 0;
@@ -785,7 +785,7 @@ if(oCONFIG.YOUTUBE.toString() == 'true')
 			}
 		}
 	}
-	
+
 	/*
 	 * name: onYouTubeIframeAPIReady
 	 * usage: to assign video array items to player array of YouTube Tracker API
@@ -800,7 +800,7 @@ if(oCONFIG.YOUTUBE.toString() == 'true')
 			});
 		}
 	}
-	
+
 	/*
 	 * name: onPlayerReady
 	 * usage: fired when the player is ready
@@ -809,15 +809,15 @@ if(oCONFIG.YOUTUBE.toString() == 'true')
 	function onFedPlayerReady(event){
 		/* left blank on purpose */
 	}
-	
-	/* 
+
+	/*
 	 * name: onPlayerStateChange
 	 * usage: fired when user interacts with the video player
 	 * such as pressing play/pause buttons
 	 * and sends proper Events to GA
 	 */
 	function onFedPlayerStateChange(event) {
-		
+
 		var videoURL = event.target.getIframe().getAttribute('src');
 		var videoId = youtube_parser_fed(videoURL);
 		_thisDuration = ((parseInt(event.target.getCurrentTime()) / parseInt(event.target.getDuration())) * 100).toFixed();
@@ -869,56 +869,56 @@ function _initIdAssigner() {
 
 /*
  * name: _tagClicks
- * usage: 
+ * usage:
  * add event listener to an HTML element
-*/	
-	
+*/
+
 	function _tagClicks(evObj, evCat, evAct, evLbl, evVal)
 	{
-		if (evObj.addEventListener) 
-		{ 
+		if (evObj.addEventListener)
+		{
 			evObj.addEventListener('mousedown', function() {
-                _sendEvent(evCat, evAct, evLbl, evVal); });       
-		} 
-		else if (evObj.attachEvent) 
-		{ 
+                _sendEvent(evCat, evAct, evLbl, evVal); });
+		}
+		else if (evObj.attachEvent)
+		{
 			evObj.attachEvent('onmousedown', function() {
-                _sendEvent(evCat, evAct, evLbl, evVal); });       
-		} 
+                _sendEvent(evCat, evAct, evLbl, evVal); });
+		}
     }
-	
-	
+
+
+/*
+ * name: _setUpTrackers
+ * usage:
+ * initializes the enabled trackers
+ */
+function _setUpTrackers() {
+	if (tObjectCheck != window["GoogleAnalyticsObject"])
+	{
+		createTracker(false);
+	}
+	oCONFIG.ENHANCED_LINK.toString() == 'true' ? _initIdAssigner() : '';
+	oCONFIG.AUTOTRACKER.toString() == 'true' ? _initAutoTracker() : '';
+	oCONFIG.YOUTUBE.toString() == 'true' ? _initYouTubeTracker() : '';
+}
+
 
 /*
  * once the document is loaded and ready
  * call enabled functions according to oConfig settings
  */
- 
-if (document.addEventListener) 
-{ 
-	document.addEventListener('DOMContentLoaded', function() {
-	if (tObjectCheck != window["GoogleAnalyticsObject"])
-	{
-		createTracker(false);
-		}
-	oCONFIG.ENHANCED_LINK.toString() == 'true' ? _initIdAssigner() : '';
-	oCONFIG.AUTOTRACKER.toString() == 'true' ? _initAutoTracker() : '';
-	oCONFIG.YOUTUBE.toString() == 'true' ? _initYouTubeTracker() : '';
-	});   
-} 
-else if (document.attachEvent) 
-{ 
+
+if (document.addEventListener)
+{
+	document.addEventListener('DOMContentLoaded', _setUpTrackers);
+}
+else if (document.attachEvent)
+{
 	document.attachEvent('onreadystatechange', function() {
-		if ( document.readyState === "complete" ) 
-		{	
-			if (tObjectCheck != window["GoogleAnalyticsObject"])
-			{
-				createTracker(false);
-				}
-			oCONFIG.ENHANCED_LINK.toString() == 'true' ? _initIdAssigner() : '';
-			oCONFIG.AUTOTRACKER.toString() == 'true'? _initAutoTracker() : '';
-			oCONFIG.YOUTUBE.toString() == 'true' ? _initYouTubeTracker() : '';
+		if ( document.readyState === "complete" )
+		{
+      _setUpTrackers();
 		}
 	});
-} 
- 
+}
