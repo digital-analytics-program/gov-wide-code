@@ -7,20 +7,6 @@ The most current version of DAP GA code is:
 * [`Universal-Federated-Analytics.js`](Universal-Federated-Analytics.js) (full)
 * [`Universal-Federated-Analytics-Min.js`](Universal-Federated-Analytics-Min.js) (minified)
 
-### Central hosting
-
-The central URLs for the Digital Analytics Program JS snippet are:
-
-* `https://dap.digitalgov.gov/Universal-Federated-Analytics.js` (full)
-* `https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js` (minified)
-
-Agencies are encouraged to use the following HTML snippet to participate in the Digital Analytics Program:
-
-```html
-<!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
-<script id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js"></script>
-```
-
 #### Transport security
 
 The centrally hosted DAP JS is only available over HTTPS. Making any request over HTTP will be immediately redirected to HTTPS.
