@@ -48,4 +48,6 @@ This means that, assuming GitHub's systems are not compromised in some way, **al
 
 This repository is maintained in its own GitHub organization, `digital-analytics-program`, and is operated by the Digital Analytics Program team.
 
-Only Digital Analytics Program staff have been granted write access to this repository. All Digital Analytics Program staff with any membership in this GitHub organization are required to have two-factor authentication enabled.
+Only Digital Analytics Program staff have been granted write access to this repository.
+
+**All members of the digital-analytics-program GitHub organization are required to have two-factor authentication enabled.**
