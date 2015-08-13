@@ -9,10 +9,7 @@ The most current version of DAP GA code is:
 
 ### Participating in the DAP
 
-The central URLs for the Digital Analytics Program JS snippet are:
-
-* `https://dap.digitalgov.gov/Universal-Federated-Analytics.js` (full)
-* `https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js` (minified)
+The Digital Analytics Program offers a central hosting server for its JavaScript files at `dap.digitalgov.gov`.
 
 Agencies are encouraged to use the following HTML snippet to participate in the Digital Analytics Program:
 
