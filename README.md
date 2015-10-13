@@ -38,11 +38,11 @@ Together, HTTPS and HSTS offer a strong, necessary level of transport security a
 
 #### Data integrity
 
-The `dap.digitalgov.gov` domain is currently served by a content delivery network that automatically serves the current JavaScript versioned in the `master` branch of this git repository.
+The `dap.digitalgov.gov` domain is currently served by a third party content delivery network (CDN) that automatically serves the current JavaScript versioned in the `master` branch of this GitHub repository.
 
 **There is no intermediate manual step** between committing to `master` and updating the code on `dap.digitalgov.gov`, though there may be a delay between a commit and a live update.
 
-This means that, assuming GitHub's systems are not compromised in some way, **all** changes to the code that appears on `dap.digitalgov.gov` should be publicly reflected in [this repository's commit history](https://github.com/digital-analytics-program/gov-wide-code/commits/master).
+This means that, barring the compromise of GitHub's systems or the CDN's systems, **all** changes to the code that appears on `dap.digitalgov.gov` should be publicly reflected in [this repository's commit history](https://github.com/digital-analytics-program/gov-wide-code/commits/master).
 
 #### Access controls
 
