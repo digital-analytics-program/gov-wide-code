@@ -15,12 +15,12 @@ Agencies are encouraged to use the following HTML snippet to participate in the 
 
 ```html
 <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
-<script src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js" id="_fed_an_ua_tag"></script>
+<script language="javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=AGENCY" id="_fed_an_ua_tag"></script>
 ```
 
-For more details on implementing the DAP script on your site, please refer to the [DAP Implementation Instructions](http://www.digitalgov.gov/services/dap/analytics-tool-instructions/) and the [Implementation Guide](https://www.digitalgov.gov/files/2015/02/GSA-DAP-UA-Code-Quick-Guide-15-01-30-v1-02_mvf.pdf).
+Replace `AGENCY` with your agency's standard abbreviation, such as DHS or EPA.
 
-Please note that there are required parts of the script tag syntax, such as `id=_fed_an_ua_tag` as well as `agency` & `subagency` parameters.
+For more details on implementing the DAP script on your site, including adding other custom parameters, please refer to the [DAP Implementation Instructions](https://www.digitalgov.gov/services/dap/analytics-tool-instructions/) and the [Implementation Guide](https://www.digitalgov.gov/files/2015/02/GSA-DAP-UA-Code-Quick-Guide-15-01-30-v1-02_mvf.pdf).
 
 #### Transport security
 
