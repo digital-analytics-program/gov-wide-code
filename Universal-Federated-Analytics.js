@@ -495,7 +495,7 @@ function _URIHandler(pageName) {
     a.async = 1;
     a.src = g;
     m.parentNode.insertBefore(a, m)
-})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 tObjectCheck = window['GoogleAnalyticsObject'];
 }
 else
@@ -699,7 +699,7 @@ if(oCONFIG.YOUTUBE.toString() == 'true')
 	
 	
 	var tag = document.createElement('script');
-	tag.src = "//www.youtube.com/player_api";
+	tag.src = "https://www.youtube.com/player_api";
 	var firstScriptTag = document.getElementsByTagName('script')[0];
 	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 	
