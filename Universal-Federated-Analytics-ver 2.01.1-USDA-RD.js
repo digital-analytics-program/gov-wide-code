@@ -3,6 +3,7 @@
 ***********************************************************************************************************
 Universal Federated Analytics: Google Analytics Government Wide Site Usage Measurement.
 05/19/2015 Version: 2.01
+03/01/2016 Version: 2.01.1 Brian Katz, E-Nor for USDA-RD. Youtube % viewed enhancement
 ***********************************************************************************************************/
 
 /*
@@ -10,6 +11,7 @@ Universal Federated Analytics: Google Analytics Government Wide Site Usage Measu
  * Most of the settings can be changed by passing a new value
  * in the query string when referencing this file.
  */
+ 
 var oCONFIG = {
     GWT_UAID: ['UA-33523145-1'],	/* hard coded cannot be configured by query string */
     FORCE_SSL: true,				/* hard coded cannot be configured by query string */
@@ -17,7 +19,7 @@ var oCONFIG = {
 
     AGENCY: '',
     SUB_AGENCY: '',
-    VERSION: '20150519 v2.01 - Universal Analytics',
+    VERSION: '20160301 v2.01.1 - USDA-RD Universal Analytics',
 
     USE_MAIN_CUSTOM_DIMENSIONS: true,
     MAIN_AGENCY_CUSTOM_DIMENSION_SLOT: 'dimension1',
@@ -320,6 +322,7 @@ function _sendCustomMetrics(_slotNums, _val)
  * usage: to set hit type to Event
  */
 function _sendEvent(_cat, _act, _lbl, _val, _nonInteraction) {
+	console.log(arguments);
     if (_cat != '' && _cat != undefined && _act != '' && _act != undefined) 
 	{
 		if (tObjectCheck != window['GoogleAnalyticsObject'])
@@ -696,6 +699,7 @@ if(oCONFIG.YOUTUBE.toString() == 'true')
 	var _f33 = false;
 	var _f66 = false;
 	var _f90 = false;
+  	var _finish = false;
 	
 	
 	var tag = document.createElement('script');
@@ -809,36 +813,72 @@ if(oCONFIG.YOUTUBE.toString() == 'true')
 	 * usage: fired when user interacts with the video player
 	 * such as pressing play/pause buttons
 	 * and sends proper Events to GA
+	 * Brian Katz - Enor 2016-03-01 fixed % tracking
 	 */
 	function onFedPlayerStateChange(event) {
 		
-		var videoURL = event.target.getIframe().getAttribute('src');
-		var videoId = youtube_parser_fed(videoURL);
-		_thisDuration = ((parseInt(event.target.getCurrentTime()) / parseInt(event.target.getDuration())) * 100).toFixed();
+		var videoURL = event.videoURL || event.target.getIframe().getAttribute('src');
+		// var videoId = event.videoId || youtube_parser_fed(videoURL);
+		var videoDuration = parseInt(event.target.getDuration());
+		var _thisDuration = (parseInt(event.target.getCurrentTime()) /  videoDuration * 100);//.toFixed();
+		_thisDuration = Math.round(_thisDuration, 0);
+		
+		var secsToNextEvent = videoDuration/10;
+		var _secondsPlayed = 0;	// since last event, not total so far. All video event values added = total seconds watched.
+		
 		if (typeof onPlayerStateChange != "undefined") { onPlayerStateChange(event); }
 		if (parseInt(event.data) == parseInt(YT.PlayerState.PLAYING)) {
 			if (_thisDuration == 0) {
 				_f33 = false;
 				_f66 = false;
 				_f90 = false;
+              	_finish = false;
 			}
 			_sendEvent('YouTube Video', 'play', videoURL, 0);
-		} else if (event.data == YT.PlayerState.ENDED) {
-			_sendEvent('YouTube Video', 'finish', videoURL, 0);
+		} else if (event.data == YT.PlayerState.ENDED && !_finish) {
+          	_finish = true;
+			_secondsPlayed = Math.round(videoDuration/10);		// 100%-90%
+			_sendEvent('YouTube Video', 'finish', videoURL, _secondsPlayed);
 		} else if (event.data == YT.PlayerState.PAUSED) {
 			_sendEvent('YouTube Video', 'pause', videoURL, 0);
-			var duration = _thisDuration;
-			if (duration < 100) {
-				var precentage = _thisDuration;
-				if (precentage > 0 && precentage <= 33 && _f33 == false) {
-					_sendEvent('YouTube Video', '33%', videoURL, 0);
-				} else if (precentage > 0 && precentage <= 66 && _f66 == false) {
-					_sendEvent('YouTube Video', '66%', videoURL, 0);
-				} else if (precentage > 0 && precentage <= 90 && _f90 == false) {
-					_sendEvent('YouTube Video', '90%', videoURL, 0);
-				}
+		} 
+		
+      
+		var duration = _thisDuration;
+		if (duration > 0 && duration < 100 ) {
+
+			var nextPercent = 33;
+			var precentage = _thisDuration;
+			var percentAction = 0;
+			if (precentage >= 33 && precentage < 66 && _f33 == false) {
+				percentAction = 33;
+				_f33 = true;
+				nextPercent = 66;
+				_secondsPlayed = 33;
+			} else if (precentage >= 66 && precentage < 90 && _f66 == false) {
+				percentAction = 66;
+				_f66 = true;
+				nextPercent = 90;
+				_secondsPlayed = 33;
+			} else if (precentage >= 90 && _f90 == false) {
+				percentAction = 90;
+				_f90 = true;
+				nextPercent = 0;
+				_secondsPlayed = 24;
 			}
+			var _secondsPlayed = Math.round(videoDuration*_secondsPlayed/100);
+			if (percentAction) {
+				_sendEvent('YouTube Video', percentAction + '%', videoURL, _secondsPlayed);
+			}
+		
+			secsToNextEvent = ((videoDuration*nextPercent/100) - event.target.getCurrentTime());
+			secsToNextEvent = secsToNextEvent > videoDuration/10 ? secsToNextEvent : videoDuration/10;
 		}
+      	if (duration < 100 && !_finish) {
+			var eventPassback = {target: event.target, videoURL: videoURL, data: 'passBack'}; // videoId: videoId,  not required
+			var timeoutId = setTimeout(function() {onFedPlayerStateChange(eventPassback)}, secsToNextEvent*1000); 
+        }
+
 	}
 }
 
