@@ -395,7 +395,7 @@ function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5)
 				{
 					_nonInteraction = _cleanBooleanParam(_param5);
 				}
-				_sendEvent(_param1, _param2, ((_param3 != undefined) ? _param3 : ''), ((_param4 != '' || !isNaN(_param4) || _param4 != undefined) ? parseInt(_param4) : 0), ((_nonInteraction == 'true') ? 1 : 0));
+				_sendEvent(_param1, _param2, ((_param3 != undefined) ? _param3 : ''), ((_param4 == '' || isNaN(_param4) || _param4 == undefined) ? 0 : parseInt(_param4)), ((_nonInteraction == 'true') ? 1 : 0));
 			}
 			catch(err) 
 			{
