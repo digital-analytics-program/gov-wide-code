@@ -6,7 +6,6 @@
 				   `"88888"          o888o o888o  `Y8bod8P"   d888b      
 
 ***********************************************************************************************************
-Copyright 2015 by E-Nor Inc.
 Universal Federated Analytics: Google Analytics Government Wide Site Usage Measurement.
 Author: Ahmed Awwad
 05/20/2016 Version: 3.1
