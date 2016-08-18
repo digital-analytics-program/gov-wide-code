@@ -15,7 +15,7 @@ Agencies are encouraged to use the following HTML snippet to participate in the 
 
 ```html
 <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
-<script language="javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=AGENCY" id="_fed_an_ua_tag"></script>
+<script async type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=AGENCY" id="_fed_an_ua_tag"></script>
 ```
 
 Replace `AGENCY` with your agency's standard abbreviation, such as DHS or EPA.
