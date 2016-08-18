@@ -1,8 +1,15 @@
 /*
+				    .ooooo.          ooo. .oo.     .ooooo.    oooo d8b
+				   d88" `88b         `888P"Y88b   d88" `88b   `888""8P
+				   888888888  88888   888   888   888   888    888
+				   888        88888   888   888   888   888    888       
+				   `"88888"          o888o o888o  `Y8bod8P"   d888b      
 
 ***********************************************************************************************************
+Copyright 2015 by E-Nor Inc.
 Universal Federated Analytics: Google Analytics Government Wide Site Usage Measurement.
-05/19/2015 Version: 2.01
+Author: Ahmed Awwad
+05/20/2016 Version: 3.1
 ***********************************************************************************************************/
 
 /*
@@ -17,17 +24,23 @@ var oCONFIG = {
 
     AGENCY: '',
     SUB_AGENCY: '',
-    VERSION: '20150519 v2.01 - Universal Analytics',
+    VERSION: '20160520 v3.1 - Universal Analytics',
+	SITE_TOPIC: '',
+	SITE_PLATFORM: '',
 
     USE_MAIN_CUSTOM_DIMENSIONS: true,
     MAIN_AGENCY_CUSTOM_DIMENSION_SLOT: 'dimension1',
     MAIN_SUBAGENCY_CUSTOM_DIMENSION_SLOT: 'dimension2',
     MAIN_CODEVERSION_CUSTOM_DIMENSION_SLOT: 'dimension3',
+	MAIN_SITE_TOPIC_CUSTOM_DIMENSION_SLOT: 'dimension4',
+	MAIN_SITE_PLATFORM_CUSTOM_DIMENSION_SLOT: 'dimension5',
 
     USE_PARALLEL_CUSTOM_DIMENSIONS: false,
     PARALLEL_AGENCY_CUSTOM_DIMENSION_SLOT: 'dimension1',
     PARALLEL_SUBAGENCY_CUSTOM_DIMENSION_SLOT: 'dimension2',
     PARALLEL_CODEVERSION_CUSTOM_DIMENSION_SLOT: 'dimension3',
+	PARALLEL_SITE_TOPIC_CUSTOM_DIMENSION_SLOT: 'dimension4',
+	PARALLEL_SITE_PLATFORM_CUSTOM_DIMENSION_SLOT: 'dimension5',
 
     COOKIE_DOMAIN: location.hostname.replace('www.', '').toLowerCase(),
     COOKIE_TIMEOUT: 60 * 60 * 24 * 2 * 365,
@@ -75,7 +88,7 @@ function _defineCookieDomain()
 			oCONFIG.COOKIE_DOMAIN = document.location.hostname.match(/(([^.\/]+\.[^.\/]{2,3}\.[^.\/]{2})|(([^.\/]+\.)[^.\/]{2,4}))(\/.*)?$/)[1];
 			oCONFIG.SUBDOMAIN_BASED = true;
 		}
-		else if(oCONFIG.SUBDOMAIN_BASED.toString() == 'auto' || oCONFIG.SUBDOMAIN_BASED == 'true')
+		else if(oCONFIG.SUBDOMAIN_BASED.toString() == 'auto' || oCONFIG.SUBDOMAIN_BASED.toString() == 'true')
 		{
 			oCONFIG.COOKIE_DOMAIN = location.hostname.toLowerCase().replace('www.','');
 			oCONFIG.SUBDOMAIN_BASED = false;
@@ -89,12 +102,14 @@ function _defineCookieDomain()
 }
 
 /* name: _defineDefaultCDsValues */
-/* usage: to define the values of AGENCY and SUB_AGENCY Custom dimensions*/
+/* usage: to define the values of AGENCY, SUB_AGENCY, SITE_TOPIC and SITE_PLATFORM Custom dimensions*/
 function _defineAgencyCDsValues()
 {
 	oCONFIG.AGENCY = oCONFIG.AGENCY || 'unspecified:' + oCONFIG.COOKIE_DOMAIN;
     oCONFIG.SUB_AGENCY = oCONFIG.SUB_AGENCY || ('' + oCONFIG.COOKIE_DOMAIN);
     oCONFIG.SUB_AGENCY = oCONFIG.AGENCY + ' - ' + oCONFIG.SUB_AGENCY;
+	oCONFIG.SITE_TOPIC = oCONFIG.SITE_TOPIC || 'unspecified:' + oCONFIG.COOKIE_DOMAIN;
+	oCONFIG.SITE_PLATFORM = oCONFIG.SITE_PLATFORM || 'unspecified:' + oCONFIG.COOKIE_DOMAIN;
 }
 
 /*
@@ -107,12 +122,12 @@ function _cleanBooleanParam(_paramValue) {
         case 'on':
         case 'yes':
         case '1':
-            return 'true';
+            return true;
         case 'false':
         case 'off':
         case 'no':
         case '0':
-            return 'false';
+            return false;
         default:
             return _paramValue;
     }
@@ -137,13 +152,15 @@ function _isValidUANum(_UANumber) {
  function _cleanDimensionValue(_paramValue){
 	try {
 		pattern = /^dimension([1-9]|[1-9][0-9]|1([0-9][0-9])|200)$/;
-		//pattern = /^dimension([1][0-9]?|20)$/;
 		if (pattern.test(_paramValue))
 			return _paramValue;
 
-		var _tmpValue = 'dimension' + _paramValue.match(/\d+$/g)[0];
-		if (pattern.test(_tmpValue))
+		if (_paramValue.match(/\d+$/g) != null)
+		{
+			var _tmpValue = 'dimension' + _paramValue.match(/\d+$/g)[0];
+			if (pattern.test(_tmpValue))
 			return _tmpValue;
+		}
 
 		return '';
 	} catch (err) {
@@ -155,12 +172,18 @@ function _isValidUANum(_UANumber) {
  * usage: to override default values of oConfig object.
  */
 function _updateConfig() {
-    var _JSElement = document.getElementById('_fed_an_ua_tag').getAttribute('src');
-    _JSElement = _JSElement.replace(/\?/g, '&');
-    var _paramList = _JSElement.split('&');
-    /* skip first element since it is just the url */
-    for (var i = 1; i < _paramList.length; i++) {
-        _keyValuePair = _paramList[i].toLowerCase();
+	var _JSElement = '';
+	var _paramList = '';
+	if(typeof _fedParmsGTM != 'undefined') {
+		_paramList = _fedParmsGTM.toLowerCase().split('&');
+	}
+	else 
+	{
+		_JSElement = document.getElementById('_fed_an_ua_tag').getAttribute('src').match(/^([^\?]*)(.*)$/i)[2].replace("?","");
+		_paramList = _JSElement.split('&');
+		}
+    for (var i = 0; i < _paramList.length; i++) {
+        _keyValuePair = decodeURIComponent(_paramList[i].toLowerCase());
         _key = _keyValuePair.split('=')[0];
         _value = _keyValuePair.split('=')[1];
 
@@ -177,45 +200,41 @@ function _updateConfig() {
             case 'subagency':
                 oCONFIG.SUB_AGENCY = _value.toUpperCase();
                 break;
-            case 'maincd':
-                _value = _cleanBooleanParam(_value);
-                if ('true' == _value || 'false' == _value)		 /* only override the default if a valid value is passed */
-                    oCONFIG.USE_MAIN_CUSTOM_DIMENSIONS = _value;
+            case 'sitetopic':
+                oCONFIG.SITE_TOPIC = _value;
                 break;
-            case 'fedagencydim':
-                _value = _cleanDimensionValue(_value);
-				if (''!=_value)
-					oCONFIG.MAIN_AGENCY_CUSTOM_DIMENSION_SLOT = _value.toLowerCase();
-                break;
-            case 'fedsubagencydim':
-                _value = _cleanDimensionValue(_value);
-				if (''!=_value)
-					oCONFIG.MAIN_SUBAGENCY_CUSTOM_DIMENSION_SLOT = _value.toLowerCase();
-                break;
-            case 'fedversiondim':
-                _value = _cleanDimensionValue(_value);
-				if (''!=_value)
-					oCONFIG.MAIN_CODEVERSION_CUSTOM_DIMENSION_SLOT = _value.toLowerCase();
+            case 'siteplatform':
+                oCONFIG.SITE_PLATFORM = _value;
                 break;
             case 'parallelcd':
                 _value = _cleanBooleanParam(_value);
-                if ('true' == _value || 'false' == _value)
+                if (true == _value || false == _value)
                     oCONFIG.USE_PARALLEL_CUSTOM_DIMENSIONS = _value;
                 break;
             case 'palagencydim':
                 _value = _cleanDimensionValue(_value);
 				if (''!=_value)
-					oCONFIG.PARALLEL_AGENCY_CUSTOM_DIMENSION_SLOT = _value.toLowerCase();
+					oCONFIG.PARALLEL_AGENCY_CUSTOM_DIMENSION_SLOT = _value;
                 break;
             case 'palsubagencydim':
                 _value = _cleanDimensionValue(_value);
 				if (''!=_value)
-					oCONFIG.PARALLEL_SUBAGENCY_CUSTOM_DIMENSION_SLOT = _value.toLowerCase();
+					oCONFIG.PARALLEL_SUBAGENCY_CUSTOM_DIMENSION_SLOT = _value;
                 break;
             case 'palversiondim':
                 _value = _cleanDimensionValue(_value);
 				if (''!=_value)
-					oCONFIG.PARALLEL_CODEVERSION_CUSTOM_DIMENSION_SLOT = _value.toLowerCase();
+					oCONFIG.PARALLEL_CODEVERSION_CUSTOM_DIMENSION_SLOT = _value;
+                break;
+			case 'paltopicdim':
+                _value = _cleanDimensionValue(_value);
+				if (''!=_value)
+					oCONFIG.PARALLEL_SITE_TOPIC_CUSTOM_DIMENSION_SLOT = _value;
+                break;
+			case 'palplatformdim':
+                _value = _cleanDimensionValue(_value);
+				if (''!=_value)
+					oCONFIG.PARALLEL_SITE_PLATFORM_CUSTOM_DIMENSION_SLOT = _value;
                 break;
             case 'cto':
                 oCONFIG.COOKIE_TIMEOUT = parseInt(_value) * 2628000;		// = 60 * 60 * 24 * 30.4166666666667;
@@ -228,12 +247,12 @@ function _updateConfig() {
                 break;
             case 'yt':
                 _value = _cleanBooleanParam(_value);
-                if ('true' == _value || 'false' == _value) /* only override the default if a valid value is passed */
+                if (true == _value || false == _value)  
                     oCONFIG.YOUTUBE = _value;
                 break;
             case 'autotracker':
                 _value = _cleanBooleanParam(_value);
-                if ('true' == _value || 'false' == _value) /* only override the default if a valid value is passed */
+                if (true == _value || false == _value)  
                     oCONFIG.AUTOTRACKER = _value;
                 break;
             case 'sdor':
@@ -241,17 +260,17 @@ function _updateConfig() {
                 break;
             case 'dclink':
                 _value = _cleanBooleanParam(_value);
-                if ('true' == _value || 'false' == _value) /* only override the default if a valid value is passed */
+                if (true == _value || false == _value)  
                     oCONFIG.DOUNBLECLICK_LINK = _value;
                 break;
             case 'enhlink':
                 _value = _cleanBooleanParam(_value);
-                if ('true' == _value || 'false' == _value) /* only override the default if a valid value is passed */
+                if (true == _value || false == _value)  
                     oCONFIG.ENHANCED_LINK = _value;
                 break;
             case 'optout':
                 _value = _cleanBooleanParam(_value);
-                if ('true' == _value || 'false' == _value) /* only override the default if a valid value is passed */
+                if (true == _value || false == _value)  
                     oCONFIG.OPTOUT_PAGE = _value;
                 break;
 			default:
@@ -376,7 +395,7 @@ function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5)
 		{
 			try 
 			{
-				_sendPageview(_param1, ((_param2 != '' || _param2 != undefined) ? _param2 : document.title));
+				_sendPageview(_param1, ((_param2 == undefined || _param2 == '') ? document.title : _param2));
 			}
 			catch(err) 
 			{
@@ -395,7 +414,7 @@ function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5)
 				{
 					_nonInteraction = _cleanBooleanParam(_param5);
 				}
-				_sendEvent(_param1, _param2, ((_param3 != undefined) ? _param3 : ''), ((_param4 != '' || !isNaN(_param4) || _param4 != undefined) ? parseInt(_param4) : 0), ((_nonInteraction == 'true') ? 1 : 0));
+				_sendEvent(_param1, _param2, ((_param3 == undefined) ? '' : _param3), ((_param4 == undefined || _param4 == '' || isNaN(_param4)) ? 0 : parseInt(_param4)), ((_nonInteraction == 'true') ? 1 : 0));
 			}
 			catch(err) 
 			{
@@ -425,7 +444,7 @@ function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5)
 				}
 				if(cdsArr.length > 0)
 				{
-					_sendCustomDimensions(cdsArr, ((_param1 != undefined) ? _param1 : ''));
+					_sendCustomDimensions(cdsArr, ((_param1 == undefined) ? '' : _param1));
 				}
 			}
 			catch(err) 
@@ -456,7 +475,7 @@ function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5)
 				}
 				if(mtrcsArr.length > 0)
 				{
-					_sendCustomMetrics(mtrcsArr, ((_param1 != '' || _param1 != undefined || !isNaN(_param1)) ? parseFloat(_param1) : 1));
+					_sendCustomMetrics(mtrcsArr, ((_param1 == undefined || _param1 == '' || isNaN(_param1)) ? 1 : parseFloat(_param1)));
 				}
 			}
 			catch(err) 
@@ -475,6 +494,27 @@ function _URIHandler(pageName) {
     }
     return pageName;
 }
+
+/* name: _isExcludedReferrer
+ * usage: to manually handle Referral Exclusion programmatically */
+ function _isExcludedReferrer() {
+	 if(document.referrer != '')
+	 {
+		var refer = document.referrer.replace(/https?\:\/\//,'').split('/')[0].replace('www.', '');
+		if (oCONFIG.SUBDOMAIN_BASED) 
+		{
+			if(refer.indexOf(oCONFIG.COOKIE_DOMAIN) != -1) {
+				return true;}
+				else{ return false;}
+				
+		} else 
+		{
+			if(refer == oCONFIG.COOKIE_DOMAIN){
+				return true;}
+				else{ return false;}
+		}
+	 }
+ }
 
 /**** Start Basic Tracker *******/
 /*
@@ -495,7 +535,7 @@ function _URIHandler(pageName) {
     a.async = 1;
     a.src = g;
     m.parentNode.insertBefore(a, m)
-})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 tObjectCheck = window['GoogleAnalyticsObject'];
 }
 else
@@ -533,15 +573,23 @@ function createTracker(sendPv)
 		if (oCONFIG.FORCE_SSL) {
 			window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + dpv + '.set', 'forceSSL', true);
 		}
+		if (_isExcludedReferrer()) {
+			window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + dpv + '.set', 'referrer', '');
+		}
 		if (oCONFIG.USE_MAIN_CUSTOM_DIMENSIONS && dpv == 0) {
 			window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + dpv + '.set', oCONFIG.MAIN_AGENCY_CUSTOM_DIMENSION_SLOT, oCONFIG.AGENCY);
 			window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + dpv + '.set', oCONFIG.MAIN_SUBAGENCY_CUSTOM_DIMENSION_SLOT, oCONFIG.SUB_AGENCY);
 			window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + dpv + '.set', oCONFIG.MAIN_CODEVERSION_CUSTOM_DIMENSION_SLOT, oCONFIG.VERSION);
+			window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + dpv + '.set', oCONFIG.MAIN_SITE_TOPIC_CUSTOM_DIMENSION_SLOT, oCONFIG.SITE_TOPIC);
+			window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + dpv + '.set', oCONFIG.MAIN_SITE_PLATFORM_CUSTOM_DIMENSION_SLOT, oCONFIG.SITE_PLATFORM);
+
 		}
 		if (oCONFIG.USE_PARALLEL_CUSTOM_DIMENSIONS && dpv > 0) {
 			window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + dpv + '.set', oCONFIG.PARALLEL_AGENCY_CUSTOM_DIMENSION_SLOT, oCONFIG.AGENCY);
 			window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + dpv + '.set', oCONFIG.PARALLEL_SUBAGENCY_CUSTOM_DIMENSION_SLOT, oCONFIG.SUB_AGENCY);
 			window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + dpv + '.set', oCONFIG.PARALLEL_CODEVERSION_CUSTOM_DIMENSION_SLOT, oCONFIG.VERSION);
+			window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + dpv + '.set', oCONFIG.PARALLEL_SITE_TOPIC_CUSTOM_DIMENSION_SLOT, oCONFIG.SITE_TOPIC);
+			window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + dpv + '.set', oCONFIG.PARALLEL_SITE_PLATFORM_CUSTOM_DIMENSION_SLOT, oCONFIG.SITE_PLATFORM);
 		}
 		if (document.title.search(/404|not found/i) !== -1)
 		{
@@ -572,9 +620,9 @@ function _initAutoTracker()
 		var flag = 0;
 		var flagExt = 0;
 		var doname = ""; 
-		var mailPattern = /^mailto\:[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/;
-		var urlPattern = /^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-		var telPattern = /^tel\:(.*)([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+		var mailPattern = /^mailto\:[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/i;
+		var urlPattern = /^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/i;
+		var telPattern = /^(tel\:)(.*)$/i;
 		if(mailPattern.test(arr[i].href) || urlPattern.test(arr[i].href) || telPattern.test(arr[i].href))
 		{
 			try
@@ -585,7 +633,7 @@ function _initAutoTracker()
 				}
 				else if(mailPattern.test(arr[i].href))
 				{
-					doname = arr[i].href.split('@')[1];
+					doname = arr[i].href.split('@')[1].toLowerCase();
 				}
 				else if(telPattern.test(arr[i].href))
 				{
@@ -669,7 +717,7 @@ function _initAutoTracker()
 						else if (extDoc.length && arr[i].href.toLowerCase().indexOf("mailto:") != -1 && arr[i].href.toLowerCase().indexOf("tel:") == -1)
 						{
 							// Tracking outbound emails 
-							var gaUri = arr[i].href.match(/[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/);
+							var gaUri = arr[i].href.match(/[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/i);
 							_tagClicks(arr[i],'Outbound MailTo', gaUri[0], '', 0); 
 						}
 						else if (extDoc.length && arr[i].href.toLowerCase().indexOf("mailto:") == -1 && arr[i].href.toLowerCase().indexOf("tel:") != -1)
@@ -689,7 +737,7 @@ function _initAutoTracker()
 
 /*** Start YouTube Tracking - Used for Youtube video tracking (Play / Pause / Watch to End ***/
 	
-if(oCONFIG.YOUTUBE.toString() == 'true')
+if(oCONFIG.YOUTUBE)
 {
 	var videoArray_fed = new Array();
 	var playerArray_fed = new Array();
@@ -699,7 +747,7 @@ if(oCONFIG.YOUTUBE.toString() == 'true')
 	
 	
 	var tag = document.createElement('script');
-	tag.src = "//www.youtube.com/player_api";
+	tag.src = "https://www.youtube.com/iframe_api";
 	var firstScriptTag = document.getElementsByTagName('script')[0];
 	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 	
@@ -708,7 +756,7 @@ if(oCONFIG.YOUTUBE.toString() == 'true')
 	 * name: youtube_parser_fed
 	 * usage: to extract YouTube video id from YouTube URI
 	 */
-	function youtube_parser_fed(url) {
+	var youtube_parser_fed = function youtube_parser_fed(url) {
 		var regExp = /^(https?\:)?(\/\/)?(www\.)?(youtu\.be\/|youtube(\-nocookie)?\.([A-Za-z]{2,4}|[A-Za-z]{2,3}\.[A-Za-z]{2})\/)(watch|embed\/|vi?\/)?(\?vi?\=)?([^#\&\?\/]{11}).*$/;
 		var match = url.match(regExp);
 		if (match && match[9].length == 11) {
@@ -721,7 +769,7 @@ if(oCONFIG.YOUTUBE.toString() == 'true')
 	 * usage: to check if the string is a valid YouTube URL
 	 */
 	
-	function IsYouTube_fed(url) {
+	var IsYouTube_fed =  function IsYouTube_fed(url) {
 		var YouTubeLink_regEx = /^(https?\:)?(\/\/)?(www\.)?(youtu\.be\/|youtube(\-nocookie)?\.([A-Za-z]{2,4}|[A-Za-z]{2,3}\.[A-Za-z]{2})\/)(watch|embed\/|vi?\/)?(\?vi?\=)?([^#\&\?\/]{11}).*$/;
 		if(YouTubeLink_regEx.test(url.toString()))
 		{
@@ -737,7 +785,7 @@ if(oCONFIG.YOUTUBE.toString() == 'true')
 	 * name: YTUrlHandler_fed
 	 * usage: to correct minor errors in YouTube URLs
 	 */
-	function YTUrlHandler_fed(url)
+	var YTUrlHandler_fed = function YTUrlHandler_fed(url)
 		{
 		url = url.replace(/origin\=(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})\&?/ig,'origin='+document.location.protocol+'//'+document.location.host);
 		
@@ -764,7 +812,7 @@ if(oCONFIG.YOUTUBE.toString() == 'true')
 	 * usage: initiate YouTube tracker libraries and loop over all YouTube iframes
 	 */
 	
-	function _initYouTubeTracker() {
+	var _initYouTubeTracker = function() {
 		var _iframes = document.getElementsByTagName('iframe');
 		var vArray = 0;
 		for (var ytifrm = 0; ytifrm < _iframes.length; ytifrm++) {
@@ -784,7 +832,7 @@ if(oCONFIG.YOUTUBE.toString() == 'true')
 	 * name: onYouTubeIframeAPIReady
 	 * usage: to assign video array items to player array of YouTube Tracker API
 	 */
-	function onYouTubePlayerAPIReady() {
+	var onYouTubePlayerAPIReady = function() {
 		for (var i = 0; i < videoArray_fed.length; i++) {
 			playerArray_fed[i] = new YT.Player(videoArray_fed[i], {
 				events: {
@@ -800,7 +848,7 @@ if(oCONFIG.YOUTUBE.toString() == 'true')
 	 * usage: fired when the player is ready
 	 * function added for compatibility of YouTube tracker API
 	 */
-	function onFedPlayerReady(event){
+	var onFedPlayerReady = function onFedPlayerReady(event){
 		/* left blank on purpose */
 	}
 	
@@ -810,7 +858,7 @@ if(oCONFIG.YOUTUBE.toString() == 'true')
 	 * such as pressing play/pause buttons
 	 * and sends proper Events to GA
 	 */
-	function onFedPlayerStateChange(event) {
+	var onFedPlayerStateChange = function onFedPlayerStateChange(event) {
 		
 		var videoURL = event.target.getIframe().getAttribute('src');
 		var videoId = youtube_parser_fed(videoURL);
@@ -832,10 +880,13 @@ if(oCONFIG.YOUTUBE.toString() == 'true')
 				var precentage = _thisDuration;
 				if (precentage > 0 && precentage <= 33 && _f33 == false) {
 					_sendEvent('YouTube Video', '33%', videoURL, 0);
-				} else if (precentage > 0 && precentage <= 66 && _f66 == false) {
+					_f33 = true;
+				} else if (precentage > 33 && precentage <= 66 && _f66 == false) {
 					_sendEvent('YouTube Video', '66%', videoURL, 0);
-				} else if (precentage > 0 && precentage <= 90 && _f90 == false) {
+					_f66 = true;
+				} else if (precentage > 66 && precentage <= 90 && _f90 == false) {
 					_sendEvent('YouTube Video', '90%', videoURL, 0);
+					_f90 = true;
 				}
 			}
 		}
@@ -881,38 +932,62 @@ function _initIdAssigner() {
 		} 
     }
 	
+
+
+/*
+ * name: _setUpTrackers
+ * usage:
+ * initializes the enabled trackers
+ */
+	function _setUpTrackers() 
+	{
+		if (tObjectCheck != window["GoogleAnalyticsObject"])
+		{
+			createTracker(false);
+		}
+		oCONFIG.ENHANCED_LINK ? _initIdAssigner() : '';
+		oCONFIG.AUTOTRACKER ? _initAutoTracker() : '';
+		oCONFIG.YOUTUBE ? _initYouTubeTracker() : '';
+	}
 	
+	
+/*
+ * name: _setUpTrackersIfReady
+ * usage:
+ * if the DOM is ready, initializes the enabled trackers and returns true
+ */
+	function _setUpTrackersIfReady() 
+	{
+	  if ( document.readyState === 'interactive' || document.readyState === 'complete' )
+	  {
+		_setUpTrackers();
+		return true;
+	  } 
+	  else 
+	  {
+		return false;
+	  }
+	}
+
 
 /*
  * once the document is loaded and ready
  * call enabled functions according to oConfig settings
  */
- 
-if (document.addEventListener) 
-{ 
-	document.addEventListener('DOMContentLoaded', function() {
-	if (tObjectCheck != window["GoogleAnalyticsObject"])
+	if (_setUpTrackersIfReady())
 	{
-		createTracker(false);
+	  // DOM already loaded
+	}
+	else
+	{
+		if (document.addEventListener)
+		{
+		  // modern browser
+		  document.addEventListener('DOMContentLoaded', _setUpTrackers);
 		}
-	oCONFIG.ENHANCED_LINK.toString() == 'true' ? _initIdAssigner() : '';
-	oCONFIG.AUTOTRACKER.toString() == 'true' ? _initAutoTracker() : '';
-	oCONFIG.YOUTUBE.toString() == 'true' ? _initYouTubeTracker() : '';
-	});   
-} 
-else if (document.attachEvent) 
-{ 
-	document.attachEvent('onreadystatechange', function() {
-		if ( document.readyState === "complete" ) 
-		{	
-			if (tObjectCheck != window["GoogleAnalyticsObject"])
-			{
-				createTracker(false);
-				}
-			oCONFIG.ENHANCED_LINK.toString() == 'true' ? _initIdAssigner() : '';
-			oCONFIG.AUTOTRACKER.toString() == 'true'? _initAutoTracker() : '';
-			oCONFIG.YOUTUBE.toString() == 'true' ? _initYouTubeTracker() : '';
+		else if (document.attachEvent)
+		{
+		  // old browser
+		  document.attachEvent('onreadystatechange', _setUpTrackersIfReady);
 		}
-	});
-} 
- 
+	} 
