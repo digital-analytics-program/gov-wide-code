@@ -609,11 +609,11 @@ function createTracker(sendPv)
  * name: _initAutoTracker
  * usage: to automatically tag outbound links / e-mails / downloads
  */
-function _initAutoTracker()
+function _initAutoTracker(links)
 {
 	var mainDomain = oCONFIG.COOKIE_DOMAIN;
 	var extDoc = oCONFIG.EXTS.split("|");
-	var arr = document.getElementsByTagName("a");
+	var arr = links || document.getElementsByTagName("a");
 	for(i=0; i < arr.length; i++)
 	 {
 		var flag = 0;
