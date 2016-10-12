@@ -50,7 +50,15 @@ In the below example, we assume the agency has an existing function,
 <script>
 function addDynamicLinks() {
   console.log('Here is where links would be added!');
-  _initAutoTracker();
+
+  // If _initAutoTracker doesn't exist, it's because the DAP
+  // script is still being loaded asynchronously; that's fine,
+  // since it will automatically call _initAutoTracker() once
+  // it loads.
+
+  if (typeof _initAutoTracker === 'function') {
+    _initAutoTracker();
+  }
 }
 
 addDynamicLinks();
