@@ -28,6 +28,28 @@ For more details on implementing the DAP script on your site, including adding o
 * [Code Capabilities Summary](https://www.digitalgov.gov/files/2014/05/DAP_v3.1_CodeSummary_Aug2016-1-1.pdf)
 * [Version 3.1 Release Notes](https://www.digitalgov.gov/files/2014/05/DAP_v3.1_ReleaseNotes_Aug2016-1.pdf)
 
+#### Known implementation issues
+
+*Issue:* The Federated code is designed to work on all government sites whether
+they already have inline site specific GA trackers or not. There is only one scenario
+that is not fully supported by the Federated code, which is when a Universal
+Analytics tracking code (that is using a custom/non-default tracking object) is added
+right after the Federated code. In this specific scenario the Federated code will fail
+in reporting the first page hit and will be able to track normally all the consecutive
+hits.
+
+Supported Scenarios:
+* UA Site Specific before the Federated code (Default Tracking Object)
+* UA Site Specific after the Federated code (Default Tracking Object)
+* UA Site Specific before the Federated code (Custom Tracking Object)
+* Classic GA Site Specific before the Federated code
+* Classic GA Site Specific after the Federated code
+
+*Issue:* The Federated tracking code doesn’t fully support the older versions of
+Microsoft Internet Explorer. While the Federated tracking code works with all
+known browsers, some features (e.g. the YouTube tracker) may not work properly
+on IE 8 and earlier versions because of YouTube API limitations
+
 #### Transport security
 
 The centrally hosted DAP JS is **only available over HTTPS**. Plain HTTP requests will not be successfully redirected, and data collection will not function. Agencies should use only `https://` URLs, not protocol-relative URLs.
