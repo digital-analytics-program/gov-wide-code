@@ -82,15 +82,10 @@ function _defineCookieDomain()
 	}
 	else
 	{
-		if (oCONFIG.SUBDOMAIN_BASED.toString() == 'false') 
+		if (oCONFIG.SUBDOMAIN_BASED.toString() == 'false')
 		{
 			oCONFIG.COOKIE_DOMAIN = document.location.hostname.match(/(([^.\/]+\.[^.\/]{2,3}\.[^.\/]{2})|(([^.\/]+\.)[^.\/]{2,4}))(\/.*)?$/)[1];
 			oCONFIG.SUBDOMAIN_BASED = true;
-		}
-		else if(oCONFIG.SUBDOMAIN_BASED.toString() == 'auto' || oCONFIG.SUBDOMAIN_BASED.toString() == 'true')
-		{
-			oCONFIG.COOKIE_DOMAIN = location.hostname.toLowerCase().replace('www.','');
-			oCONFIG.SUBDOMAIN_BASED = false;
 		}
 		else
 		{
