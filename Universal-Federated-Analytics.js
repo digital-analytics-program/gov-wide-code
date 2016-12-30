@@ -904,7 +904,7 @@ function _initIdAssigner() {
     var _allDocLinks = document.getElementsByTagName('a');
     for (var sid = 0; sid < _allDocLinks.length; sid++) {
         var currentId = _allDocLinks[sid].getAttribute('id');
-        if (currentId == null || currentId == '' || currentId == undefined) {
+        if (currentId === null || currentId === '' || currentId === undefined) {
             _allDocLinks[sid].setAttribute('id', 'anch_' + sid);
         }
     }
