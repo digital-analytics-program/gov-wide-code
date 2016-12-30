@@ -82,12 +82,12 @@ function _defineCookieDomain()
 	}
 	else
 	{
-		if (oCONFIG.SUBDOMAIN_BASED.toString() == 'false') 
+		if (oCONFIG.SUBDOMAIN_BASED.toString() === 'false')
 		{
 			oCONFIG.COOKIE_DOMAIN = document.location.hostname.match(/(([^.\/]+\.[^.\/]{2,3}\.[^.\/]{2})|(([^.\/]+\.)[^.\/]{2,4}))(\/.*)?$/)[1];
 			oCONFIG.SUBDOMAIN_BASED = true;
 		}
-		else if(oCONFIG.SUBDOMAIN_BASED.toString() == 'auto' || oCONFIG.SUBDOMAIN_BASED.toString() == 'true')
+		else if(oCONFIG.SUBDOMAIN_BASED.toString() === 'auto' || oCONFIG.SUBDOMAIN_BASED.toString() === 'true')
 		{
 			oCONFIG.COOKIE_DOMAIN = location.hostname.toLowerCase().replace('www.','');
 			oCONFIG.SUBDOMAIN_BASED = false;
@@ -141,7 +141,7 @@ function _isValidUANum(_UANumber) {
     var _regEx = /^ua\-([0-9]+)\-[0-9]+$/;
     var match = _UANumber.match(_regEx);
 
-    return (match != null && match.length > 0);
+    return (match !== null && match.length > 0);
 }
 
 /*
@@ -154,7 +154,7 @@ function _isValidUANum(_UANumber) {
 		if (pattern.test(_paramValue))
 			return _paramValue;
 
-		if (_paramValue.match(/\d+$/g) != null)
+		if (_paramValue.match(/\d+$/g) !== null)
 		{
 			var _tmpValue = 'dimension' + _paramValue.match(/\d+$/g)[0];
 			if (pattern.test(_tmpValue))
@@ -173,7 +173,7 @@ function _isValidUANum(_UANumber) {
 function _updateConfig() {
 	var _JSElement = '';
 	var _paramList = '';
-	if(typeof _fedParmsGTM != 'undefined') {
+	if(typeof _fedParmsGTM !== 'undefined') {
 		_paramList = _fedParmsGTM.toLowerCase().split('&');
 	}
 	else 
@@ -207,7 +207,7 @@ function _updateConfig() {
                 break;
             case 'parallelcd':
                 _value = _cleanBooleanParam(_value);
-                if (true == _value || false == _value)
+                if (true === _value || false === _value)
                     oCONFIG.USE_PARALLEL_CUSTOM_DIMENSIONS = _value;
                 break;
             case 'palagencydim':
@@ -246,12 +246,12 @@ function _updateConfig() {
                 break;
             case 'yt':
                 _value = _cleanBooleanParam(_value);
-                if (true == _value || false == _value)  
+                if (true === _value || false === _value)
                     oCONFIG.YOUTUBE = _value;
                 break;
             case 'autotracker':
                 _value = _cleanBooleanParam(_value);
-                if (true == _value || false == _value)  
+                if (true === _value || false === _value)
                     oCONFIG.AUTOTRACKER = _value;
                 break;
             case 'sdor':
@@ -259,17 +259,17 @@ function _updateConfig() {
                 break;
             case 'dclink':
                 _value = _cleanBooleanParam(_value);
-                if (true == _value || false == _value)  
+                if (true === _value || false === _value)
                     oCONFIG.DOUNBLECLICK_LINK = _value;
                 break;
             case 'enhlink':
                 _value = _cleanBooleanParam(_value);
-                if (true == _value || false == _value)  
+                if (true === _value || false === _value)
                     oCONFIG.ENHANCED_LINK = _value;
                 break;
             case 'optout':
                 _value = _cleanBooleanParam(_value);
-                if (true == _value || false == _value)  
+                if (true === _value || false === _value)
                     oCONFIG.OPTOUT_PAGE = _value;
                 break;
 			default:
@@ -285,15 +285,15 @@ function _updateConfig() {
 
 function _sendCustomDimensions(_slotNums, _val) 
 {
-    if (_slotNums.length > 0 && _val != '' && _val != undefined) 
+    if (_slotNums.length > 0 && _val !== '' && _val !== undefined)
 	{
-		if (tObjectCheck != window['GoogleAnalyticsObject'])
+		if (tObjectCheck !== window['GoogleAnalyticsObject'])
 		{
 			createTracker(false);
 		}
         for (var i = 0; i < oCONFIG.GWT_UAID.length; i++) 
 		{
-			if(_slotNums[i] != 'dimension0')
+			if(_slotNums[i] !== 'dimension0')
 			{
 				try
 				{
@@ -312,15 +312,15 @@ function _sendCustomDimensions(_slotNums, _val)
  */
 function _sendCustomMetrics(_slotNums, _val) 
 {
-    if (_slotNums.length > 0 && _val != '' && _val != undefined) 
+    if (_slotNums.length > 0 && _val !== '' && _val !== undefined)
 	{
-		if (tObjectCheck != window['GoogleAnalyticsObject'])
+		if (tObjectCheck !== window['GoogleAnalyticsObject'])
 		{
 			createTracker(false);
 		}
         for (var i = 0; i < oCONFIG.GWT_UAID.length; i++) 
 		{
-			if(_slotNums[i] != 'metric0')
+			if(_slotNums[i] !== 'metric0')
 			{
 				try
 				{
@@ -338,9 +338,9 @@ function _sendCustomMetrics(_slotNums, _val)
  * usage: to set hit type to Event
  */
 function _sendEvent(_cat, _act, _lbl, _val, _nonInteraction) {
-    if (_cat != '' && _cat != undefined && _act != '' && _act != undefined) 
+    if (_cat !== '' && _cat !== undefined && _act !== '' && _act !== undefined)
 	{
-		if (tObjectCheck != window['GoogleAnalyticsObject'])
+		if (tObjectCheck !== window['GoogleAnalyticsObject'])
 		{
 			createTracker(false);
 		}
@@ -348,7 +348,7 @@ function _sendEvent(_cat, _act, _lbl, _val, _nonInteraction) {
 		{
 			try
 			{
-				window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + i + '.send', 'event', _cat, _act, ((_lbl != undefined) ? _lbl : ''), ((_val != '' || !isNaN(_val) || _val != undefined) ? parseInt(_val) : 0), {'nonInteraction': _nonInteraction});
+				window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + i + '.send', 'event', _cat, _act, ((_lbl !== undefined) ? _lbl : ''), ((_val !== '' || !isNaN(_val) || _val !== undefined) ? parseInt(_val) : 0), {'nonInteraction': _nonInteraction});
 			}
 			catch(err) 
 			{
@@ -363,9 +363,9 @@ function _sendEvent(_cat, _act, _lbl, _val, _nonInteraction) {
  */
 function _sendPageview(_virtualPath, _virtualTitle) 
 {
-    if (_virtualPath != '' && _virtualPath != undefined) 
+    if (_virtualPath !== '' && _virtualPath !== undefined)
 	{
-		if (tObjectCheck != window['GoogleAnalyticsObject'])
+		if (tObjectCheck !== window['GoogleAnalyticsObject'])
 		{
 			createTracker(false);
 		}
@@ -373,7 +373,7 @@ function _sendPageview(_virtualPath, _virtualTitle)
 		{
 			try 
 			{
-				window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + i + '.send', 'pageview', {'page': _virtualPath, 'title': ((_virtualTitle != '' || _virtualTitle != undefined) ? _virtualTitle : document.title)});
+				window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + i + '.send', 'pageview', {'page': _virtualPath, 'title': ((_virtualTitle !== '' || _virtualTitle !== undefined) ? _virtualTitle : document.title)});
 			}
 			catch(err) 
 			{
@@ -388,24 +388,24 @@ function _sendPageview(_virtualPath, _virtualTitle)
 function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5) 
 {
 	/*making sure the required parameters are passed*/
-	if(_command != undefined && _command != '' && _hitType != undefined && _hitType != '' && _param1 != undefined && _param1 != '')
+	if(_command !== undefined && _command !== '' && _hitType !== undefined && _hitType !== '' && _param1 !== undefined && _param1 !== '')
     {
-		if (_hitType.toLowerCase() == 'pageview') 
+		if (_hitType.toLowerCase() === 'pageview')
 		{
 			try 
 			{
-				_sendPageview(_param1, ((_param2 == undefined || _param2 == '') ? document.title : _param2));
+				_sendPageview(_param1, ((_param2 === undefined || _param2 === '') ? document.title : _param2));
 			}
 			catch(err) 
 			{
 			}
 		} 
-		else if (_hitType.toLowerCase() == 'event' && _param2 != undefined && _param2 != '') 
+		else if (_hitType.toLowerCase() === 'event' && _param2 !== undefined && _param2 !== '')
 		{
 			try 
 			{
 				var _nonInteraction = 'false';
-				if (_param5 == undefined)
+				if (_param5 === undefined)
 				{
 					_param5 = _nonInteraction;
 				}
@@ -413,13 +413,13 @@ function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5)
 				{
 					_nonInteraction = _cleanBooleanParam(_param5);
 				}
-				_sendEvent(_param1, _param2, ((_param3 == undefined) ? '' : _param3), ((_param4 == undefined || _param4 == '' || isNaN(_param4)) ? 0 : parseInt(_param4)), ((_nonInteraction == 'true') ? 1 : 0));
+				_sendEvent(_param1, _param2, ((_param3 === undefined) ? '' : _param3), ((_param4 === undefined || _param4 === '' || isNaN(_param4)) ? 0 : parseInt(_param4)), ((_nonInteraction === 'true') ? 1 : 0));
 			}
 			catch(err) 
 			{
 			}
 		} 
-		else if (_hitType.toLowerCase().indexOf('dimension') != -1) 
+		else if (_hitType.toLowerCase().indexOf('dimension') !== -1)
 		{
 			try 
 			{
@@ -435,7 +435,7 @@ function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5)
 					else
 					{
 						var tmpDim = 'dimension'+cdsTmpArr[ix].match(/\d+$/g)[0];
-						if(dimsPattern.test(tmpDim) || tmpDim == 'dimension0')
+						if(dimsPattern.test(tmpDim) || tmpDim === 'dimension0')
 						{
 							cdsArr.push(tmpDim);						
 						}
@@ -443,14 +443,14 @@ function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5)
 				}
 				if(cdsArr.length > 0)
 				{
-					_sendCustomDimensions(cdsArr, ((_param1 == undefined) ? '' : _param1));
+					_sendCustomDimensions(cdsArr, ((_param1 === undefined) ? '' : _param1));
 				}
 			}
 			catch(err) 
 			{
 			}
 		} 
-		else if (_hitType.toLowerCase().indexOf('metric') != -1) 
+		else if (_hitType.toLowerCase().indexOf('metric') !== -1)
 		{
 			try 
 			{
@@ -466,7 +466,7 @@ function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5)
 					else
 					{
 						var tmpMtrcs = 'metric'+mtrcsTmpArr[ixx].match(/\d+$/g)[0];
-						if(mtrcsPattern.test(tmpMtrcs) || tmpMtrcs == 'metric0')
+						if(mtrcsPattern.test(tmpMtrcs) || tmpMtrcs === 'metric0')
 						{
 							mtrcsArr.push(tmpMtrcs);
 						}
@@ -474,7 +474,7 @@ function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5)
 				}
 				if(mtrcsArr.length > 0)
 				{
-					_sendCustomMetrics(mtrcsArr, ((_param1 == undefined || _param1 == '' || isNaN(_param1)) ? 1 : parseFloat(_param1)));
+					_sendCustomMetrics(mtrcsArr, ((_param1 === undefined || _param1 === '' || isNaN(_param1)) ? 1 : parseFloat(_param1)));
 				}
 			}
 			catch(err) 
@@ -497,18 +497,18 @@ function _URIHandler(pageName) {
 /* name: _isExcludedReferrer
  * usage: to manually handle Referral Exclusion programmatically */
  function _isExcludedReferrer() {
-	 if(document.referrer != '')
+	 if(document.referrer !== '')
 	 {
 		var refer = document.referrer.replace(/https?\:\/\//,'').split('/')[0].replace('www.', '');
 		if (oCONFIG.SUBDOMAIN_BASED) 
 		{
-			if(refer.indexOf(oCONFIG.COOKIE_DOMAIN) != -1) {
+			if(refer.indexOf(oCONFIG.COOKIE_DOMAIN) !== -1) {
 				return true;}
 				else{ return false;}
 				
 		} else 
 		{
-			if(refer == oCONFIG.COOKIE_DOMAIN){
+			if(refer === oCONFIG.COOKIE_DOMAIN){
 				return true;}
 				else{ return false;}
 		}
@@ -575,7 +575,7 @@ function createTracker(sendPv)
 		if (_isExcludedReferrer()) {
 			window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + dpv + '.set', 'referrer', '');
 		}
-		if (oCONFIG.USE_MAIN_CUSTOM_DIMENSIONS && dpv == 0) {
+		if (oCONFIG.USE_MAIN_CUSTOM_DIMENSIONS && dpv === 0) {
 			window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + dpv + '.set', oCONFIG.MAIN_AGENCY_CUSTOM_DIMENSION_SLOT, oCONFIG.AGENCY);
 			window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + dpv + '.set', oCONFIG.MAIN_SUBAGENCY_CUSTOM_DIMENSION_SLOT, oCONFIG.SUB_AGENCY);
 			window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + dpv + '.set', oCONFIG.MAIN_CODEVERSION_CUSTOM_DIMENSION_SLOT, oCONFIG.VERSION);
@@ -654,32 +654,32 @@ function _initAutoTracker()
 
 		if (oCONFIG.SUBDOMAIN_BASED) 
 		{
-			condition = (doname.indexOf(mainDomain) != -1);
+			condition = (doname.indexOf(mainDomain) !== -1);
 		} else 
 		{
-			condition = (doname == mainDomain);
+			condition = (doname === mainDomain);
 		}
 		
 		if(condition)
 		{
 			// Tracking internal email clicks		
-			if (arr[i].href.toLowerCase().indexOf("mailto:") != -1 && arr[i].href.toLowerCase().indexOf("tel:") == -1) 
+			if (arr[i].href.toLowerCase().indexOf("mailto:") ! !==  && arr[i].href.toLowerCase().indexOf("tel:") === -1)
 			{
 				var gaUri = arr[i].href.match(/[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/);
 				_tagClicks(arr[i],'Mailto', gaUri[0], '', 0); 
 			}
-			else if (arr[i].href.toLowerCase().indexOf("mailto:") == -1 && arr[i].href.toLowerCase().indexOf("tel:") != -1) 
+			else if (arr[i].href.toLowerCase().indexOf("mailto:") === -1 && arr[i].href.toLowerCase().indexOf("tel:") !== -1)
 			{
 				_tagClicks(arr[i],'Telephone Clicks', arr[i].href.split("tel:")[1], '', 0); 
 			}
-			else if(arr[i].href.toLowerCase().indexOf("mailto:") == -1 && arr[i].href.toLowerCase().indexOf("tel:") == -1)
+			else if(arr[i].href.toLowerCase().indexOf("mailto:") === -1 && arr[i].href.toLowerCase().indexOf("tel:") === -1)
 			{
 				
 				for(var j = 0; j < extDoc.length; j++) 
 				{
 					var arExt = arr[i].href.split(".");
 					var ext = arExt[arExt.length-1].split(/[#?&?]/);
-					if(ext[0].toLowerCase() == extDoc[j]) 
+					if(ext[0].toLowerCase() === extDoc[j])
 					{
 						// Tracking internal downloads - doc, xls, pdf, exe, zip
 						_tagClicks(arr[i],'Download', ext[0].toLowerCase(), arr[i].href.split(/[#?&?]/)[0], 0);
@@ -696,30 +696,30 @@ function _initAutoTracker()
 			{
 				var arExt = arr[i].href.split(".");
 				var ext = arExt[arExt.length-1].split(/[#?]/);
-				if(ext[0].toLowerCase() == extDoc[l]) 
+				if(ext[0].toLowerCase() === extDoc[l])
 				{
 					// Tracking outbound downloads - doc, xls, pdf, exe, zip
 					var gaUri = arr[i].href.split(extDoc[l]);
 					_tagClicks(arr[i],'Outbound Downloads', ext[0].toLowerCase(), arr[i].href.split(/[#?&?]/)[0], 0);
 					break;
 				}
-				else if(ext[0].toLowerCase() != extDoc[l])
+				else if(ext[0].toLowerCase() !== extDoc[l])
 				{
 					flagExt++;
-					if(flagExt == extDoc.length)
+					if(flagExt === extDoc.length)
 					{
-						if(arr[i].href.toLowerCase().indexOf("mailto:") == -1 && arr[i].href.toLowerCase().indexOf("tel:") == -1)
+						if(arr[i].href.toLowerCase().indexOf("mailto:") === -1 && arr[i].href.toLowerCase().indexOf("tel:") === -1)
 						{
 							// Tracking outbound links 
 							_tagClicks(arr[i],'Outbound', arr[i].hostname, arr[i].pathname, 0);
 						}
-						else if (extDoc.length && arr[i].href.toLowerCase().indexOf("mailto:") != -1 && arr[i].href.toLowerCase().indexOf("tel:") == -1)
+						else if (extDoc.length && arr[i].href.toLowerCase().indexOf("mailto:") !== -1 && arr[i].href.toLowerCase().indexOf("tel:") === -1)
 						{
 							// Tracking outbound emails 
 							var gaUri = arr[i].href.match(/[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/i);
 							_tagClicks(arr[i],'Outbound MailTo', gaUri[0], '', 0); 
 						}
-						else if (extDoc.length && arr[i].href.toLowerCase().indexOf("mailto:") == -1 && arr[i].href.toLowerCase().indexOf("tel:") != -1)
+						else if (extDoc.length && arr[i].href.toLowerCase().indexOf("mailto:") === -1 && arr[i].href.toLowerCase().indexOf("tel:") !== -1)
 						{
 							// Tracking Telephone clicks
 							_tagClicks(arr[i],'Telephone Clicks', arr[i].href.split("tel:")[1], '', 0); 
@@ -758,7 +758,7 @@ if(oCONFIG.YOUTUBE)
 	var youtube_parser_fed = function youtube_parser_fed(url) {
 		var regExp = /^(https?\:)?(\/\/)?(www\.)?(youtu\.be\/|youtube(\-nocookie)?\.([A-Za-z]{2,4}|[A-Za-z]{2,3}\.[A-Za-z]{2})\/)(watch|embed\/|vi?\/)?(\?vi?\=)?([^#\&\?\/]{11}).*$/;
 		var match = url.match(regExp);
-		if (match && match[9].length == 11) {
+		if (match && match[9].length === 11) {
 			return match[9];
 		} else {}
 	}
@@ -797,7 +797,7 @@ if(oCONFIG.YOUTUBE)
 		if (url.indexOf('origin')==-1){stAdd +='&origin='+document.location.protocol+'//'+document.location.host;adFlag = true;}
 			
 	
-	if (adFlag == true)
+	if (adFlag === true)
 	{
 		return url+stAdd;
 		}
@@ -862,28 +862,28 @@ if(oCONFIG.YOUTUBE)
 		var videoURL = event.target.getIframe().getAttribute('src');
 		var videoId = youtube_parser_fed(videoURL);
 		_thisDuration = ((parseInt(event.target.getCurrentTime()) / parseInt(event.target.getDuration())) * 100).toFixed();
-		if (typeof onPlayerStateChange != "undefined") { onPlayerStateChange(event); }
-		if (parseInt(event.data) == parseInt(YT.PlayerState.PLAYING)) {
-			if (_thisDuration == 0) {
+		if (typeof onPlayerStateChange !== "undefined") { onPlayerStateChange(event); }
+		if (parseInt(event.data) === parseInt(YT.PlayerState.PLAYING)) {
+			if (_thisDuration === 0) {
 				_f33 = false;
 				_f66 = false;
 				_f90 = false;
 			}
 			_sendEvent('YouTube Video', 'play', videoURL, 0);
-		} else if (event.data == YT.PlayerState.ENDED) {
+		} else if (event.data === YT.PlayerState.ENDED) {
 			_sendEvent('YouTube Video', 'finish', videoURL, 0);
-		} else if (event.data == YT.PlayerState.PAUSED) {
+		} else if (event.data === YT.PlayerState.PAUSED) {
 			_sendEvent('YouTube Video', 'pause', videoURL, 0);
 			var duration = _thisDuration;
 			if (duration < 100) {
 				var precentage = _thisDuration;
-				if (precentage > 0 && precentage <= 33 && _f33 == false) {
+				if (precentage > 0 && precentage <= 33 && _f33 === false) {
 					_sendEvent('YouTube Video', '33%', videoURL, 0);
 					_f33 = true;
-				} else if (precentage > 33 && precentage <= 66 && _f66 == false) {
+				} else if (precentage > 33 && precentage <= 66 && _f66 === false) {
 					_sendEvent('YouTube Video', '66%', videoURL, 0);
 					_f66 = true;
-				} else if (precentage > 66 && precentage <= 90 && _f90 == false) {
+				} else if (precentage > 66 && precentage <= 90 && _f90 === false) {
 					_sendEvent('YouTube Video', '90%', videoURL, 0);
 					_f90 = true;
 				}
@@ -904,7 +904,7 @@ function _initIdAssigner() {
     var _allDocLinks = document.getElementsByTagName('a');
     for (var sid = 0; sid < _allDocLinks.length; sid++) {
         var currentId = _allDocLinks[sid].getAttribute('id');
-        if (currentId == null || currentId == '' || currentId == undefined) {
+        if (currentId === null || currentId === '' || currentId === undefined) {
             _allDocLinks[sid].setAttribute('id', 'anch_' + sid);
         }
     }
@@ -940,7 +940,7 @@ function _initIdAssigner() {
  */
 	function _setUpTrackers() 
 	{
-		if (tObjectCheck != window["GoogleAnalyticsObject"])
+		if (tObjectCheck !== window["GoogleAnalyticsObject"])
 		{
 			createTracker(false);
 		}
