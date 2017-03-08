@@ -22,6 +22,8 @@ Agencies are encouraged to use the following HTML snippet to participate in the 
 
 Replace `AGENCY` with your agency's standard abbreviation, such as DHS or EPA.
 
+*Note* If your agency does not already have an agency-specific view in DAP, all pages/sites will also need `&pua=ua-33523145-2` after the `agency=AGENCY` parameter in order to send data both to the property that contains aggregated data view and to the property that will house your agency-specific profile.
+
 For more details on implementing the DAP script on your site, including adding other custom parameters, please refer to:
 * [DAP Implementation Instructions](https://www.digitalgov.gov/services/dap/analytics-tool-instructions/)
 * [Implementation Guide](https://s3.amazonaws.com/sitesusa/wp-content/uploads/sites/212/2014/05/DAP_v3.1_QuickGuide_Aug2016-1.pdf)
