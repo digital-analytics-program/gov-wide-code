@@ -6,7 +6,7 @@
   "private": true,
   "main": "Universal-Federated-Analytics.js",
   "scripts": {
-    "minify": "uglifyjs --compress --source-map Universal-Federated-Analytics-Min.js.map Universal-Federated-Analytics.js > Universal-Federated-Analytics-Min.js"
+    "minify": "uglifyjs --compress --source-map Universal-Federated-Analytics-Min.js.map Universal-Federated-Analytics.js -o Universal-Federated-Analytics-Min.js"
   },
   "repository": {
     "type": "git",
