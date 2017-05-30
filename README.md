@@ -74,6 +74,12 @@ Before any change of the JavaScript being served by the CDN, the owners of this 
 
 This means that, barring the compromise of GitHub's systems or the CDN's systems, all changes to the code that appears on `dap.digitalgov.gov` should be publicly reflected in [this repository's commit history](https://github.com/digital-analytics-program/gov-wide-code/commits/master).
 
+#### Appropriate Placement
+
+The Digital Analytics Program Javascript code is intended to be implemented on "public-facing" federal government webpages. In this sense, "public-facing" webpages are defined as those that can be accessed without any authentication/login, and are not part of an otherwise "privileged session".
+
+As such, the DAP script tag should not be placed on pages visited during logged-in sessions. Notably, other seemingly "public" pages that can be accessed without authentication may also be part of "privileged sessions"; for example, a "password reset" page that is accessed by clicking a link in an email is not appropriate for DAP code, because it assumes the visitor has the privilege of control over the email account used to provide the link. 
+
 #### Access controls
 
 This repository is maintained in its own GitHub organization, `digital-analytics-program`, and is operated by the Digital Analytics Program team.
