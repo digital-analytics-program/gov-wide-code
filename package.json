@@ -1,0 +1,22 @@
+{
+  "name": "gov-wide-code",
+  "version": "1.0.0",
+  "homepage": "https://github.com/digital-analytics-program/gov-wide-code#readme",
+  "description": "Provides a JavaScript file for US federal agencies to link or embed in their websites to participate in the Digital Analytics Program.",
+  "private": true,
+  "main": "Universal-Federated-Analytics.js",
+  "scripts": {
+    "minify": "uglifyjs --compress --source-map Universal-Federated-Analytics-Min.js.map Universal-Federated-Analytics.js -o Universal-Federated-Analytics-Min.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/digital-analytics-program/gov-wide-code.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/digital-analytics-program/gov-wide-code/issues"
+  },
+  "devDependencies": {
+    "uglify-js": "^2.8.8"
+  }
+}

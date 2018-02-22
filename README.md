@@ -87,3 +87,13 @@ This repository is maintained in its own GitHub organization, `digital-analytics
 Only Digital Analytics Program staff have been granted write access to this repository.
 
 **All members of the digital-analytics-program GitHub organization are required to have two-factor authentication enabled.**
+
+## Minifying for production
+
+The production build of the script, `Universal-Federated-Analytics-Min.js`, is minified with [UglifyJS](https://github.com/mishoo/UglifyJS2). To build the production script:
+
+1. Clone this repository.
+1. Ensure that you have [Node.js](https://nodejs.org/en/) installed.
+1. Run `npm install --dev` in the project directory.
+1. Run `npm run minify` to regenerate the minified JS and corresponding [source map](https://developers.google.com/web/tools/chrome-devtools/javascript/source-maps).
+1. Commit changes to `Universal-Federated-Analytics-Min.js` and the `Universal-Federated-Analytics-Min.js.map` with any chances to the source script, `Universal-Federated-Analytics.js`.
