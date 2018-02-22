@@ -52,6 +52,7 @@ var oCONFIG = {
     DOUNBLECLICK_LINK: false,
     ENHANCED_LINK: false,
     OPTOUT_PAGE: false,
+    SEND_PAGEVIEW: true,
     PUA_NAME: 'GSA_ENOR'
 };
 
@@ -272,6 +273,12 @@ function _updateConfig() {
                 if (true == _value || false == _value)  
                     oCONFIG.OPTOUT_PAGE = _value;
                 break;
+            case 'sendpageview':
+                _value = _cleanBooleanParam(_value);
+                if (true == _value || false == _value)
+                    oCONFIG.SEND_PAGEVIEW = _value;
+                break;
+
 			default:
 				break;
         }
@@ -543,7 +550,7 @@ else
 }
 
 /* create the trackers according to oCONFIG object and fire the main pageview */
-createTracker(true);
+createTracker(oCONFIG.SEND_PAGEVIEW);
 
 function createTracker(sendPv)
 {
