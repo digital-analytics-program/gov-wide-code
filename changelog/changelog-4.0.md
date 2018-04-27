@@ -23,11 +23,12 @@
 ### Issue #1: 
 The Federated code is designed to work on all government sites whether they already have inline site specific GA trackers or not. There is only one scenario that is not fully supported by the Federated code, which is when a Universal Analytics tracking code (that is using a custom/non-default tracking object) is added right after the Federated code. In this specific scenario the Federated code will fail in reporting the first page hit and will be able to track normally all the consecutive hits. 
 Supported Scenarios:
-UA Site Specific before the Federated code (Default Tracking Object)
-UA Site Specific after the Federated code (Default Tracking Object)
-UA Site Specific before the Federated code (Custom Tracking Object)
-Classic GA Site Specific before the Federated code 
-Classic GA Site Specific after the Federated code 
+
+* UA Site Specific before the Federated code (Default Tracking Object)
+* UA Site Specific after the Federated code (Default Tracking Object)
+* UA Site Specific before the Federated code (Custom Tracking Object)
+* Classic GA Site Specific before the Federated code 
+* Classic GA Site Specific after the Federated code 
 
 
 ### Issue #2: 
