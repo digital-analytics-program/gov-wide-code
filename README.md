@@ -54,7 +54,7 @@ on IE 8 and earlier versions because of YouTube API limitations
 
 #### Transport security
 
-The centrally hosted DAP JS is **only available over HTTPS**. Plain HTTP requests will not be successfully redirected, and data collection will not function. Agencies should use only `https://` URLs, not protocol-relative URLs.
+The centrally hosted DAP JS is **only available over HTTPS**. Agencies should use only `https://` URLs, not protocol-relative URLs.
 
 Additionally, an [HTTP Strict Transport Security](https://https.cio.gov/hsts/) header is set with a length of 1 year, and is prepared for preloading into major web browsers. As of this writing, that header looks like this:
 
