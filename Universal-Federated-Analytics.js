@@ -17,52 +17,51 @@ Author: Ahmed Awwad
  * in the query string when referencing this file.
  */
 var oCONFIG = {
-    GWT_UAID: ['UA-33523145-1'], /* hard coded cannot be configured by query string */
-    FORCE_SSL: true, /* hard coded cannot be configured by query string */
-    ANONYMIZE_IP: true, /* hard coded cannot be configured by query string */
+  GWT_UAID: ['UA-33523145-1'], /* hard coded cannot be configured by query string */
+  FORCE_SSL: true, /* hard coded cannot be configured by query string */
+  ANONYMIZE_IP: true, /* hard coded cannot be configured by query string */
 
-    AGENCY: '',
-    SUB_AGENCY: '',
-    VERSION: '20171207 v4.0 - Universal Analytics',
-    SITE_TOPIC: '',
-    SITE_PLATFORM: '',
-    SCRIPT_SOURCE: '',
-    URL_PROTOCOL: location.protocol,
+  AGENCY: '',
+  SUB_AGENCY: '',
+  VERSION: '20171207 v4.0 - Universal Analytics',
+  SITE_TOPIC: '',
+  SITE_PLATFORM: '',
+  SCRIPT_SOURCE: '',
+  URL_PROTOCOL: location.protocol,
 
-    USE_MAIN_CUSTOM_DIMENSIONS: true,
-    MAIN_AGENCY_CUSTOM_DIMENSION_SLOT: 'dimension1',
-    MAIN_SUBAGENCY_CUSTOM_DIMENSION_SLOT: 'dimension2',
-    MAIN_CODEVERSION_CUSTOM_DIMENSION_SLOT: 'dimension3',
-    MAIN_SITE_TOPIC_CUSTOM_DIMENSION_SLOT: 'dimension4',
-    MAIN_SITE_PLATFORM_CUSTOM_DIMENSION_SLOT: 'dimension5',
-    MAIN_SCRIPT_SOURCE_URL_CUSTOM_DIMENSION_SLOT: 'dimension6',
-    MAIN_URL_PROTOCOL_CUSTOM_DIMENSION_SLOT: 'dimension7',
-    MAIN_INTERACTION_TYPE_CUSTOM_DIMENSION_SLOT: 'dimension8',
-
-
-    USE_PARALLEL_CUSTOM_DIMENSIONS: false,
-    PARALLEL_AGENCY_CUSTOM_DIMENSION_SLOT: 'dimension1',
-    PARALLEL_SUBAGENCY_CUSTOM_DIMENSION_SLOT: 'dimension2',
-    PARALLEL_CODEVERSION_CUSTOM_DIMENSION_SLOT: 'dimension3',
-    PARALLEL_SITE_TOPIC_CUSTOM_DIMENSION_SLOT: 'dimension4',
-    PARALLEL_SITE_PLATFORM_CUSTOM_DIMENSION_SLOT: 'dimension5',
-    PARALLEL_SCRIPT_SOURCE_URL_CUSTOM_DIMENSION_SLOT: 'dimension6',
-    PARALLEL_URL_PROTOCOL_CUSTOM_DIMENSION_SLOT: 'dimension7',
-    PARALLEL_INTERACTION_TYPE_CUSTOM_DIMENSION_SLOT: 'dimension8',
+  USE_MAIN_CUSTOM_DIMENSIONS: true,
+  MAIN_AGENCY_CUSTOM_DIMENSION_SLOT: 'dimension1',
+  MAIN_SUBAGENCY_CUSTOM_DIMENSION_SLOT: 'dimension2',
+  MAIN_CODEVERSION_CUSTOM_DIMENSION_SLOT: 'dimension3',
+  MAIN_SITE_TOPIC_CUSTOM_DIMENSION_SLOT: 'dimension4',
+  MAIN_SITE_PLATFORM_CUSTOM_DIMENSION_SLOT: 'dimension5',
+  MAIN_SCRIPT_SOURCE_URL_CUSTOM_DIMENSION_SLOT: 'dimension6',
+  MAIN_URL_PROTOCOL_CUSTOM_DIMENSION_SLOT: 'dimension7',
+  MAIN_INTERACTION_TYPE_CUSTOM_DIMENSION_SLOT: 'dimension8',
 
 
-    COOKIE_DOMAIN: location.hostname.replace('www.', '').toLowerCase(),
-    COOKIE_TIMEOUT: 60 * 60 * 24 * 2 * 365,
-    SEARCH_PARAMS: 'q|querytext|nasaInclude|k|qt',
+  USE_PARALLEL_CUSTOM_DIMENSIONS: false,
+  PARALLEL_AGENCY_CUSTOM_DIMENSION_SLOT: 'dimension1',
+  PARALLEL_SUBAGENCY_CUSTOM_DIMENSION_SLOT: 'dimension2',
+  PARALLEL_CODEVERSION_CUSTOM_DIMENSION_SLOT: 'dimension3',
+  PARALLEL_SITE_TOPIC_CUSTOM_DIMENSION_SLOT: 'dimension4',
+  PARALLEL_SITE_PLATFORM_CUSTOM_DIMENSION_SLOT: 'dimension5',
+  PARALLEL_SCRIPT_SOURCE_URL_CUSTOM_DIMENSION_SLOT: 'dimension6',
+  PARALLEL_URL_PROTOCOL_CUSTOM_DIMENSION_SLOT: 'dimension7',
+  PARALLEL_INTERACTION_TYPE_CUSTOM_DIMENSION_SLOT: 'dimension8',
 
-    YOUTUBE: false,
-    AUTOTRACKER: true,
-    EXTS: 'doc|docx|xls|xlsx|xlsm|ppt|pptx|exe|zip|pdf|js|txt|csv|dxf|dwgd|rfa|rvt|dwfx|dwg|wmv|jpg|msi|7z|gz|tgz|wma|mov|avi|mp3|mp4|csv|mobi|epub|swf|rar',
-    SUBDOMAIN_BASED: true,
-    DOUBLECLICK_LINK: false,
-    ENHANCED_LINK: false,
-    OPTOUT_PAGE: false,
-    PUA_NAME: 'GSA_ENOR'
+  COOKIE_DOMAIN: location.hostname.replace('www.', '').toLowerCase(),
+  COOKIE_TIMEOUT: 60 * 60 * 24 * 2 * 365,
+  SEARCH_PARAMS: 'q|querytext|nasaInclude|k|qt',
+
+  YOUTUBE: false,
+  AUTOTRACKER: true,
+  EXTS: 'doc|docx|xls|xlsx|xlsm|ppt|pptx|exe|zip|pdf|js|txt|csv|dxf|dwgd|rfa|rvt|dwfx|dwg|wmv|jpg|msi|7z|gz|tgz|wma|mov|avi|mp3|mp4|csv|mobi|epub|swf|rar',
+  SUBDOMAIN_BASED: true,
+  DOUBLECLICK_LINK: false,
+  ENHANCED_LINK: false,
+  OPTOUT_PAGE: false,
+  PUA_NAME: 'GSA_ENOR'
 };
 
 
@@ -72,7 +71,7 @@ var oCONFIG = {
  * the order of the functions called within this function must be maintained as is
  */
 function _onEveryPage() {
-    _updateConfig();
+  _updateConfig();
   _defineCookieDomain();
   _defineAgencyCDsValues();
 }
@@ -81,24 +80,20 @@ _onEveryPage();
 
 /* name: _defineCookieDomain */
 /* usage: to define cookie domain based on the SUBDOMAIN_BASED variable value */
-function _defineCookieDomain()
-{
+function _defineCookieDomain(){
   var domainPattern = /(([^.\/]+\.[^.\/]{2,3}\.[^.\/]{2})|(([^.\/]+\.)[^.\/]{2,4}))(\/.*)?$/;
 
-  if(domainPattern.test(oCONFIG.SUBDOMAIN_BASED.toString()))
-  {
+  if (domainPattern.test(oCONFIG.SUBDOMAIN_BASED.toString())){
     oCONFIG.COOKIE_DOMAIN = oCONFIG.SUBDOMAIN_BASED.toLowerCase().replace('www.','');
     oCONFIG.SUBDOMAIN_BASED = true;
   }
-  else
-  {
-    if (oCONFIG.SUBDOMAIN_BASED === false)
-    {
+  else {
+    
+    if (oCONFIG.SUBDOMAIN_BASED === false) {
       oCONFIG.COOKIE_DOMAIN = document.location.hostname.match(/(([^.\/]+\.[^.\/]{2,3}\.[^.\/]{2})|(([^.\/]+\.)[^.\/]{2,4}))(\/.*)?$/)[1];
       oCONFIG.SUBDOMAIN_BASED = true;
     }
-    else
-    {
+    else {
       oCONFIG.COOKIE_DOMAIN = location.hostname.toLowerCase().replace('www.','');
       oCONFIG.SUBDOMAIN_BASED = false;
     }
@@ -107,8 +102,7 @@ function _defineCookieDomain()
 
 /* name: _defineDefaultCDsValues */
 /* usage: to define the values of AGENCY, SUB_AGENCY, SITE_TOPIC and SITE_PLATFORM Custom dimensions*/
-function _defineAgencyCDsValues()
-{
+function _defineAgencyCDsValues(){
   oCONFIG.AGENCY = oCONFIG.AGENCY || 'unspecified:' + oCONFIG.COOKIE_DOMAIN;
   oCONFIG.SUB_AGENCY = oCONFIG.SUB_AGENCY || ('' + oCONFIG.COOKIE_DOMAIN);
   oCONFIG.SUB_AGENCY = oCONFIG.AGENCY + ' - ' + oCONFIG.SUB_AGENCY;
@@ -121,20 +115,20 @@ function _defineAgencyCDsValues()
  * usage: to map several string values to boolean values.
  */
 function _cleanBooleanParam(_paramValue) {
-    switch (_paramValue.toString().toLowerCase()) {
-        case 'true':
-        case 'on':
-        case 'yes':
-        case '1':
-            return true;
-        case 'false':
-        case 'off':
-        case 'no':
-        case '0':
-            return false;
-        default:
-            return _paramValue;
-    }
+  switch (_paramValue.toString().toLowerCase()) {
+    case 'true':
+    case 'on':
+    case 'yes':
+    case '1':
+      return true;
+    case 'false':
+    case 'off':
+    case 'no':
+    case '0':
+      return false;
+    default:
+      return _paramValue;
+  }
 }
 
 /*
@@ -142,32 +136,31 @@ function _cleanBooleanParam(_paramValue) {
  * usage: to check if a string is a valid UA
  */
 function _isValidUANum(_UANumber) {
-    _UANumber = _UANumber.toLowerCase();
-    var _regEx = /^ua\-([0-9]+)\-[0-9]+$/;
-    var match = _UANumber.match(_regEx);
+  _UANumber = _UANumber.toLowerCase();
+  var _regEx = /^ua\-([0-9]+)\-[0-9]+$/;
+  var match = _UANumber.match(_regEx);
 
-    return (match != null && match.length > 0);
+  return (match != null && match.length > 0);
 }
 
 /*
  * name: _cleanDimensionValue
  * usage: make sure the dimension slot number is passed correctly
  */
- function _cleanDimensionValue(_paramValue){
+function _cleanDimensionValue(_paramValue){
   try {
     pattern = /^dimension([1-9]|[1-9][0-9]|1([0-9][0-9])|200)$/;
     if (pattern.test(_paramValue))
       return _paramValue;
 
-    if (_paramValue.match(/\d+$/g) !== null)
-    {
+    if (_paramValue.match(/\d+$/g) !== null){
       var _tmpValue = 'dimension' + _paramValue.match(/\d+$/g)[0];
       if (pattern.test(_tmpValue))
       return _tmpValue;
     }
-
     return '';
-  } catch (err) {
+  } 
+  catch (err) {
   }
 }
 
@@ -178,127 +171,143 @@ function _isValidUANum(_UANumber) {
 function _updateConfig() {
   var _JSElement = '';
   var _paramList = '';
-  if(typeof _fedParmsGTM !== 'undefined') {
+  if (typeof _fedParmsGTM !== 'undefined') {
     _paramList = _fedParmsGTM.toLowerCase().split('&');
     oCONFIG.SCRIPT_SOURCE = 'GTM';
   }
-  else
-  {
+  else {
     _JSElement = document.getElementById('_fed_an_ua_tag');
     _fullParams = _JSElement.src.match(/^([^\?]*)(.*)$/i)[2].replace("?","");
     _paramList = _fullParams.split('&');
     oCONFIG.SCRIPT_SOURCE = _JSElement.src.split("?")[0];
-    }
-    for (var i = 0; i < _paramList.length; i++) {
-        _keyValuePair = decodeURIComponent(_paramList[i].toLowerCase());
-        _key = _keyValuePair.split('=')[0];
-        _value = _keyValuePair.split('=')[1];
+  }
+  
+  for (var i = 0; i < _paramList.length; i++) {
+    _keyValuePair = decodeURIComponent(_paramList[i].toLowerCase());
+    _key = _keyValuePair.split('=')[0];
+    _value = _keyValuePair.split('=')[1];
 
-        switch (_key) {
+    switch (_key) {
       case 'pua':
-          var _UAList = _value.split(',');
-          for (var j = 0; j < _UAList.length; j++)
-              if (_isValidUANum(_UAList[j]))
-                  oCONFIG.GWT_UAID.push(_UAList[j].toUpperCase());
-          break;
+        var _UAList = _value.split(',');
+        for (var j = 0; j < _UAList.length; j++){
+          if (_isValidUANum(_UAList[j])){
+            oCONFIG.GWT_UAID.push(_UAList[j].toUpperCase());
+          }
+        }
+        break;
       case 'agency':
-          oCONFIG.AGENCY = _value.toUpperCase();
-          break;
+        oCONFIG.AGENCY = _value.toUpperCase();
+        break;
       case 'subagency':
-          oCONFIG.SUB_AGENCY = _value.toUpperCase();
-          break;
+        oCONFIG.SUB_AGENCY = _value.toUpperCase();
+        break;
       case 'sitetopic':
-          oCONFIG.SITE_TOPIC = _value;
-          break;
+        oCONFIG.SITE_TOPIC = _value;
+        break;
       case 'siteplatform':
-          oCONFIG.SITE_PLATFORM = _value;
-          break;
+        oCONFIG.SITE_PLATFORM = _value;
+        break;
       case 'parallelcd':
-          _value = _cleanBooleanParam(_value);
-          if (true === _value || false === _value)
-              oCONFIG.USE_PARALLEL_CUSTOM_DIMENSIONS = _value;
-          break;
+        _value = _cleanBooleanParam(_value);
+        if (true === _value || false === _value){
+            oCONFIG.USE_PARALLEL_CUSTOM_DIMENSIONS = _value;
+        }
+        break;
       case 'palagencydim':
-                _value = _cleanDimensionValue(_value);
-        if (''!==_value)
+        _value = _cleanDimensionValue(_value);
+        if (''!==_value){
           oCONFIG.PARALLEL_AGENCY_CUSTOM_DIMENSION_SLOT = _value;
-                break;
+        }
+        break;
       case 'palsubagencydim':
-                _value = _cleanDimensionValue(_value);
-        if (''!==_value)
-          oCONFIG.PARALLEL_SUBAGENCY_CUSTOM_DIMENSION_SLOT = _value;
-                break;
-            case 'palversiondim':
-                _value = _cleanDimensionValue(_value);
-        if (''!==_value)
+        _value = _cleanDimensionValue(_value);
+        if (''!==_value){
+          oCONFIG.PARALLEL_SUBAGENCY_CUSTOM_DIMENSION_SLOT = _value;          
+        }
+        break;
+      case 'palversiondim':
+        _value = _cleanDimensionValue(_value);
+        if (''!==_value){
           oCONFIG.PARALLEL_CODEVERSION_CUSTOM_DIMENSION_SLOT = _value;
-                break;
+        }
+        break;
       case 'paltopicdim':
-                _value = _cleanDimensionValue(_value);
-        if (''!==_value)
+        _value = _cleanDimensionValue(_value);
+        if (''!==_value){
           oCONFIG.PARALLEL_SITE_TOPIC_CUSTOM_DIMENSION_SLOT = _value;
-                break;
+        }
+        break;
       case 'palplatformdim':
-                _value = _cleanDimensionValue(_value);
-        if (''!==_value)
+        _value = _cleanDimensionValue(_value);
+        if (''!==_value){
           oCONFIG.PARALLEL_SITE_PLATFORM_CUSTOM_DIMENSION_SLOT = _value;
-                break;
+        }
+        break;
       case 'palscriptsrcdim':
-                _value = _cleanDimensionValue(_value);
-        if (''!==_value)
+        _value = _cleanDimensionValue(_value);
+        if (''!==_value){
           oCONFIG.PARALLEL_SCRIPT_SOURCE_URL_CUSTOM_DIMENSION_SLOT = _value;
-                break;
+        }
+        break;
       case 'palurlprotocoldim':
-                _value = _cleanDimensionValue(_value);
-        if (''!==_value)
+        _value = _cleanDimensionValue(_value);
+        if (''!==_value){
           oCONFIG.PARALLEL_URL_PROTOCOL_CUSTOM_DIMENSION_SLOT = _value;
-                break;
+        }
+        break;
       case 'palinteractiontypedim':
-                _value = _cleanDimensionValue(_value);
-        if (''!==_value)
+        _value = _cleanDimensionValue(_value);
+        if (''!==_value){
           oCONFIG.PARALLEL_INTERACTION_TYPE_CUSTOM_DIMENSION_SLOT = _value;
-                break;
+        }
+        break;
       case 'cto':
-          oCONFIG.COOKIE_TIMEOUT = parseInt(_value) * 2628000;    // = 60 * 60 * 24 * 30.4166666666667;
-          break;
+        oCONFIG.COOKIE_TIMEOUT = parseInt(_value) * 2628000;    // = 60 * 60 * 24 * 30.4166666666667;
+        break;
       case 'sp':
-          oCONFIG.SEARCH_PARAMS += '|' + _value.replace(/,/g, '|');
-          break;
+        oCONFIG.SEARCH_PARAMS += '|' + _value.replace(/,/g, '|');
+        break;
       case 'exts':
-          oCONFIG.EXTS += '|' + _value.replace(/,/g, '|');
-          break;
+        oCONFIG.EXTS += '|' + _value.replace(/,/g, '|');
+        break;
       case 'yt':
-          _value = _cleanBooleanParam(_value);
-          if (true === _value || false === _value)
-              oCONFIG.YOUTUBE = _value;
-          break;
+        _value = _cleanBooleanParam(_value);
+        if (true === _value || false === _value){
+          oCONFIG.YOUTUBE = _value;
+        }
+        break;
       case 'autotracker':
-          _value = _cleanBooleanParam(_value);
-          if (true === _value || false === _value)
-              oCONFIG.AUTOTRACKER = _value;
-          break;
+        _value = _cleanBooleanParam(_value);
+        if (true === _value || false === _value){
+          oCONFIG.AUTOTRACKER = _value;
+        }
+        break;
       case 'sdor':
-    oCONFIG.SUBDOMAIN_BASED = _cleanBooleanParam(_value);
-          break;
+        oCONFIG.SUBDOMAIN_BASED = _cleanBooleanParam(_value);
+        break;
       case 'dclink':
-          _value = _cleanBooleanParam(_value);
-          if (true === _value || false === _value)
-              oCONFIG.DOUBLECLICK_LINK = _value;
-          break;
+        _value = _cleanBooleanParam(_value);
+        if (true === _value || false === _value){
+          oCONFIG.DOUBLECLICK_LINK = _value;
+        }
+        break;
       case 'enhlink':
-          _value = _cleanBooleanParam(_value);
-          if (true === _value || false === _value)
-              oCONFIG.ENHANCED_LINK = _value;
-          break;
+        _value = _cleanBooleanParam(_value);
+        if (true === _value || false === _value){
+          oCONFIG.ENHANCED_LINK = _value;
+        }
+        break;
       case 'optout':
-          _value = _cleanBooleanParam(_value);
-          if (true === _value || false === _value)
-              oCONFIG.OPTOUT_PAGE = _value;
-          break;
+        _value = _cleanBooleanParam(_value);
+        if (true === _value || false === _value){
+          oCONFIG.OPTOUT_PAGE = _value;
+        }
+        break;
       default:
         break;
-        }
     }
+  }
 }
 
 
@@ -306,54 +315,46 @@ function _updateConfig() {
  /* name: _sendCustomDimensions
  * usage: to set custom dimensions before sending the hit */
 
-function _sendCustomDimensions(_slotNums, _val)
-{
-    if (_slotNums.length > 0 && _val !== '' && _val !== undefined)
-  {
-    if (tObjectCheck !== window['GoogleAnalyticsObject'])
-    {
+function _sendCustomDimensions(_slotNums, _val) {
+  if (_slotNums.length > 0 && _val !== '' && _val !== undefined) {
+    if (tObjectCheck !== window['GoogleAnalyticsObject']){
       createTracker(false);
     }
-        for (var i = 0; i < oCONFIG.GWT_UAID.length; i++)
-    {
-      if(_slotNums[i] !== 'dimension0')
-      {
-        try
-        {
+    
+    for (var i = 0; i < oCONFIG.GWT_UAID.length; i++) {
+      if (_slotNums[i] !== 'dimension0') {
+        try {
           window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + i + '.set', _slotNums[i], _val);
         }
-        catch(err)
-        {}
-      }
+        catch (err){
+          
         }
+      }
     }
+  }
+  
 }
 
 /*
  * name: _sendCustomMetrics
  * usage: to set custom metrics before sending the hit
  */
-function _sendCustomMetrics(_slotNums, _val)
-{
-    if (_slotNums.length > 0 && _val !== '' && _val !== undefined)
-  {
-    if (tObjectCheck != window['GoogleAnalyticsObject'])
-    {
+function _sendCustomMetrics(_slotNums, _val){
+  if (_slotNums.length > 0 && _val !== '' && _val !== undefined){
+    if (tObjectCheck != window['GoogleAnalyticsObject']){
       createTracker(false);
     }
-        for (var i = 0; i < oCONFIG.GWT_UAID.length; i++)
-    {
-      if(_slotNums[i] !== 'metric0')
-      {
-        try
-        {
+    for (var i = 0; i < oCONFIG.GWT_UAID.length; i++) {
+      if (_slotNums[i] !== 'metric0'){
+        try{
           window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + i + '.set', _slotNums[i], _val);
         }
-        catch(err)
-        {}
-      }
+        catch (err){
+          
         }
+      }
     }
+  }
 }
 
 /*
@@ -361,33 +362,25 @@ function _sendCustomMetrics(_slotNums, _val)
  * usage: to set hit type to Event
  */
 function _sendEvent(_cat, _act, _lbl, _val, _nonInteraction, interactionType) {
-  if (_cat !== '' && _cat !== undefined && _act !== '' && _act !== undefined)
-  {
+  if (_cat !== '' && _cat !== undefined && _act !== '' && _act !== undefined) {
     var interactionSlot = oCONFIG.MAIN_INTERACTION_TYPE_CUSTOM_DIMENSION_SLOT;
-    if (tObjectCheck !== window['GoogleAnalyticsObject'])
-    {
+    if (tObjectCheck !== window['GoogleAnalyticsObject']){
       createTracker(false);
     }
-    for (var i = 0; i < oCONFIG.GWT_UAID.length; i++)
-    {
-      try
-      {
-        if(i > 0)
-        {
-          if(oCONFIG.USE_PARALLEL_CUSTOM_DIMENSIONS === true)
-          {
+    for (var i = 0; i < oCONFIG.GWT_UAID.length; i++){
+      try {
+        if (i > 0) {
+          if (oCONFIG.USE_PARALLEL_CUSTOM_DIMENSIONS === true) {
             interactionSlot = oCONFIG.PARALLEL_INTERACTION_TYPE_CUSTOM_DIMENSION_SLOT;
           }
-          else
-          {
+          else {
             interactionType = undefined;
           }
         }
         window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + i + '.set', interactionSlot, interactionType);
         window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + i + '.send', 'event', _cat, _act, ((_lbl !== undefined) ? _lbl : ''), ((_val !== '' || !isNaN(_val) || _val !== undefined) ? parseInt(_val) : 0), { 'nonInteraction': _nonInteraction});
       }
-      catch(err)
-      {
+      catch(err){
       }
     }
   }
@@ -399,85 +392,64 @@ function _sendEvent(_cat, _act, _lbl, _val, _nonInteraction, interactionType) {
  */
 function _sendPageview(_virtualPath, _virtualTitle)
 {
-    if (_virtualPath !== '' && _virtualPath !== undefined)
-  {
-    if (tObjectCheck !== window['GoogleAnalyticsObject'])
-    {
+  if (_virtualPath !== '' && _virtualPath !== undefined){
+    if (tObjectCheck !== window['GoogleAnalyticsObject']){
       createTracker(false);
     }
-        for (var i = 0; i < oCONFIG.GWT_UAID.length; i++)
-    {
-      try
-      {
+    for (var i = 0; i < oCONFIG.GWT_UAID.length; i++){
+      try{
         window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + i + '.send', 'pageview', {'page': _virtualPath, 'title': ((_virtualTitle !== '' || _virtualTitle !== undefined) ? _virtualTitle : document.title)});
       }
-      catch(err)
-      {
+      catch (err){
       }
-        }
     }
+  }
 }
 
 /* name: gas
  * usage: to set hit parameters or send hits.
  * This is the only public function that should be called by users. */
-function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5)
-{
+function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5){
   /*making sure the required parameters are passed*/
-  if(_command !== undefined && _command !== '' && _hitType !== undefined && _hitType !== '' && _param1 !== undefined && _param1 !== '')
-    {
-    if (_hitType.toLowerCase() === 'pageview')
-    {
-      try
-      {
+  if (_command !== undefined && _command !== '' && _hitType !== undefined && _hitType !== '' && _param1 !== undefined && _param1 !== ''){
+    if (_hitType.toLowerCase() === 'pageview'){
+      try {
         _sendPageview(_param1, ((_param2 === undefined || _param2 === '') ? document.title : _param2));
       }
-      catch(err)
-      {
+      catch(err){
       }
     }
-    else if (_hitType.toLowerCase() === 'event' && _param2 !== undefined && _param2 !== '')
-    {
-      try
-      {
+    else if (_hitType.toLowerCase() === 'event' && _param2 !== undefined && _param2 !== ''){
+      try {
         var _nonInteraction = false;
         if (_param5 !== undefined)
         {
-          if(typeof _cleanBooleanParam(_param5) === "boolean")
-          {
+          if (typeof _cleanBooleanParam(_param5) === "boolean"){
             _nonInteraction = _cleanBooleanParam(_param5);
           }
         }
         _sendEvent(_param1, _param2, ((_param3 === undefined) ? '' : _param3), ((_param4 === undefined || _param4 === '' || isNaN(_param4)) ? 0 : parseInt(_param4)), _nonInteraction);
       }
-      catch(err)
-      {
+      catch (err){
       }
     }
-    else if (_hitType.toLowerCase().indexOf('dimension') != -1)
-    {
-      try
-      {
+    else if (_hitType.toLowerCase().indexOf('dimension') != -1) {
+      try {
         var cdsTmpArr = _hitType.toLowerCase().split(',');
         var cdsArr = [];
         dimsPattern = /^dimension([1-9]|[1-9][0-9]|1([0-9][0-9])|200)$/;
-        for (var ix = 0; ix< cdsTmpArr.length; ix++)
-        {
-          if(dimsPattern.test(cdsTmpArr[ix]))
-          {
+        for (var ix = 0; ix< cdsTmpArr.length; ix++) {
+          if (dimsPattern.test(cdsTmpArr[ix])) {
             cdsArr.push(cdsTmpArr[ix]);
           }
-          else
-          {
+          else {
             var tmpDim = 'dimension'+cdsTmpArr[ix].match(/\d+$/g)[0];
-            if(dimsPattern.test(tmpDim) || tmpDim === 'dimension0')
-            {
+            if (dimsPattern.test(tmpDim) || tmpDim === 'dimension0') {
               cdsArr.push(tmpDim);
             }
           }
         }
-        if(cdsArr.length > 0)
-        {
+        if (cdsArr.length > 0){
           _sendCustomDimensions(cdsArr, ((_param1 === undefined) ? '' : _param1));
         }
       }
@@ -555,10 +527,8 @@ function _URIHandler(pageName) {
  * build GA tracking code
  * according to configurations saved in oConfig
  */
- var tObjectCheck ;
- if (typeof window['GoogleAnalyticsObject'] === 'undefined')
-{
-
+var tObjectCheck ;
+if (typeof window['GoogleAnalyticsObject'] === 'undefined'){
 (function(i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r;
     i[r] = i[r] || function() {
@@ -775,8 +745,7 @@ function _initAutoTracker(links)
 
 /*** Start YouTube Tracking - Used for Youtube video tracking (Play / Pause / Watch to End ***/
 
-if(oCONFIG.YOUTUBE)
-{
+if (oCONFIG.YOUTUBE){
   var videoArray_fed = new Array();
   var playerArray_fed = new Array();
   var _f33 = false;
@@ -901,7 +870,9 @@ if(oCONFIG.YOUTUBE)
     var videoURL = event.target.getIframe().getAttribute('src');
     var videoId = youtube_parser_fed(videoURL);
     _thisDuration = ((parseInt(event.target.getCurrentTime()) / parseInt(event.target.getDuration())) * 100).toFixed();
-    if (typeof onPlayerStateChange !== "undefined") { onPlayerStateChange(event); }
+    if (typeof onPlayerStateChange !== "undefined") { 
+      onPlayerStateChange(event); 
+    }
     if (parseInt(event.data) === parseInt(YT.PlayerState.PLAYING)) {
       if (_thisDuration === 0) {
         _f33 = false;
@@ -909,9 +880,11 @@ if(oCONFIG.YOUTUBE)
         _f90 = false;
       }
       _sendEvent('YouTube Video', 'play', videoURL, 0);
-    } else if (event.data === YT.PlayerState.ENDED) {
+    } 
+    else if (event.data === YT.PlayerState.ENDED) {
       _sendEvent('YouTube Video', 'finish', videoURL, 0);
-    } else if (event.data === YT.PlayerState.PAUSED) {
+    } 
+    else if (event.data === YT.PlayerState.PAUSED) {
       _sendEvent('YouTube Video', 'pause', videoURL, 0);
       var duration = _thisDuration;
       if (duration < 100) {
@@ -919,10 +892,12 @@ if(oCONFIG.YOUTUBE)
         if (precentage > 0 && precentage <= 33 && _f33 === false) {
           _sendEvent('YouTube Video', '33%', videoURL, 0);
           _f33 = true;
-        } else if (precentage > 33 && precentage <= 66 && _f66 === false) {
+        } 
+        else if (precentage > 33 && precentage <= 66 && _f66 === false) {
           _sendEvent('YouTube Video', '66%', videoURL, 0);
           _f66 = true;
-        } else if (precentage > 66 && precentage <= 90 && _f90 === false) {
+        } 
+        else if (precentage > 66 && precentage <= 90 && _f90 === false) {
           _sendEvent('YouTube Video', '90%', videoURL, 0);
           _f90 = true;
         }
@@ -940,13 +915,13 @@ if(oCONFIG.YOUTUBE)
  * useful for Enhanced Link Attribution
  */
 function _initIdAssigner() {
-    var _allDocLinks = document.getElementsByTagName('a');
-    for (var sid = 0; sid < _allDocLinks.length; sid++) {
-        var currentId = _allDocLinks[sid].getAttribute('id');
-        if (currentId === null || currentId === '' || currentId === undefined) {
-            _allDocLinks[sid].setAttribute('id', 'anch_' + sid);
-        }
+  var _allDocLinks = document.getElementsByTagName('a');
+  for (var sid = 0; sid < _allDocLinks.length; sid++) {
+    var currentId = _allDocLinks[sid].getAttribute('id');
+    if (currentId === null || currentId === '' || currentId === undefined) {
+      _allDocLinks[sid].setAttribute('id', 'anch_' + sid);
     }
+  }
 }
 
 
@@ -956,31 +931,32 @@ function _initIdAssigner() {
  * add event listener to an HTML element
 */
 
-  function _tagClicks(evObj, evCat, evAct, evLbl, evVal)
-  {
-    if (evObj.addEventListener)
-    {
-      evObj.addEventListener('mousedown', function() {
-                _sendEvent(evCat, evAct, evLbl, evVal, false, 'Mouse Click'); });
-      evObj.addEventListener('keydown', function(event) {
-        //event.preventDefault();
-        if (event.keyCode === 13) {
-             _sendEvent(evCat, evAct, evLbl, evVal, false, 'Enter Key Keystroke');
-           }
-         });
-    }
-    else if (evObj.attachEvent)
-    {
-      evObj.attachEvent('onmousedown', function() {
-                _sendEvent(evCat, evAct, evLbl, evVal, false, 'Mouse Click'); });
-      evObj.attachEvent('onkeydown', function(event) {
-        //event.preventDefault();
-        if (event.keyCode === 13) {
-             _sendEvent(evCat, evAct, evLbl, evVal, false, 'Enter Key Keystroke');
-           }
-         });
-    }
+function _tagClicks(evObj, evCat, evAct, evLbl, evVal){
+  if (evObj.addEventListener){
+    evObj.addEventListener('mousedown', function() {
+      _sendEvent(evCat, evAct, evLbl, evVal, false, 'Mouse Click'); 
+    });
+    
+    evObj.addEventListener('keydown', function(event) {
+      //event.preventDefault();
+      if (event.keyCode === 13) {
+        _sendEvent(evCat, evAct, evLbl, evVal, false, 'Enter Key Keystroke');
+      }
+    });
   }
+  else if (evObj.attachEvent){
+    evObj.attachEvent('onmousedown', function() {
+      _sendEvent(evCat, evAct, evLbl, evVal, false, 'Mouse Click'); 
+    });
+
+    evObj.attachEvent('onkeydown', function(event) {
+      //event.preventDefault();
+      if (event.keyCode === 13) {
+        _sendEvent(evCat, evAct, evLbl, evVal, false, 'Enter Key Keystroke');
+      }
+    });
+  }
+}
 
 
 
@@ -990,16 +966,14 @@ function _initIdAssigner() {
  * usage:
  * initializes the enabled trackers
  */
-  function _setUpTrackers()
-  {
-    if (tObjectCheck !== window["GoogleAnalyticsObject"])
-    {
-      createTracker(false);
-    }
-    oCONFIG.ENHANCED_LINK ? _initIdAssigner() : '';
-    oCONFIG.AUTOTRACKER ? _initAutoTracker() : '';
-    oCONFIG.YOUTUBE ? _initYouTubeTracker() : '';
+function _setUpTrackers(){
+  if (tObjectCheck !== window["GoogleAnalyticsObject"]){
+    createTracker(false);
   }
+  oCONFIG.ENHANCED_LINK ? _initIdAssigner() : '';
+  oCONFIG.AUTOTRACKER ? _initAutoTracker() : '';
+  oCONFIG.YOUTUBE ? _initYouTubeTracker() : '';
+}
 
 
 /*
@@ -1007,38 +981,31 @@ function _initIdAssigner() {
  * usage:
  * if the DOM is ready, initializes the enabled trackers and returns true
  */
-  function _setUpTrackersIfReady()
-  {
-    if ( document.readyState === 'interactive' || document.readyState === 'complete' )
-    {
+function _setUpTrackersIfReady(){
+  if ( document.readyState === 'interactive' || document.readyState === 'complete' ){
     _setUpTrackers();
     return true;
-    }
-    else
-    {
-    return false;
-    }
   }
+  else{
+    return false;
+  }
+}
 
 
 /*
  * once the document is loaded and ready
  * call enabled functions according to oConfig settings
  */
-  if (_setUpTrackersIfReady())
-  {
-    // DOM already loaded
+if (_setUpTrackersIfReady()){
+  // DOM already loaded
+}
+else{
+  if (document.addEventListener){
+    // modern browser
+    document.addEventListener('DOMContentLoaded', _setUpTrackers);
   }
-  else
-  {
-    if (document.addEventListener)
-    {
-      // modern browser
-      document.addEventListener('DOMContentLoaded', _setUpTrackers);
-    }
-    else if (document.attachEvent)
-    {
-      // old browser
-      document.attachEvent('onreadystatechange', _setUpTrackersIfReady);
-    }
+  else if (document.attachEvent){
+    // old browser
+    document.attachEvent('onreadystatechange', _setUpTrackersIfReady);
   }
+}
