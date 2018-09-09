@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/digital-analytics-program/gov-wide-code#readme",
   "dependencies": {
+    "eslint": "^5.5.0",
     "uglify-js": "^3.4.9"
   }
 }
