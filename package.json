@@ -5,7 +5,8 @@
   "main": "Universal-Federated-Analytics.js",
   "scripts": {
     "build": "npx uglifyjs Universal-Federated-Analytics.js --output Universal-Federated-Analytics-Min.js",
-    "clean": "rm ./Universal-Federated-Analytics-Min.js"
+    "clean": "rm ./Universal-Federated-Analytics-Min.js",
+    "lint": "npx eslint Universal-Federated-Analytics.js"
   },
   "repository": {
     "type": "git",
