@@ -88,7 +88,6 @@ function _defineCookieDomain() {
     oCONFIG.SUBDOMAIN_BASED = true;
   }
   else {
-    
     if (oCONFIG.SUBDOMAIN_BASED === false) {
       oCONFIG.COOKIE_DOMAIN = document.location.hostname.match(/(([^.\/]+\.[^.\/]{2,3}\.[^.\/]{2})|(([^.\/]+\.)[^.\/]{2,4}))(\/.*)?$/)[1];
       oCONFIG.SUBDOMAIN_BASED = true;
@@ -150,8 +149,9 @@ function _isValidUANum(_UANumber) {
 function _cleanDimensionValue(_paramValue) {
   try {
     pattern = /^dimension([1-9]|[1-9][0-9]|1([0-9][0-9])|200)$/;
-    if (pattern.test(_paramValue))
-      return _paramValue;
+    if (pattern.test(_paramValue)){
+      return _paramValue;      
+    }
 
     if (_paramValue.match(/\d+$/g) !== null) {
       var _tmpValue = 'dimension' + _paramValue.match(/\d+$/g)[0];
@@ -161,6 +161,7 @@ function _cleanDimensionValue(_paramValue) {
     return '';
   } 
   catch (err) {
+    // ignore error
   }
 }
 
@@ -327,12 +328,11 @@ function _sendCustomDimensions(_slotNums, _val) {
           window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + i + '.set', _slotNums[i], _val);
         }
         catch (err) {
-          
+          // ignore error
         }
       }
     }
   }
-  
 }
 
 /*
@@ -350,7 +350,7 @@ function _sendCustomMetrics(_slotNums, _val) {
           window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + i + '.set', _slotNums[i], _val);
         }
         catch (err) {
-          
+          // ignore error
         }
       }
     }
@@ -381,6 +381,7 @@ function _sendEvent(_cat, _act, _lbl, _val, _nonInteraction, interactionType) {
         window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + i + '.send', 'event', _cat, _act, ((_lbl !== undefined) ? _lbl : ''), ((_val !== '' || !isNaN(_val) || _val !== undefined) ? parseInt(_val) : 0), { 'nonInteraction': _nonInteraction});
       }
       catch (err) {
+        // ignore error
       }
     }
   }
@@ -400,7 +401,7 @@ function _sendPageview(_virtualPath, _virtualTitle) {
         window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + i + '.send', 'pageview', {'page': _virtualPath, 'title': ((_virtualTitle !== '' || _virtualTitle !== undefined) ? _virtualTitle : document.title)});
       }
       catch (err) {
-        //
+        // ignore error
       }
     }
   }
@@ -410,20 +411,20 @@ function _sendPageview(_virtualPath, _virtualTitle) {
  * usage: to set hit parameters or send hits.
  * This is the only public function that should be called by users. */
 function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5) {
-  /*making sure the required parameters are passed*/
+  /* making sure the required parameters are passed */
   if (_command !== undefined && _command !== '' && _hitType !== undefined && _hitType !== '' && _param1 !== undefined && _param1 !== '') {
     if (_hitType.toLowerCase() === 'pageview') {
       try {
         _sendPageview(_param1, ((_param2 === undefined || _param2 === '') ? document.title : _param2));
       }
-      catch(err) {
+      catch (err) {
+        // ignore error
       }
     }
     else if (_hitType.toLowerCase() === 'event' && _param2 !== undefined && _param2 !== '') {
       try {
         var _nonInteraction = false;
-        if (_param5 !== undefined)
-        {
+        if (_param5 !== undefined) {
           if (typeof _cleanBooleanParam(_param5) === "boolean") {
             _nonInteraction = _cleanBooleanParam(_param5);
           }
@@ -431,6 +432,7 @@ function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5) {
         _sendEvent(_param1, _param2, ((_param3 === undefined) ? '' : _param3), ((_param4 === undefined || _param4 === '' || isNaN(_param4)) ? 0 : parseInt(_param4)), _nonInteraction);
       }
       catch (err) {
+        // ignore error
       }
     }
     else if (_hitType.toLowerCase().indexOf('dimension') != -1) {
@@ -453,8 +455,8 @@ function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5) {
           _sendCustomDimensions(cdsArr, ((_param1 === undefined) ? '' : _param1));
         }
       }
-      catch(err) {
-        //
+      catch (err) {
+        // ignore error
       }
     }
     else if (_hitType.toLowerCase().indexOf('metric') != -1) {
@@ -479,7 +481,7 @@ function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5) {
         }
       }
       catch (err) {
-        //
+        // ignore error
       }
     }
   }
@@ -488,17 +490,17 @@ function gas(_command, _hitType, _param1, _param2, _param3, _param4, _param5) {
 /* name: _URIHandler
  * usage: to unify parameter name of search to be passed to GA */
 function _URIHandler(pageName) {
-    var re = new RegExp('([?&])(' + oCONFIG.SEARCH_PARAMS + ')(=[^&]*)', 'i');
-    if (re.test(pageName)) {
-        pageName = pageName.replace(re, '$1query$3');
-    }
-    return pageName;
+  var re = new RegExp('([?&])(' + oCONFIG.SEARCH_PARAMS + ')(=[^&]*)', 'i');
+  if (re.test(pageName)) {
+      pageName = pageName.replace(re, '$1query$3');
+  }
+  return pageName;
 }
 
 /* name: _isExcludedReferrer
  * usage: to manually handle Referral Exclusion programmatically */
- function _isExcludedReferrer() {
-   if (document.referrer !== '') {
+function _isExcludedReferrer() {
+  if (document.referrer !== '') {
     var refer = document.referrer.replace(/https?\:\/\//,'').split('/')[0].replace('www.', '');
     if (oCONFIG.SUBDOMAIN_BASED) {
       if (refer.indexOf(oCONFIG.COOKIE_DOMAIN) != -1) {
@@ -507,15 +509,17 @@ function _URIHandler(pageName) {
       else { 
         return false;
       }
-
     } 
     else {
       if (refer === oCONFIG.COOKIE_DOMAIN) {
-        return true;}
-        else{ return false;}
+        return true;
       }
-   }
- }
+      else { 
+        return false;
+      }
+    }
+  }
+}
 
 /**** Start Basic Tracker *******/
 /*
@@ -624,7 +628,7 @@ function _initAutoTracker(links) {
         else if (mailPattern.test(arr[i].href)) {
           doname = arr[i].href.split('@')[1].toLowerCase();
         }
-        else if(telPattern.test(arr[i].href)) {
+        else if (telPattern.test(arr[i].href)) {
           doname = arr[i].href;
           doname = doname.toLowerCase();
         }
@@ -717,7 +721,6 @@ if (oCONFIG.YOUTUBE) {
   var firstScriptTag = document.getElementsByTagName('script')[0];
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-
   /*
    * name: youtube_parser_fed
    * usage: to extract YouTube video id from YouTube URI
@@ -737,7 +740,6 @@ if (oCONFIG.YOUTUBE) {
    * name: IsYouTube_fed
    * usage: to check if the string is a valid YouTube URL
    */
-
   var IsYouTube_fed =  function IsYouTube_fed(url) {
     var YouTubeLink_regEx = /^(https?\:)?(\/\/)?(www\.)?(youtu\.be\/|youtube(\-nocookie)?\.([A-Za-z]{2,4}|[A-Za-z]{2,3}\.[A-Za-z]{2})\/)(watch|embed\/|vi?\/)?(\?vi?\=)?([^#\&\?\/]{11}).*$/;
     if (YouTubeLink_regEx.test(url.toString())) {
@@ -752,7 +754,7 @@ if (oCONFIG.YOUTUBE) {
    * name: YTUrlHandler_fed
    * usage: to correct minor errors in YouTube URLs
    */
-  var YTUrlHandler_fed = function YTUrlHandler_fed(url){
+  var YTUrlHandler_fed = function YTUrlHandler_fed(url) {
     url = url.replace(/origin\=(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})\&?/ig,'origin='+document.location.protocol+'//'+document.location.host);
 
     stAdd = '';
