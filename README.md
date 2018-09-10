@@ -9,7 +9,7 @@ The most current version of DAP GA code is:
 
 ### Participating in the DAP
 
-On November 8, 2016, the Office of Management and Budget (OMB) released a memorandum on ["Policies for Federal Agency Public Websites and Digital Services"](https://www.whitehouse.gov/sites/default/files/omb/memoranda/2017/m-17-06.pdf), which requires federal agencies to implement the DAP javascript code on all public facing federal websites.
+On November 8, 2016, the Office of Management and Budget (OMB) released a memorandum on ["Policies for Federal Agency Public Websites and Digital Services"](https://www.whitehouse.gov/sites/whitehouse.gov/files/omb/memoranda/2017/m-17-06.pdf), which requires federal agencies to implement the DAP javascript code on all public facing federal websites.
 
 The Digital Analytics Program offers a central hosting server for its minified JavaScript file at `https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js`. As of August 2018, the file is gzipped and served compressed by default, but will be served uncompressed where `Accept-Encoding: gzip` is not present in the viewer.
 
