@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/digital-analytics-program/gov-wide-code.git"
   },
-  "license": "ISC",
+  "license": "public domain",
   "bugs": {
     "url": "https://github.com/digital-analytics-program/gov-wide-code/issues"
   },
