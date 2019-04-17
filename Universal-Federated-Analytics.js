@@ -51,7 +51,7 @@ var oCONFIG = {
     PARALLEL_INTERACTION_TYPE_CUSTOM_DIMENSION_SLOT: 'dimension8',
 
 
-    COOKIE_DOMAIN: location.hostname.replace('www.', '').toLowerCase(),
+    COOKIE_DOMAIN: location.hostname.replace(/^www\./, '').toLowerCase(),
     COOKIE_TIMEOUT: 60 * 60 * 24 * 2 * 365,
     SEARCH_PARAMS: 'q|querytext|nasaInclude|k|qt',
 
@@ -87,7 +87,7 @@ function _defineCookieDomain()
 
 	if(domainPattern.test(oCONFIG.SUBDOMAIN_BASED.toString()))
 	{
-		oCONFIG.COOKIE_DOMAIN = oCONFIG.SUBDOMAIN_BASED.toLowerCase().replace('www.','');
+		oCONFIG.COOKIE_DOMAIN = oCONFIG.SUBDOMAIN_BASED.toLowerCase().replace(/^www\./, '');
 		oCONFIG.SUBDOMAIN_BASED = true;
 	}
 	else
@@ -99,7 +99,7 @@ function _defineCookieDomain()
 		}
 		else
 		{
-			oCONFIG.COOKIE_DOMAIN = location.hostname.toLowerCase().replace('www.','');
+			oCONFIG.COOKIE_DOMAIN = location.hostname.toLowerCase().replace(/^www\./, '');
 			oCONFIG.SUBDOMAIN_BASED = false;
 		}
 	}
@@ -534,7 +534,7 @@ function _URIHandler(pageName) {
  function _isExcludedReferrer() {
 	 if(document.referrer !== '')
 	 {
-		var refer = document.referrer.replace(/https?\:\/\//,'').split('/')[0].replace('www.', '');
+		var refer = document.referrer.replace(/https?\:\/\//,'').split('/')[0].replace(/^www\./, '');
 		if (oCONFIG.SUBDOMAIN_BASED)
 		{
 			if(refer.indexOf(oCONFIG.COOKIE_DOMAIN) != -1) {
@@ -667,7 +667,7 @@ function _initAutoTracker(links)
 			{
 				if(urlPattern.test(arr[i].href))
 				{
-					doname = arr[i].hostname.toLowerCase().replace("www.","");
+					doname = arr[i].hostname.toLowerCase().replace(/^www\./, '');
 				}
 				else if(mailPattern.test(arr[i].href))
 				{
