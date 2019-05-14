@@ -26,9 +26,9 @@ Replace `AGENCY` with your agency's standard abbreviation, such as DHS or EPA.
 
 For more details on implementing the DAP script on your site, including adding other custom parameters, please refer to:
 * [DAP Implementation Instructions](https://www.digitalgov.gov/services/dap/analytics-tool-instructions/)
-* [Implementation Guide](https://github.com/digital-analytics-program/gov-wide-code/blob/master/documentation/GSA%20DAP%204.0%20-%20Quick%20Guide.pdf)
-* [Code Capabilities Summary](https://github.com/digital-analytics-program/gov-wide-code/blob/master/documentation/GSA%20DAP%204.0%20-%20DAP%20Code%20Capabilities%20Summary%20and%20Reference.pdf)
-* [Version 4.0 Release Notes](https://github.com/digital-analytics-program/gov-wide-code/blob/master/documentation/GSA%20DAP%204.0%20-%20Release%20Notes.pdf)
+* [Implementation Guide](https://github.com/digital-analytics-program/gov-wide-code/blob/master/documentation/GSA%20DAP%204.1%20-%20Quick%20Guide.pdf)
+* [Code Capabilities Summary](https://github.com/digital-analytics-program/gov-wide-code/blob/master/documentation/GSA%20DAP%204.1%20-%20DAP%20Code%20Capabilities%20Summary%20and%20Reference.pdf)
+* [Version 4.0 Release Notes](https://github.com/digital-analytics-program/gov-wide-code/blob/master/documentation/GSA%20DAP%204.1%20-%20Release%20Notes.pdf)
 
 #### Known implementation issues
 
