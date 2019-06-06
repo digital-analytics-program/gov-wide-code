@@ -5,7 +5,8 @@
   "main": "Universal-Federated-Analytics.js",
   "scripts": {
     "build": "npx uglifyjs Universal-Federated-Analytics.js --output Universal-Federated-Analytics-Min.js",
-    "clean": "rm ./Universal-Federated-Analytics-Min.js"
+    "clean": "rm ./Universal-Federated-Analytics-Min.js",
+    "coveralls": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,7 @@
   },
   "homepage": "https://github.com/digital-analytics-program/gov-wide-code#readme",
   "dependencies": {
+    "coveralls": "^3.0.4",
     "uglify-js": "^3.4.9"
   }
 }
