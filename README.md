@@ -80,6 +80,10 @@ The Digital Analytics Program Javascript code is intended to be implemented on "
 
 As such, the DAP script tag should not be placed on pages visited during logged-in sessions. Notably, other seemingly "public" pages that can be accessed without authentication may also be part of "privileged sessions"; for example, a "password reset" page that is accessed by clicking a link in an email is not appropriate for DAP code, because it assumes the visitor has the privilege of control over the email account used to provide the link. 
 
+This decision tree may help:
+
+![Decision Tree](/documentation/DAP-Criteria.png)
+
 #### Access controls
 
 This repository is maintained in its own GitHub organization, `digital-analytics-program`, and is operated by the Digital Analytics Program team.
