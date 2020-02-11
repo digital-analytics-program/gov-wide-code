@@ -1,3 +1,5 @@
+![Node CI](https://github.com/gitkyle/gov-wide-code/workflows/Node%20CI/badge.svg?branch=master)
+
 ## Digital Analytics Program government-wide code
 
 Provides a JavaScript file for US federal agencies to link or embed in their websites to participate in the Digital Analytics Program.
