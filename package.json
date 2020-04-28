@@ -1,6 +1,6 @@
 {
   "name": "digital-analytics-program",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Provides a JavaScript file for US federal agencies to link or embed in their websites to participate in the Digital Analytics Program.",
   "main": "Universal-Federated-Analytics.js",
   "scripts": {
