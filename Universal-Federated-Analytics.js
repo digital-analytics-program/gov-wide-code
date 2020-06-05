@@ -513,13 +513,13 @@ if(typeof window['GoogleAnalyticsObject'] === 'undefined'){
   (function(i, s, o, g, r, a, m){
     i['GoogleAnalyticsObject'] = r;
     i[r] = i[r] || function() {
-        (i[r].q = i[r].q || []).push(arguments)
+        (i[r].q = i[r].q || []).push(arguments);
     }, i[r].l = 1 * new Date();
     a = s.createElement(o),
     m = s.getElementsByTagName(o)[0];
     a.async = 1;
     a.src = g;
-    m.parentNode.insertBefore(a, m)
+    m.parentNode.insertBefore(a, m);
   })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
   tObjectCheck = window['GoogleAnalyticsObject'];
 }
@@ -534,7 +534,7 @@ function createTracker(sendPv){
     var _adjPageUri = _URIHandler(document.location.pathname + document.location.search + document.location.hash);
 		if(oCONFIG.OPTOUT_PAGE){
 			window['ga-disable-' + oCONFIG.GWT_UAID[dpv]] = true;
-		};
+		}
 		window[window['GoogleAnalyticsObject']]('create', oCONFIG.GWT_UAID[dpv], oCONFIG.COOKIE_DOMAIN, {
 			'name': oCONFIG.PUA_NAME + dpv,
 			'allowLinker': true,
@@ -553,7 +553,7 @@ function createTracker(sendPv){
 			window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + dpv + '.require', 'linkid', 'linkid.js');
 		}
 		if(oCONFIG.FORCE_SSL){
-			window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + dpv + '.set', 'forceSSL', true);
+			window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + dpv + '.set', 'forceSSL', oCONFIG.FORCE_SSL);
 		}
 		if(_isExcludedReferrer()){
 			window[window['GoogleAnalyticsObject']](oCONFIG.PUA_NAME + dpv + '.set', 'referrer', '');
@@ -685,7 +685,7 @@ function _initAutoTracker(links){
 		}
 	}
 }
-/*** End AutoTracker  ***/
+/*** End AutoTracker ***/
 
 
 /*** Start YouTube Tracking - Used for Youtube video tracking (Play / Pause / Watch to End ***/
@@ -713,12 +713,12 @@ if(oCONFIG.YOUTUBE){
     else{
 
     }
-	}
+	};
 	/*
 	 * name: IsYouTube_fed
 	 * usage: to check if the string is a valid YouTube URL
 	 */
-	var IsYouTube_fed =  function IsYouTube_fed(url){
+	var IsYouTube_fed = function IsYouTube_fed(url){
 		var YouTubeLink_regEx = /^(https?\:)?(\/\/)?(www\.)?(youtu\.be\/|youtube(\-nocookie)?\.([A-Za-z]{2,4}|[A-Za-z]{2,3}\.[A-Za-z]{2})\/)(watch|embed\/|vi?\/)?(\?vi?\=)?([^#\&\?\/]{11}).*$/;
 		if(YouTubeLink_regEx.test(url.toString())){
 			return true;
@@ -726,7 +726,7 @@ if(oCONFIG.YOUTUBE){
 		else{
 			return false;
     }
-	}
+	};
 	/*
 	 * name: YTUrlHandler_fed
 	 * usage: to correct minor errors in YouTube URLs
@@ -747,7 +747,7 @@ if(oCONFIG.YOUTUBE){
 		else{
       return url;
     }
-  }
+  };
 	/*
 	 * name: _initYouTubeTracker
 	 * usage: initiate YouTube tracker libraries and loop over all YouTube iframes
@@ -766,7 +766,7 @@ if(oCONFIG.YOUTUBE){
 				vArray++;
 			}
 		}
-	}
+	};
 	/*
 	 * name: onYouTubeIframeAPIReady
 	 * usage: to assign video array items to player array of YouTube Tracker API
@@ -780,7 +780,7 @@ if(oCONFIG.YOUTUBE){
 				}
 			});
 		}
-	}
+	};
 
 	/*
 	 * name: onPlayerReady
@@ -789,7 +789,7 @@ if(oCONFIG.YOUTUBE){
 	 */
 	var onFedPlayerReady = function onFedPlayerReady(event){
 		/* left blank on purpose */
-	}
+	};
 	/*
 	 * name: onPlayerStateChange
 	 * usage: fired when user interacts with the video player
@@ -833,7 +833,7 @@ if(oCONFIG.YOUTUBE){
 				}
 			}
 		}
-	}
+	};
 }
 
 /*** End YouTube Tracking - Used for Youtube video tracking (Play / Pause / Watch to End ***/
