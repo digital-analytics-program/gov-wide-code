@@ -1,30 +1,3 @@
-
-(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-var {
-  _updateConfig,
-  _defineCookieDomain,
-  _defineAgencyCDsValues,
-  gas,
-  initTrackers,
-  _initBasicTracker,
-  createTracker,
-  createYouTubeIFrames,
-} = require('./Universal-Federated-Analytics.lib.js');
-
-// Order matters
-_updateConfig();
-_defineCookieDomain();
-_defineAgencyCDsValues();
-
-createYouTubeIFrames();
-_initBasicTracker();
-createTracker(true);
-initTrackers();
-
-// globally accessible functions
-window['gas'] = gas;
-
-},{"./Universal-Federated-Analytics.lib.js":2}],2:[function(require,module,exports){
 /*
  * oConfig holds all settings with default values.
  * Most of the settings can be changed by passing a new value
@@ -1054,5 +1027,3 @@ module.exports = {
   IsYouTube_fed,
   youtube_parser_fed,
 };
-
-},{}]},{},[1]);
