@@ -1,7 +1,6 @@
 var oCONFIG = {
-    // GWT_UAID: ["UA-33523145-1"],
-    GWT_UAID: ["UA-188848967-2"],
-    GWT_GA4ID: "G-TBE5K6NB2T",
+    GWT_UAID: ["UA-33523145-1"],
+    GWT_GA4ID: "G-9TNNMGP8WJ",
     FORCE_SSL: !0,
     ANONYMIZE_IP: !0,
     AGENCY: "",
