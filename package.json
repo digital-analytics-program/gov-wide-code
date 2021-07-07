@@ -5,18 +5,19 @@
   "main": "Universal-Federated-Analytics.js",
   "scripts": {
     "build": "npx uglifyjs Universal-Federated-Analytics.js --output Universal-Federated-Analytics-Min.js",
-    "clean": "rm ./Universal-Federated-Analytics-Min.js"
+    "clean": "rm ./Universal-Federated-Analytics-Min.js",
+    "lint": "npx eslint Universal-Federated-Analytics.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/digital-analytics-program/gov-wide-code.git"
   },
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/digital-analytics-program/gov-wide-code/issues"
   },
   "homepage": "https://github.com/digital-analytics-program/gov-wide-code#readme",
   "dependencies": {
+    "eslint": "^5.5.0",
     "uglify-js": "^3.4.9"
   }
 }
