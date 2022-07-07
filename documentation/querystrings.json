@@ -1,0 +1,14 @@
+{
+	"default": ["utm_id","utm_source","utm_medium","utm_campaign","utm_term","utm_content"],
+    "test3": ["test3","work","id"],
+    "wes_test": ["wes","test"],
+    "gsa": ["challenge","affiliate","state"],
+    "dhs": ["appreceiptnum"],
+    "doc": ["station","meas","start","atlc","epac","cpac","basin","fdays","cone","tswind120","gm_track","50wind120","hwind120","mltoa34","swath","radii","wsurge","key_messages","inundation","rainqpf","ero","gage","wfo","spanish_key_messages","key_messages","sid"],
+    "hhs": ["s_cid","selectedFacets"],
+    "hud": ["PostID"],
+    "nasa": ["feature","ProductID","selectedFacets"],
+    "nps": ["gid","mapid","site","webcam","id"],
+    "nsf": ["meas","start","atlc","epac","cpac","basin","fdays","cone","tswind120","gm_track","50wind120","hwind120","mltoa34","swath","radii","wsurge","key_messages","inundation","rainqpf","ero","gage","wfo","spanish_key_messages","key_messages","sid"],
+    "va": ["id"]
+}
