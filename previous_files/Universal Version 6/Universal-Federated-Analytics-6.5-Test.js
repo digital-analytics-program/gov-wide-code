@@ -1,8 +1,8 @@
 // ****** Configuration Functions ******
 var tObjectCheck, oCONFIG = {
     GWT_GA4ID: ["G-FQ8Q9Q0WC0"],
-    HOSTNAME_JSON: "https://analytics.usa.gov/hostnames.json",
-    QUERYSTRING_JSON: "https://analytics.usa.gov/querystrings.json",
+    HOSTNAME_JSON: "https://dap.digitalgov.gov/hostnames.json",
+    QUERYSTRING_JSON: "https://dap.digitalgov.gov/querystrings.json",
     FORCE_SSL: !0,
     ANONYMIZE_IP: !0,
     AGENCY: "",
