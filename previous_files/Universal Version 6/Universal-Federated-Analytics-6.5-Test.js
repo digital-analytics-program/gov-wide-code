@@ -1,8 +1,8 @@
 // ****** Configuration Functions ******
 var tObjectCheck, oCONFIG = {
     GWT_GA4ID: ["G-FQ8Q9Q0WC0"],
-    HOSTNAME_JSON: "https://dap.digitalgov.gov/hostnames.json",
-    QUERYSTRING_JSON: "https://dap.digitalgov.gov/querystrings.json",
+    HOSTNAME_JSON:"https://dap.digitalgov.gov/hostnames.json",
+    QUERYSTRING_JSON:"https://dap.digitalgov.gov/querystrings.json",
     FORCE_SSL: !0,
     ANONYMIZE_IP: !0,
     AGENCY: "",
@@ -275,7 +275,7 @@ function _allowedDomains(){
     var _allowed = false;
     try {
         for (var i=0; i < a.length; i++) {
-            if (a[i].toString().trim() == document.location.hostname.toString().trim() ) {
+            if (a[i].toString().trim().indexOf(document.location.hostname.toString().trim()) > -1 ) {
                 _allowed = true;
                 break;
             }
