@@ -9,11 +9,11 @@
 Copyright 2023 by Cardinal Path.
 Dual Tracking Federated Analytics: Google Analytics Government Wide Site Usage Measurement.
 Author: Ahmed Awwad
-07/31/2023 Version: 6.8
+08/18/2023 Version: 6.8
 ***********************************************************************************************************/
 var tObjectCheck,
   _allowedQuerystrings = [],
-  isAllowedDomain,
+  isSearch = false,
   oCONFIG = {
     GWT_UAID: ["UA-33523145-1"],
     GWT_GA4ID: ["G-CSLL4ZEK4L"],
@@ -21,7 +21,7 @@ var tObjectCheck,
     ANONYMIZE_IP: !0,
     AGENCY: "",
     SUB_AGENCY: "",
-    VERSION: "20230731 v6.8 - Dual Tracking",
+    VERSION: "20230818 v6.8 - Dual Tracking",
     SITE_TOPIC: "",
     SITE_PLATFORM: "",
     SCRIPT_SOURCE: "",
@@ -46,7 +46,7 @@ var tObjectCheck,
     PARALLEL_INTERACTION_TYPE_CUSTOM_DIMENSION_SLOT: "dimension8",
     COOKIE_DOMAIN: location.hostname.replace("www.", "").toLowerCase(),
     COOKIE_TIMEOUT: 63072e3,
-    SEARCH_PARAMS: "q|querytext|nasaInclude|k|qt",
+    SEARCH_PARAMS: "q|query|nasaInclude|k|querytext|keys|qt|search_input|search|globalSearch|goog|s|gsearch|search_keywords|SearchableText|sp_q|qs|psnetsearch|locate|lookup|search_api_views_fulltext|keywords|request|_3_keywords",
     YOUTUBE: !1,
     AUTOTRACKER: !0,
     EXTS: "doc|docx|xls|xlsx|xlsm|ppt|pptx|exe|zip|pdf|js|txt|csv|dxf|dwgd|rfa|rvt|dwfx|dwg|wmv|jpg|msi|7z|gz|tgz|wma|mov|avi|mp3|mp4|csv|mobi|epub|swf|rar",
@@ -55,7 +55,7 @@ var tObjectCheck,
     GA4_NAME: "GSA_GA4_ENOR",
   };
   
-
+//*********GA4************
 var head = document.getElementsByTagName("head").item(0);
 var GA4Object = document.createElement("script");
 GA4Object.setAttribute("type", "text/javascript");
@@ -70,7 +70,8 @@ function gtag() {
   dataLayer.push(arguments);
 }
 gtag("js", new Date());
-
+gtag('set', 'cookie_flags', 'SameSite=Strict;Secure');
+//*********GA4************
 
 "undefined" === typeof window.GoogleAnalyticsObject &&
   (function (a, b, c, d, f, e, h) {
@@ -102,7 +103,7 @@ function _onEveryPage() {
   _defineAgencyCDsValues();
   _setAllowedQS();
   createTracker(trackerFlag);
-
+  _sendViewSearchResult(location.href);
 }
 _onEveryPage();
 
@@ -129,7 +130,6 @@ function _defineCookieDomain() {
 function _defineAgencyCDsValues() {
   oCONFIG.AGENCY = oCONFIG.AGENCY || "unspecified:" + oCONFIG.COOKIE_DOMAIN;
   oCONFIG.SUB_AGENCY = oCONFIG.SUB_AGENCY || "" + oCONFIG.COOKIE_DOMAIN;
-  oCONFIG.SUB_AGENCY = oCONFIG.AGENCY + " - " + oCONFIG.SUB_AGENCY;
   oCONFIG.SITE_TOPIC =
     oCONFIG.SITE_TOPIC || "unspecified:" + oCONFIG.COOKIE_DOMAIN;
   oCONFIG.SITE_PLATFORM =
@@ -315,8 +315,16 @@ function _sendCustomMetrics(a, b) {
 }
 
 function _sendEvent(a, b) {
-  _mapGA4toUA(a, b);
-  b.send_to = oCONFIG.GA4_NAME;
+  !/^(page_view|view_search_results)$/i.test(a) && _mapGA4toUA(a, b);
+  var send_to = "";
+  for (var g = 0; g < oCONFIG.GWT_GA4ID.length; g++){
+    try {
+      send_to += oCONFIG.GA4_NAME+g+ ",";
+    }
+    catch(er){}
+  }
+  b.send_to = send_to.replace(/.$/, "");
+  b.event_name_dimension = a;
   gtag("event", a, b);
 }
 
@@ -325,7 +333,7 @@ function _mapGA4toUA(en, pa) {
   (c = pa.link_url),
   (d = pa.event_value?pa.event_value:0),
     (f = pa.non_interaction || !1),
-    (e = pa.interaction_type);
+    (e =  pa.interaction_type);
   switch (en) {
     case "file_download":
       pa.outbound ? (a = "Outbound Downloads") : (a = "Download");
@@ -383,6 +391,8 @@ function _mapGA4toUA(en, pa) {
       b = pa.event_action;
       c = pa.event_label;
       break;
+    default:
+      break;
   }
 
   if ("" !== a && void 0 !== a && "" !== b && void 0 !== b) {
@@ -416,26 +426,29 @@ function _mapGA4toUA(en, pa) {
 
 function _sendPageview(a, b) {
   if ("" !== a && void 0 !== a) {
+    var ur = _URIHandler(_scrubbedURL(a)).split(/[#]/)[0];
     tObjectCheck !== window.GoogleAnalyticsObject && createTracker(!1);
-    for (var c = 0; c < oCONFIG.GWT_UAID.length; c++)
+    for (var c = 0; c < oCONFIG.GWT_UAID.length; c++){
       try {
         window[window.GoogleAnalyticsObject](
           oCONFIG.PUA_NAME + c + ".send",
           "pageview",
           {
-            page: a,
+            page: ur.split(location.hostname)[1],
             title: "" !== b || void 0 !== b ? b : document.title
           }
         );
       } catch (d) {}
+    }
 
+      _sendEvent("page_view", {
+        page_location: ur,
+        page_title: "" !== b || void 0 !== b ? b : document.title,
+        ignore_referrer: (_isExcludedReferrer()? true : false)
+      });
 
-    _sendEvent("page_view", {
-      send_to: oCONFIG.GA4_NAME,
-      page_location: _URIHandler(_scrubbedURL(a)),
-      page_title: "" !== b || void 0 !== b ? b : document.title,
-      ignore_referrer: (_isExcludedReferrer()? true : false)
-    });
+    _sendViewSearchResult(ur);
+
   }
 }
 
@@ -499,8 +512,12 @@ function gas(a, b, c, d, f, e, h) {
 
 function _URIHandler(a) {
   var b = new RegExp("([?&])(" + oCONFIG.SEARCH_PARAMS + ")(=[^&]*)", "i");
-  b.test(a) && (a = a.replace(b, "$1query$3"));
+  b.test(a) && (a = a.replace(b, "$1query$3"), isSearch = true);
   return a;
+}
+
+function _sendViewSearchResult(a){
+  isSearch && (_sendEvent("view_search_results", {search_term: _URIHandler(a).match(/([?&])(query\=)([^&#?]*)/i)[3], page_location: _URIHandler(_scrubbedURL(a))}), isSearch=false);
 }
 
 function _isExcludedReferrer() {
@@ -536,6 +553,7 @@ function createTracker(a) {
         name: oCONFIG.PUA_NAME + b,
         allowLinker: !0,
         cookieExpires: parseInt(oCONFIG.COOKIE_TIMEOUT),
+        cookieFlags: 'SameSite=Strict;Secure'
       }
     );
     if (oCONFIG.ANONYMIZE_IP)
@@ -639,29 +657,14 @@ function createTracker(a) {
       );
   }
 
-  // ************ GA4 ************
-  var head = document.getElementsByTagName("head").item(0);
-  var GA4Object = document.createElement("script");
-  GA4Object.setAttribute("type", "text/javascript");
-  GA4Object.setAttribute(
-    "src",
-    "https://www.googletagmanager.com/gtag/js?id=" + oCONFIG.GWT_GA4ID[0]
-  );
-  head.appendChild(GA4Object);
-
-  window.dataLayer = window.dataLayer || [];
-  function gtag() {
-    dataLayer.push(arguments);
-  }
-  gtag("js", new Date());
-  // ************ GA4 ************
   var p = ((-1 !== document.title.search(/404|not found/ig))? document.location.protocol+"//"+document.location.hostname+c : document.location.href);
+  var ur = _URIHandler(_scrubbedURL(p));
   for (var b = 0; b < oCONFIG.GWT_GA4ID.length; b++) {
     if((b === 0) || (b > 0 && oCONFIG.USE_PARALLEL_CUSTOM_DIMENSIONS)){
       gtag("config", oCONFIG.GWT_GA4ID[b], {
-        groups: oCONFIG.GA4_NAME,
+        groups: oCONFIG.GA4_NAME+b,
         cookie_expires: parseInt(oCONFIG.COOKIE_TIMEOUT),
-        page_location: _URIHandler(_scrubbedURL(p)),
+        page_location: ur,
         ignore_referrer: (_isExcludedReferrer()? true : false),
         agency: oCONFIG.AGENCY.toUpperCase(),
         subagency: oCONFIG.SUB_AGENCY.toUpperCase(),
@@ -670,14 +673,16 @@ function createTracker(a) {
         script_source: oCONFIG.SCRIPT_SOURCE.toLowerCase(),
         version: oCONFIG.VERSION.toLowerCase(),
         protocol: oCONFIG.URL_PROTOCOL,
+        event_name_dimension: "page_view"
       });
     }
     else {
       gtag("config", oCONFIG.GWT_GA4ID[b], {
-        groups: oCONFIG.GA4_NAME,
+        groups: oCONFIG.GA4_NAME+b,
         cookie_expires: parseInt(oCONFIG.COOKIE_TIMEOUT),
-        page_location: _URIHandler(_scrubbedURL(p)),
-        ignore_referrer: (_isExcludedReferrer()? true : false)
+        page_location: ur,
+        ignore_referrer: (_isExcludedReferrer()? true : false),
+        event_name_dimension: "page_view"
       });
     }
   }
@@ -741,7 +746,7 @@ function _initAutoTracker(a) {
                 e[0].toLowerCase() === c[d])
               ) {
                 _tagClicks(a[i], "file_download", {
-                  file_name: a[i].href.split(/[#?&?]/)[0],
+                  file_name: a[i].pathname.split(/[#?&?]/)[0],
                   file_extension: e[0].toLowerCase(),
                   link_text: a[i].text.replace(/(?:[\r\n]+)+/g, "").trim(),
                   link_id: a[i].id,
@@ -972,7 +977,7 @@ function _tagClicks(a, b, c) {
     ? (o
         .split("?")[1]
         .split("&")
-        .forEach(function (o, a) {
+        .forEach(function (o, i) {
           _allowedQuerystrings.indexOf(o.split("=")[0]) > -1 && (t = t + "&" + o);
         }),
       t.length > 0 ? a + "?" + t.substring(1) : a)
@@ -981,10 +986,10 @@ function _tagClicks(a, b, c) {
 
 function _setAllowedQS(){
   var queries = {
-    "default": ["utm_id","utm_source","utm_medium","utm_campaign","utm_term","utm_content"],
+    "default": ["utm_id","utm_source","utm_medium","utm_campaign","utm_term","utm_content","_gl","gclid", "dclid", "gclsrc"],
       "gsa": ["challenge","affiliate","state"],
       "dhs": ["appreceiptnum"],
-      "doc": ["station","meas","start","atlc","epac","cpac","basin","fdays","cone","tswind120","gm_track","50wind120","hwind120","mltoa34","swath","radii","wsurge","key_messages","inundation","rainqpf","ero","gage","wfo","spanish_key_messages","key_messages","sid"],
+      "doc": ["station","meas","start","atlc","epac","cpac","basin","fdays","cone","tswind120","gm_track","50wind120","hwind120","mltoa34","swath","radii","wsurge","key_messages","inundation","rainqpf","ero","gage","wfo","spanish_key_messages","key_messages","sid","lan","office"],
       "hhs": ["s_cid","selectedFacets"],
       "hud": ["PostID"],
       "nasa": ["feature","ProductID","selectedFacets"],
