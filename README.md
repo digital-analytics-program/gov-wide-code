@@ -6,6 +6,7 @@ The most current version of DAP GA code is:
 
 * [`Universal-Federated-Analytics.js`](Universal-Federated-Analytics.js) (full)
 * [`Universal-Federated-Analytics-Min.js`](Universal-Federated-Analytics-Min.js) (minified)
+* [`Federated.js.map`](Federated.js.map) (source map)
 
 ### Participating in the DAP
 
