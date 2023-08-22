@@ -25,7 +25,7 @@ Replace `AGENCY` with your agency's standard abbreviation, such as DHS or EPA.
 For more details about the DAP script capabilities, implementation steps for adding DAP code to your website (including implementing with a tag manager) and using custom parameters, please refer to:
 * [DAP Code Version 6.8 - Universal Analytics/GA4 Dual Tracking - Release Notes](https://github.com/digital-analytics-program/gov-wide-code/blob/master/documentation/GSA%20DAP%206.8%20-%20Release%20Notes.docx.pdf)
 * [DAP Implementation Instructions](https://digital.gov/guide/dap/add-your-site-dap/#participating-in-the-program)
-* [Implementation Guide](https://github.com/digital-analytics-program/gov-wide-code/blob/master/documentation/GSA%20DAP%204.1%20-%20Quick%20Guide.pdf)
+* [DAP Quick Guide](https://github.com/digital-analytics-program/gov-wide-code/blob/master/documentation/GSA%20DAP%204.1%20-%20Quick%20Guide.pdf)
 * [Code Capabilities Summary](https://github.com/digital-analytics-program/gov-wide-code/blob/master/documentation/GSA%20DAP%204.1%20-%20DAP%20Code%20Capabilities%20Summary%20and%20Reference.pdf)
 
 
