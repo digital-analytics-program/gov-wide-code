@@ -43,7 +43,7 @@ supported scenarios include:
 * Classic GA Site Specific before the Federated code
 * Classic GA Site Specific after the Federated code
 
-*Limitation:* However, there is one scenario where the Gov-wide Federated
+*Limitation:* There is one scenario where the Federated DAP
 Analytics code fails: when an agency Universal Analytics tracking code (not DAP)
 uses a custom/non-default tracking object and it is added right after the Federated
 code. In this specific scenario, the Federated code will fail in reporting the first page
