@@ -30,27 +30,29 @@ For more details about the DAP script capabilities, steps for adding DAP code to
 * [Guide to the Digital Analytics Program](https://digital.gov/guide/dap/add-your-site-dap/#participating-in-the-program)
 
 
-#### Known implementation issues
+#### Known implementation limitations
 
-*Issue:* The Federated code is designed to work on all government sites whether
-they already have inline site specific GA trackers or not. There is only one scenario
-that is not fully supported by the Federated code, which is when a Universal
-Analytics tracking code (that is using a custom/non-default tracking object) is added
-right after the Federated code. In this specific scenario the Federated code will fail
-in reporting the first page hit and will be able to track normally all the consecutive
-hits.
+The Federated DAP code is designed to work on all government sites, whether they
+already have inline, site-specific/independent GA tracking or not. Specific
+supported scenarios include:
 
-Supported Scenarios:
-* UA Site Specific before the Federated code (Default Tracking Object)
-* UA Site Specific after the Federated code (Default Tracking Object)
-* UA Site Specific before the Federated code (Custom Tracking Object)
+* UA/GA4 Site Specific before the Federated code (Default Tracking Object)
+* UA/GA4 Site Specific after the Federated code (Default Tracking Object)
+* UA/GA4 Site Specific before the Federated code (Custom Tracking Object)
+* GA4 Site Specific after the Federated code (Custom Tracking Object)
 * Classic GA Site Specific before the Federated code
 * Classic GA Site Specific after the Federated code
 
-*Issue:* The Federated tracking code doesn’t fully support the older versions of
-Microsoft Internet Explorer. While the Federated tracking code works with all
-known browsers, some features (e.g. the YouTube tracker) may not work properly
-on IE 8 and earlier versions because of YouTube API limitations
+*Limitation:* However, there is one scenario where the Gov-wide Federated
+Analytics code fails: when an agency Universal Analytics tracking code (not DAP)
+uses a custom/non-default tracking object and it is added right after the Federated
+code. In this specific scenario, the Federated code will fail in reporting the first page
+hit and will be able to track normally all the consecutive hits. 
+
+*Limitation:* The Federated DAP code doesn’t fully support older versions of
+Microsoft Internet Explorer. While the Federated DAP code works with all known
+browsers, some features (e.g. the YouTube tracker) may not work properly on
+Internet Explorer 8 and earlier versions due to limitations in the YouTube API.
 
 #### Transport security
 
