@@ -969,7 +969,7 @@ function _tagClicks(a, b, c) {
 // ************ GA4 ************
  function _scrubbedURL(z) {
   RegExp.escape = function(s) { return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'); };
-  var n = new RegExp(`^(https?\:\/\/(www\.)?)?${RegExp.escape(document.location.hostname.replace("www.", ""))}`, "ig");
+  var n = new RegExp(`^(https?\:\/\/(www\.)?)?${RegExp.escape(document.location.hostname.replace("www.", ""))}`, "ig"),
     t = "",
     o = ((n.test(z) )? z: document.location.protocol +"//"+ document.location.hostname+z ),
     a = o.split("?")[0];
