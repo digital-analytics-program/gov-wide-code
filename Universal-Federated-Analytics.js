@@ -9,19 +9,19 @@
 Copyright 2023 by Cardinal Path.
 Dual Tracking Federated Analytics: Google Analytics Government Wide Site Usage Measurement.
 Author: Ahmed Awwad
-08/18/2023 Version: 6.8
+09/20/2023 Version: 6.8
 ***********************************************************************************************************/
 var tObjectCheck,
   _allowedQuerystrings = [],
   isSearch = false,
   oCONFIG = {
     GWT_UAID: ["UA-33523145-1"],
-    GWT_GA4ID: ["G-CSLL4ZEK4L"],
+    GWT_GA4ID: ["G-CSLL4ZEK4L"], 
     FORCE_SSL: !0,
     ANONYMIZE_IP: !0,
     AGENCY: "",
     SUB_AGENCY: "",
-    VERSION: "20230818 v6.8 - Dual Tracking",
+    VERSION: "20230920 v6.8 - Dual Tracking",
     SITE_TOPIC: "",
     SITE_PLATFORM: "",
     SCRIPT_SOURCE: "",
@@ -511,7 +511,7 @@ function gas(a, b, c, d, f, e, h) {
 }
 
 function _URIHandler(a) {
-  var b = new RegExp("([?&])(" + oCONFIG.SEARCH_PARAMS + ")(=[^&]*)", "i");
+  var b = new RegExp("([?&])(" + oCONFIG.SEARCH_PARAMS + ")(=[^&]+)", "i");
   b.test(a) && (a = a.replace(b, "$1query$3"), isSearch = true);
   return a;
 }
@@ -672,8 +672,7 @@ function createTracker(a) {
         site_platform: oCONFIG.SITE_PLATFORM.toLowerCase(),
         script_source: oCONFIG.SCRIPT_SOURCE.toLowerCase(),
         version: oCONFIG.VERSION.toLowerCase(),
-        protocol: oCONFIG.URL_PROTOCOL,
-        event_name_dimension: "page_view"
+        protocol: oCONFIG.URL_PROTOCOL
       });
     }
     else {
@@ -681,8 +680,7 @@ function createTracker(a) {
         groups: oCONFIG.GA4_NAME+b,
         cookie_expires: parseInt(oCONFIG.COOKIE_TIMEOUT),
         page_location: ur,
-        ignore_referrer: (_isExcludedReferrer()? true : false),
-        event_name_dimension: "page_view"
+        ignore_referrer: (_isExcludedReferrer()? true : false)
       });
     }
   }
@@ -745,8 +743,10 @@ function _initAutoTracker(a) {
                 (e = e[e.length - 1].split(/[#?&?]/)),
                 e[0].toLowerCase() === c[d])
               ) {
+                var pa = a[i].pathname.split(/[#?&?]/)[0]; 
+                var p = pa.length >100? "[shrt]"+pa.substring(pa.length-94) : pa;
                 _tagClicks(a[i], "file_download", {
-                  file_name: a[i].pathname.split(/[#?&?]/)[0],
+                  file_name: p,
                   file_extension: e[0].toLowerCase(),
                   link_text: a[i].text.replace(/(?:[\r\n]+)+/g, "").trim(),
                   link_id: a[i].id,
@@ -764,8 +764,10 @@ function _initAutoTracker(a) {
             e[0].toLowerCase() === c[f])
           ) {
             a[i].href.split(c[f]);
+            var pa = a[i].pathname.split(/[#?&?]/)[0]; 
+            var p = pa.length >100? "[shrt]"+pa.substring(pa.length-94) : pa;
             _tagClicks(a[i], "file_download", {
-              file_name: a[i].pathname.split(/[#?&?]/)[0],
+              file_name: p,
               file_extension: e[0].toLowerCase(),
               link_text: a[i].text.replace(/(?:[\r\n]+)+/g, "").trim(),
               link_id: a[i].id,
@@ -969,7 +971,7 @@ function _tagClicks(a, b, c) {
 // ************ GA4 ************
  function _scrubbedURL(z) {
   RegExp.escape = function(s) { return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'); };
-  var n = new RegExp(`^(https?\:\/\/(www\.)?)?${RegExp.escape(document.location.hostname.replace("www.", ""))}`, "ig");
+  var n = new RegExp(`^(https?:\\/\\/(www\\.)?)?${RegExp.escape(document.location.hostname.replace("www.", ""))}`, "ig"),
     t = "",
     o = ((n.test(z) )? z: document.location.protocol +"//"+ document.location.hostname+z ),
     a = o.split("?")[0];
@@ -986,8 +988,8 @@ function _tagClicks(a, b, c) {
 
 function _setAllowedQS(){
   var queries = {
-    "default": ["utm_id","utm_source","utm_medium","utm_campaign","utm_term","utm_content","_gl","gclid", "dclid", "gclsrc"],
-      "gsa": ["challenge","affiliate","state"],
+    "default": ["utm_id","utm_source","utm_medium","utm_campaign","utm_term","utm_content","_gl","gclid", "dclid", "gclsrc", "affiliate"],
+      "gsa": ["challenge","state"],
       "dhs": ["appreceiptnum"],
       "doc": ["station","meas","start","atlc","epac","cpac","basin","fdays","cone","tswind120","gm_track","50wind120","hwind120","mltoa34","swath","radii","wsurge","key_messages","inundation","rainqpf","ero","gage","wfo","spanish_key_messages","key_messages","sid","lan","office"],
       "hhs": ["s_cid","selectedFacets"],
