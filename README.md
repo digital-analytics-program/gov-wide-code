@@ -84,7 +84,7 @@ Authenticated or “priviledged” public-facing pages require elevated privacy 
 
 This decision tree may help:
 
-![Decision Tree](/documentation/DAP-critera.png
+![Decision Tree](/documentation/DAP-critera.png)
 
 #### Access controls
 
