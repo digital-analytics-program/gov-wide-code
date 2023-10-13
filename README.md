@@ -1,4 +1,4 @@
-## Digital Analytics Program government-wide code
+## Digital Analytics Program Government-wide Code
 
 Provides a JavaScript file for US federal agencies to link or embed in their websites to participate in the Digital Analytics Program.
 
