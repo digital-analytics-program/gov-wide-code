@@ -941,7 +941,7 @@ function _initIdAssigner() {
 
 function _setAllowedQS(){
   var queries = {
-    "default": ["utm_id","utm_source","utm_medium","utm_campaign","utm_term","utm_content","_gl","gclid", "dclid", "gclsrc", "affiliate"],
+    "default": ["utm_id","utm_source","utm_medium","utm_campaign","utm_term","utm_content","_gl","gclid", "dclid", "gclsrc", "affiliate", "dap-dev-env"],
       "gsa": ["challenge","state"],
       "dhs": ["appreceiptnum"],
       "doc": ["station","meas","start","atlc","epac","cpac","basin","fdays","cone","tswind120","gm_track","50wind120","hwind120","mltoa34","swath","radii","wsurge","key_messages","inundation","rainqpf","ero","gage","wfo","spanish_key_messages","key_messages","sid","lan","office","pil"],
