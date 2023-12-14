@@ -9,7 +9,7 @@
 Copyright 2023 by Cardinal Path.
 Dual Tracking Federated Analytics: Google Analytics Government Wide Site Usage Measurement.
 Author: Ahmed Awwad
-09/20/2023 Version: 6.8
+12/12/2023 Version: 6.9
 ***********************************************************************************************************/
 var tObjectCheck,
   _allowedQuerystrings = [],
@@ -21,7 +21,7 @@ var tObjectCheck,
     ANONYMIZE_IP: !0,
     AGENCY: "",
     SUB_AGENCY: "",
-    VERSION: "20230920 v6.8 - Dual Tracking",
+    VERSION: "20231212 v6.9 - Dual Tracking",
     SITE_TOPIC: "",
     SITE_PLATFORM: "",
     SCRIPT_SOURCE: "",
@@ -44,7 +44,7 @@ var tObjectCheck,
     PARALLEL_SCRIPT_SOURCE_URL_CUSTOM_DIMENSION_SLOT: "dimension6",
     PARALLEL_URL_PROTOCOL_CUSTOM_DIMENSION_SLOT: "dimension7",
     PARALLEL_INTERACTION_TYPE_CUSTOM_DIMENSION_SLOT: "dimension8",
-    COOKIE_DOMAIN: location.hostname.replace("www.", "").toLowerCase(),
+    COOKIE_DOMAIN: location.hostname.replace(/^www\./, "").toLowerCase(),
     COOKIE_TIMEOUT: 63072e3,
     SEARCH_PARAMS: "q|query|nasaInclude|k|querytext|keys|qt|search_input|search|globalSearch|goog|s|gsearch|search_keywords|SearchableText|sp_q|qs|psnetsearch|locate|lookup|search_api_views_fulltext|keywords|request|_3_keywords",
     YOUTUBE: !1,
@@ -54,7 +54,10 @@ var tObjectCheck,
     PUA_NAME: "GSA_ENOR",
     GA4_NAME: "GSA_GA4_ENOR",
   };
-  
+if(document.location.href.match(/([?&])(dap-dev-env)([^&$]*)/i)){
+  oCONFIG.GWT_UAID[0] = "UA-33523145-1";
+  oCONFIG.GWT_GA4ID[0] = "G-9TNNMGP8WJ"; //Test Digital Analytics Program GA4
+}
 //*********GA4************
 var head = document.getElementsByTagName("head").item(0);
 var GA4Object = document.createElement("script");
@@ -112,7 +115,7 @@ function _defineCookieDomain() {
     oCONFIG.SUBDOMAIN_BASED.toString()
   )
     ? ((oCONFIG.COOKIE_DOMAIN = oCONFIG.SUBDOMAIN_BASED.toLowerCase().replace(
-        "www.",
+        /^www\./i,
         ""
       )),
       (oCONFIG.SUBDOMAIN_BASED = !0))
@@ -123,7 +126,7 @@ function _defineCookieDomain() {
       (oCONFIG.SUBDOMAIN_BASED = !0))
     : ((oCONFIG.COOKIE_DOMAIN = location.hostname
         .toLowerCase()
-        .replace("www.", "")),
+        .replace(/^www\./i, "")),
       (oCONFIG.SUBDOMAIN_BASED = !1));
 }
 
@@ -156,13 +159,13 @@ function _cleanBooleanParam(a) {
 function _isValidUANum(a) {
   a = a.toLowerCase();
   a = a.match(/^ua\-([0-9]+)\-[0-9]+$/);
-  return null != a && 0 < a.length;
+  return null !== a && 0 < a.length && a[0] !== oCONFIG.GWT_UAID[0].toLowerCase();
 }
 
 function _isValidGA4Num(a) {
   a = a.toLowerCase();
   a = a.match(/^g\-([0-9a-z])+$/);
-  return null != a && 0 < a.length;
+  return null !== a && 0 < a.length && a[0] !== oCONFIG.GWT_GA4ID[0].toLowerCase();
 }
 
 function _cleanDimensionValue(a) {
@@ -523,9 +526,9 @@ function _sendViewSearchResult(a){
 function _isExcludedReferrer() {
   if ("" !== document.referrer) {
     var a = document.referrer
-      .replace(/https?:\/\//, "")
+      .replace(/https?:\/\//i, "")
       .split("/")[0]
-      .replace("www.", "");
+      .replace(/^www\./i, "");
     return oCONFIG.SUBDOMAIN_BASED
       ? -1 != a.indexOf(oCONFIG.COOKIE_DOMAIN)
         ? !0
@@ -535,11 +538,6 @@ function _isExcludedReferrer() {
       : !1;
   }
 }
-
-
-
-
-
 
 function createTracker(a) {
   for (var b = 0; b < oCONFIG.GWT_UAID.length; b++) {
@@ -686,135 +684,110 @@ function createTracker(a) {
   }
 }
 
-function _initAutoTracker(a) {
-  var b = oCONFIG.COOKIE_DOMAIN,
-    c = oCONFIG.EXTS.split("|");
-  a = a || document.getElementsByTagName("a");
-  for (i = 0; i < a.length; i++) {
-    var d = 0,
-      f = "",
-      e = /^mailto:[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/i,
-      h =
-        /^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/i,
-      g = /^(tel:)(.*)$/i;
-    if (e.test(a[i].href) || h.test(a[i].href) || g.test(a[i].href)) {
-      try {
-        h.test(a[i].href)
-          ? (f = a[i].hostname.toLowerCase().replace("www.", ""))
-          : e.test(a[i].href)
-          ? (f = a[i].href.split("@")[1].toLowerCase())
-          : g.test(a[i].href) && ((f = a[i].href), (f = f.toLowerCase()));
-      } catch (k) {
-        continue;
-      }
-      if (oCONFIG.SUBDOMAIN_BASED ? -1 !== f.indexOf(b) : f === b)
-        if (
-          -1 !== a[i].href.toLowerCase().indexOf("mailto:") &&
-          -1 === a[i].href.toLowerCase().indexOf("tel:")
-        )
-          (e = a[i].href.match(
-            /[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/
-          )),
-            _tagClicks(a[i], "email_click", {
-              link_id: a[i].id,
-              link_url: e[0],
-              link_domain: e[0].split("@")[1],
-              link_text: a[i].text.replace(/(?:[\r\n]+)+/g, "").trim(),
-              link_classes: a[i].className,
-            });
-        else if (
-          -1 === a[i].href.toLowerCase().indexOf("mailto:") &&
-          -1 !== a[i].href.toLowerCase().indexOf("tel:")
-        )
-          _tagClicks(a[i], "telephone_click", {
-            link_id: a[i].id,
-            link_url: a[i].href.split("tel:")[1],
-            link_text: a[i].text.replace(/(?:[\r\n]+)+/g, "").trim(),
-            link_classes: a[i].className,
-          });
-        else {
-          if (
-            -1 === a[i].href.toLowerCase().indexOf("mailto:") &&
-            -1 === a[i].href.toLowerCase().indexOf("tel:")
-          )
-            for (d = 0; d < c.length; d++)
-              if (
-                ((e = a[i].href.split(".")),
-                (e = e[e.length - 1].split(/[#?&?]/)),
-                e[0].toLowerCase() === c[d])
-              ) {
-                var pa = a[i].pathname.split(/[#?&?]/)[0]; 
-                var p = pa.length >100? "[shrt]"+pa.substring(pa.length-94) : pa;
-                _tagClicks(a[i], "file_download", {
-                  file_name: p,
-                  file_extension: e[0].toLowerCase(),
-                  link_text: a[i].text.replace(/(?:[\r\n]+)+/g, "").trim(),
-                  link_id: a[i].id,
-                  link_url: a[i].href.replace(/[#?&].*/, ""),
-                  link_domain: a[i].hostname.replace(/(www\.)?/gi, ""),
-                });
-                break;
-              }
-        }
-      else
-        for (f = 0; f < c.length; f++)
-          if (
-            ((e = a[i].href.split(".")),
-            (e = e[e.length - 1].split(/[#?]/)),
-            e[0].toLowerCase() === c[f])
-          ) {
-            a[i].href.split(c[f]);
-            var pa = a[i].pathname.split(/[#?&?]/)[0]; 
-            var p = pa.length >100? "[shrt]"+pa.substring(pa.length-94) : pa;
-            _tagClicks(a[i], "file_download", {
-              file_name: p,
-              file_extension: e[0].toLowerCase(),
-              link_text: a[i].text.replace(/(?:[\r\n]+)+/g, "").trim(),
-              link_id: a[i].id,
-              link_url: a[i].href.replace(/[#?&].*/, ""),
-              link_domain: a[i].hostname.replace(/(www\.)?/gi, ""),
-              outbound: true,
-            });
-            break;
-          } else
-            e[0].toLowerCase() !== c[f] &&
-              (d++,
-              d === c.length &&
-                (-1 === a[i].href.toLowerCase().indexOf("mailto:") &&
-                -1 === a[i].href.toLowerCase().indexOf("tel:")
-                  ? _tagClicks(a[i], "click", {
-                      link_id: a[i].id,
-                      link_url: a[i].href.replace(/[#?&].*/, ""),
-                      link_domain: a[i].hostname.replace(/(www\.)?/gi, ""),
-                      link_text: a[i].text.replace(/(?:[\r\n]+)+/g, "").trim(),
-                      link_classes: a[i].className,
-                      outbound: true,
-                    })
-                  : c.length &&
-                    -1 !== a[i].href.toLowerCase().indexOf("mailto:") &&
-                    -1 === a[i].href.toLowerCase().indexOf("tel:")
-                  ? ((e = a[i].href.match(
-                      /[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/i
-                    )),
-                    _tagClicks(a[i], "email_click", {
-                      link_id: a[i].id,
-                      link_url: e[0],
-                      link_domain: e[0].split("@")[1],
-                      link_text: a[i].text.replace(/(?:[\r\n]+)+/g, "").trim(),
-                      link_classes: a[i].className,
-                      outbound: true,
-                    }))
-                  : c.length &&
-                    -1 === a[i].href.toLowerCase().indexOf("mailto:") &&
-                    -1 !== a[i].href.toLowerCase().indexOf("tel:") &&
-                    _tagClicks(a[i], "telephone_click", {
-                      link_id: a[i].id,
-                      link_url: a[i].href.split("tel:")[1],
-                      link_text: a[i].text.replace(/(?:[\r\n]+)+/g, "").trim(),
-                      link_classes: a[i].className,
-                    })));
+function _initAutoTracker() {
+  var _isDownload = function(a){
+    var ex = a.href.toLowerCase().replace(/[#?&].*/, '').split(a.hostname)[1].split("."); var ext = ex[ex.length-1];
+    if(ext.match(new RegExp("^("+oCONFIG.EXTS+")$")) != null){
+    return ext;
     }
-  }
+    else{
+    return false;
+    }
+  };
+  var _enforeLower = function(j){
+    try {
+      var d = JSON.stringify(j);
+      return JSON.parse(d.toLowerCase());
+    } catch (error) {}
+  };
+
+  var _eventHandler = function(event){
+    try {
+      if("mousedown" === event.type || ("keydown" === event.type && 13 === event.keyCode) ){
+        if(event.target.nodeName === 'A' || event.target.closest('a') !== null){
+          var b = oCONFIG.COOKIE_DOMAIN, c = "";
+          var d = "",
+              f = "",
+              e = /^mailto:[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/i,
+              h =
+                /^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/i,
+              i = "",
+              t = "",
+              l = {},
+              g = /^(tel:)(.*)$/i;
+          var a = event.target.closest('a');
+          if("mousedown" === event.type){
+            t = "Mouse Click";
+          }
+          else if("keydown" === event.type && 13 === event.keyCode){
+            t = "Enter Key Keystroke";
+          }
+  
+          if (e.test(a.href) || h.test(a.href) || g.test(a.href)) {
+            try {
+              h.test(a.href)
+                ? ((f = a.hostname.toLowerCase().replace(/^www\./i, "")), (i= "l"))
+                : e.test(a.href)
+                ? ((f = a.href.split("@")[1].toLowerCase()), (i="m"))
+                : g.test(a.href) && ((f = a.href), (f = f.toLowerCase()),(i="t"));
+            } catch (k) {
+              //continue;
+            }
+          }
+
+          if (oCONFIG.SUBDOMAIN_BASED ? -1 !== f.indexOf(b) : f === b){
+            if("m"===i){
+              c = a.href.match(/[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/);
+              l = {link_id: a.id, link_url: c[0], link_domain: c[0].split("@")[1], link_text: a.text.replace(/(?:[\r\n]+)+/g, "").trim(), link_classes: a.className, interaction_type: t};
+              _sendEvent("email_click", _enforeLower(l));
+            }
+            /*else if("t"===i){
+              l = {link_id: a.id, link_url: a.href.split("tel:")[1], link_text: a.text.replace(/(?:[\r\n]+)+/g, "").trim(), link_classes: a.className, interaction_type: t};
+              _sendEvent("telephone_click", l);
+            }*/
+            else{
+              if("l"===i && _isDownload(a)){
+                c = a.pathname.split(/[#?&?]/)[0];
+                d = _isDownload(a);
+                l = { file_name: c, file_extension: d, link_text: a.text.replace(/(?:[\r\n]+)+/g, "").trim(), link_id: a.id, link_url: a.href.replace(/[#?&].*/, ""), link_domain: a.hostname.replace(/^www\./i, ""), interaction_type: t};
+                _sendEvent("file_download",  _enforeLower(l));
+              }
+              else if("l"===i && !_isDownload(a)){
+                //internal link tracking;
+              }
+            }
+          }
+          else {
+            if("l"===i && _isDownload(a)){
+              c = a.pathname.split(/[#?&?]/)[0]; 
+              d = _isDownload(a);
+              l = { file_name: c, file_extension: d, link_text: a.text.replace(/(?:[\r\n]+)+/g, "").trim(), link_id: a.id, link_url: a.href.replace(/[#?&].*/, ""), link_domain: a.hostname.replace(/^www\./i, ""), outbound: true, interaction_type: t};
+              _sendEvent("file_download",  _enforeLower(l));
+            }
+            else if("l"===i && !_isDownload(a)){
+              l = {link_id: a.id, link_url: a.href.replace(/[#?&].*/, ""), link_domain: a.hostname.replace(/^www\./i, ""), link_text: a.text.replace(/(?:[\r\n]+)+/g, "").trim(), link_classes: a.className, outbound: true, interaction_type: t};
+              _sendEvent("click",  _enforeLower(l));
+            }
+            else if("m" === i){
+              c = a.href.match(/[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/);
+              l = {link_id: a.id, link_url: c[0], link_domain: c[0].split("@")[1], link_text: a.text.replace(/(?:[\r\n]+)+/g, "").trim(), link_classes: a.className, outbound: true, interaction_type: t};
+              _sendEvent("email_click",  _enforeLower(l));
+            }
+            else if("t" === i){
+              l = {link_id: a.id, link_url: a.href.split("tel:")[1], link_text: a.text.replace(/(?:[\r\n]+)+/g, "").trim(), link_classes: a.className, interaction_type: t};
+              _sendEvent("telephone_click",  _enforeLower(l));
+            }
+          }
+        }
+      }
+
+    } catch (error) {
+      
+    }
+  };
+
+  (document.addEventListener? document.addEventListener("mousedown", _eventHandler, false) : (document.attachEvent && document.attachEvent("onmousedown", _eventHandler)));
+  (document.addEventListener? document.addEventListener("keydown", _eventHandler, false) : (document.attachEvent && document.attachEvent("onkeydown", _eventHandler)));
 }
 
 // START YT TRACKER //
@@ -948,30 +921,10 @@ function _initIdAssigner() {
   }
 }
 
-function _tagClicks(a, b, c) {
-  a.addEventListener
-    ? (a.addEventListener("mousedown", function () {
-        (c.interaction_type = "Mouse Click"), _sendEvent(b, c);
-      }),
-      a.addEventListener("keydown", function (e) {
-        13 === e.keyCode &&
-          ( (c.interaction_type = "Enter Key Keystroke"), _sendEvent(b, c));
-      }))
-    : a.attachEvent &&
-      (a.attachEvent("onmousedown", function () {
-        (c.interaction_type = "Mouse Click"), _sendEvent(b, c);
-      }),
-      a.attachEvent("onkeydown", function (e) {
-        13 === e.keyCode &&
-          ( (c.interaction_type = "Enter Key Keystroke"), _sendEvent(b, c));
-      }));
-}
-
-
 // ************ GA4 ************
  function _scrubbedURL(z) {
   RegExp.escape = function(s) { return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'); };
-  var n = new RegExp(`^(https?:\\/\\/(www\\.)?)?${RegExp.escape(document.location.hostname.replace("www.", ""))}`, "ig"),
+  var n = new RegExp(`^(https?:\\/\\/(www\\.)?)?${RegExp.escape(document.location.hostname.replace(/^www\\./, ""))}`, "ig"),
     t = "",
     o = ((n.test(z) )? z: document.location.protocol +"//"+ document.location.hostname+z ),
     a = o.split("?")[0];
@@ -988,10 +941,10 @@ function _tagClicks(a, b, c) {
 
 function _setAllowedQS(){
   var queries = {
-    "default": ["utm_id","utm_source","utm_medium","utm_campaign","utm_term","utm_content","_gl","gclid", "dclid", "gclsrc", "affiliate"],
+    "default": ["utm_id","utm_source","utm_medium","utm_campaign","utm_term","utm_content","_gl","gclid", "dclid", "gclsrc", "affiliate", "dap-dev-env"],
       "gsa": ["challenge","state"],
       "dhs": ["appreceiptnum"],
-      "doc": ["station","meas","start","atlc","epac","cpac","basin","fdays","cone","tswind120","gm_track","50wind120","hwind120","mltoa34","swath","radii","wsurge","key_messages","inundation","rainqpf","ero","gage","wfo","spanish_key_messages","key_messages","sid","lan","office"],
+      "doc": ["station","meas","start","atlc","epac","cpac","basin","fdays","cone","tswind120","gm_track","50wind120","hwind120","mltoa34","swath","radii","wsurge","key_messages","inundation","rainqpf","ero","gage","wfo","spanish_key_messages","key_messages","sid","lan","office","pil"],
       "hhs": ["s_cid","selectedFacets"],
       "hud": ["PostID"],
       "nasa": ["feature","ProductID","selectedFacets"],
