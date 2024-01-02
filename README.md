@@ -3,11 +3,11 @@
 Provides a JavaScript file for US federal agencies to link or embed in their websites to participate in the Digital Analytics Program.
 The latest code collects both DAP Universal Analytics and GA4 data as part of the same tag.
 
-The most current version of DAP GA code is here: 
+The latest version of DAP GA code contains dual tracking code for both Universal Analytics (UA) and GA4: 
 
-* Dual Tracking DAP Universal Analytics/GA4 [`Universal-Federated-Analytics.js`](Universal-Federated-Analytics.js) (full)
-* Dual Tracking DAP Universal Analytics/GA4 [`Universal-Federated-Analytics-Min.js`](Universal-Federated-Analytics-Min.js) (minified)
-* Dual Tracking DAP Universal Analytics/GA4 [`Federated.js.map`](Federated.js.map) (source map)
+* [`Universal-Federated-Analytics.js`](Universal-Federated-Analytics.js) (full)
+* [`Universal-Federated-Analytics-Min.js`](Universal-Federated-Analytics-Min.js) (minified)
+* [`Federated.js.map`](Federated.js.map) (source map)
 
 ### Participating in the DAP
 
