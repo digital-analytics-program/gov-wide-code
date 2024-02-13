@@ -5,8 +5,8 @@ The latest code collects both DAP Universal Analytics and GA4 data as part of th
 
 The latest version of DAP GA code contains dual tracking code for both Universal Analytics (UA) and GA4: 
 
-* [`Universal-Federated-Analytics.js`](Universal-Federated-Analytics.js) (full)
-* [`Universal-Federated-Analytics-Min.js`](Universal-Federated-Analytics-Min.js) (minified)
+* [`Universal-Federated-Analytics.js`](Universal-Federated-Analytics.js) (full DAP GA4)
+* [`Universal-Federated-Analytics-Min.js`](Universal-Federated-Analytics-Min.js) (minified DAP GA4)
 * [`Federated.js.map`](Federated.js.map) (source map)
 
 ### Participating in the DAP
