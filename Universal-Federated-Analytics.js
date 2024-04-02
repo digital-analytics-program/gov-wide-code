@@ -46,7 +46,7 @@ var tObjectCheck,
     PARALLEL_INTERACTION_TYPE_CUSTOM_DIMENSION_SLOT: "dimension8",
     COOKIE_DOMAIN: location.hostname.replace(/^www\./, "").toLowerCase(),
     COOKIE_TIMEOUT: 63072e3,
-    SEARCH_PARAMS: "q|query|nasaInclude|k|querytext|keys|qt|search_input|search|globalSearch|goog|s|gsearch|search_keywords|SearchableText|sp_q|qs|psnetsearch|locate|lookup|search_api_views_fulltext|keywords|request|_3_keywords",
+    SEARCH_PARAMS: "q|query|nasaInclude|k|querytext|keys|qt|search_input|search|globalSearch|goog|s|gsearch|search_keywords|SearchableText|sp_q|qs|psnetsearch|locate|lookup|search_api_views_fulltext|keywords|request|_3_keywords|searchString",
     YOUTUBE: !1,
     YT_MILESTONE: 25, //accepts 10, 20, and 25
     AUTOTRACKER: !0,
@@ -971,6 +971,9 @@ function _piiredactor(payload, type) {
   }, {
     name: 'SSN',
     regex: /(full)?(([\-\_])?)?ssn\=(\d{3}\-?\d{2}\-?\d{4})([^\&\s]*)/ig
+  }, {
+    name: 'DOB',
+    regex: /((birth)?date|dob)\=([^&\/\?]*)/ig
   }];
   try {
     var _allowedQs = _allowedQuerystrings.toString().replace(/\,/g, "=|")+"=";
