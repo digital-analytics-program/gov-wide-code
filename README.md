@@ -80,11 +80,11 @@ This means that, barring the compromise of GitHub's systems or the CDN's systems
 
 #### Appropriate Placement
 
-The Digital Analytics Program Javascript code is intended to be implemented on "public-facing" federal government webpages. Public-facing web pages are defined as those that can be accessed by the general public and not internal government personnel.
+The Digital Analytics Program Javascript code must be applied to public-facing websites. Public-facing websites are defined as websites whose primary intended users are not Federal government employees or contractors.
 
 #### Authenticated or "Priviledged" Pages
 
-Authenticated or “priviledged” public-facing pages require elevated privacy and security measures to prevent collection sensitive and PII information inadvertently placed in URL strings. The DAP script tag implementation on public-facing authenticated pages is only allowed on a case by case basis and after it is approved by the GSA DAP. The use of the DAP script on authenticated pages without the approval of DAP will result in suspension of web analytics data collection and reporting. To learn more about using DAP on authenticated public-facing pages, contact DAP at @dap@gsa.gov.
+For the time being, do not apply DAP script to any webpages behind authentication or log-in, even if the website as a whole is public-facing. However, agencies should continue to apply DAP script to log-in pages that serve as the entry point to authenticated pages on public-facing websites. This policy was determined by OMB in collaboration with the DAP team.
 
 This decision tree may help:
 
