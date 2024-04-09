@@ -88,7 +88,7 @@ For the time being, do not apply DAP script to any webpages behind authenticatio
 
 This decision tree may help:
 
-![Decision Tree](/documentation/DAP-critera.png)
+![Decision Tree](/documentation/Copy of DAP Decision Tree.png)
 
 #### Access controls
 
