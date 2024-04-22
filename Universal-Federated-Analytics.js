@@ -9,7 +9,7 @@
 Copyright 2024 by Cardinal Path.
 Dual Tracking Federated Analytics: Google Analytics Government Wide Site Usage Measurement.
 Author: Ahmed Awwad
-16/04/2024 Version: 7.01
+22/04/2024 Version: 7.02
 ***********************************************************************************************************/
 var tObjectCheck,
   _allowedQuerystrings = [],
@@ -21,7 +21,7 @@ var tObjectCheck,
     ANONYMIZE_IP: !0,
     AGENCY: "",
     SUB_AGENCY: "",
-    VERSION: "20240416 v7.01 - Dual Tracking",
+    VERSION: "20240422 v7.02 - Dual Tracking",
     SITE_TOPIC: "",
     SITE_PLATFORM: "",
     SCRIPT_SOURCE: "",
@@ -814,7 +814,7 @@ function _initAutoTracker() {
 // START YT TRACKER //
 if (oCONFIG.YOUTUBE) {
   var tag = document.createElement('script');
-  tag.src = document.location.protocol + "//www.youtube.com/iframe_api";
+  tag.src = "https://www.youtube.com/iframe_api";
   var firstScriptTag = document.getElementsByTagName('script')[0];
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   var videoArray = [];
