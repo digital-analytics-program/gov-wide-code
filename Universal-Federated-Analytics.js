@@ -9,7 +9,7 @@
 Copyright 2024 by Cardinal Path.
 Dual Tracking Federated Analytics: Google Analytics Government Wide Site Usage Measurement.
 Author: Ahmed Awwad
-22/04/2024 Version: 7.02
+26/04/2024 Version: 7.02
 ***********************************************************************************************************/
 var tObjectCheck,
   _allowedQuerystrings = [],
@@ -21,7 +21,7 @@ var tObjectCheck,
     ANONYMIZE_IP: !0,
     AGENCY: "",
     SUB_AGENCY: "",
-    VERSION: "20240422 v7.02 - Dual Tracking",
+    VERSION: "20240426 v7.02 - Dual Tracking",
     SITE_TOPIC: "",
     SITE_PLATFORM: "",
     SCRIPT_SOURCE: "",
@@ -925,21 +925,16 @@ function _payloadInterceptor() {
   if (!window._isRedacted) {
     window._isRedacted = !0;
     try {
-      var proxied = window.navigator.sendBeacon;
+      var pl = window.navigator.sendBeacon;
       window.navigator.sendBeacon = function () {
-        if (arguments && arguments[0].match(/google-analytics\.com.*v\=2\&/)) {
-          var endpoint = arguments[0].split('?')[0];
-          var query = arguments[0].split('?')[1];
+        if (arguments && arguments[0].match(/google-analytics\.com.*v\=2\&/i)) {
+          var endpoint = arguments[0].split('?')[0], query = arguments[0].split('?')[1];
           var beacon = {
-            endpoint: endpoint,
-            // Check for PII
-            query: _piiredactor(query, "ga4"), events: []
+            endpoint: endpoint, query: _piiRedactor(query, "ga4"), events: []
           };
-          // This is a multiple events hit
           if (arguments[1]) {
             arguments[1].split("\r\n").forEach(function (event) {
-              // Check for PII
-              beacon.events.push(_piiredactor(event, "ga4"));
+              beacon.events.push(_piiRedactor(event, "ga4"));
             });
           }
           arguments[0] = [beacon.endpoint, beacon.query].join('?');
@@ -948,39 +943,52 @@ function _payloadInterceptor() {
             arguments[1] = beacon.events.join("\r\n");
           }
         }
-        return proxied.apply(this, arguments);
+        return pl.apply(this, arguments);
       };
-    } catch (e) { return proxied.apply(this, arguments); }
+    } catch (e) { return pl.apply(this, arguments); }
   }
 }
 // End GA4 Payload Interceptor
 
 // Payload Redactor
-function _piiredactor(payload, type) {
+function _piiRedactor(payload, type) {
   var piiRegex = [{
     name: 'EMAIL',
     regex: /[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/gi
   }, {
     name: 'TEL',
-    regex: /(tel|telephone|mob(ile)?|cell(ular)?)\=[\d\+\s]([^&\/\?]*)/gi
+    regex: /((tel|(tele)?phone|mob(ile)?|cell(ular)?)\=)?((\+\d{1,2}[\s\.\-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s\.\-]?\d{4})([^\&\s\?\/]*)/gi
   }, {
     name: 'NAME',
-    regex: /((first|last|middle|sur|f|l)([\-\_])?)?name\=([^\&\s]*)/ig
+    regex: /((first|last|middle|sur|f|l)([\-\_])?)?name\=([^\&\s\?\/]*)/ig
   }, {
     name: 'PASSWORD',
-    regex: /(((confirm([\-\_])?)?password)|passwd|pwd)\=([^\&\s]*)/ig
+    regex: /(((confirm([\-\_])?)?password)|passwd|pwd)\=([^\&\s\?\/]*)/ig
   }, {
     name: 'ZIP',
-    regex: /((postcode=)|(zipcode=)|(zip=))([^&\/\?]*)/gi
+    regex: /((postcode=)|(zipcode=)|(zip=))([^\&\s\?\/]*)/gi
   }, {
     name: 'ADDRESS',
-    regex: /add(ress)?([1-2])?\=([^\&\s]*)/ig
+    regex: /add(ress)?([1-2])?\=([^\&\s\?\/]*)/ig
   }, {
     name: 'SSN',
-    regex: /(full)?(([\-\_])?)?ssn\=(\d{3}\-?\d{2}\-?\d{4})([^\&\s]*)/ig
+    regex: /((full)?(([\-\_])?)?ssn\=)?(\d{3}[\s\.\-]?\d{2}[\s\.\-]?\d{4})([^\&\s\?\/]*)/ig
   }, {
     name: 'DOB',
-    regex: /((birth)?date|dob)\=([^&\/\?]*)/ig
+    regex: /(((birth)?date|dob)\=)?(19|20)\d\d[\-\/\.](0?[1-9]|1[012])[\-\/\.](0?[1-9]|[12][0-9]|3[01])([^\&\s\?\/]*)/ig,
+    format: 'YYYY-MM-DD'
+  }, {
+    name: 'DOB',
+    regex: /(((birth)?date|dob)\=)?(19|20)\d\d[\-\/\.](0?[1-9]|[12][0-9]|3[01])[\-\/\.](0?[1-9]|1[012])([^\&\s\?\/]*)/ig,
+    format: 'YYYY-DD-MM'
+  }, {
+    name: 'DOB',
+    regex: /(((birth)?date|dob)\=)?(0?[1-9]|[12][0-9]|3[01])[\-\/\.](0?[1-9]|1[012])[\-\/\.](19|20)\d\d([^\&\s\?\/]*)/ig,
+    format: 'DD-MM-YYYY'
+  }, {
+    name: 'DOB',
+    regex: /(((birth)?date|dob)\=)?(0?[1-9]|1[012])[\-\/\.](0?[1-9]|[12][0-9]|3[01])[\-\/\.](19|20)\d\d([^\&\s\?\/]*)/ig,
+    format: 'MM-DD-YYYY'
   }];
   try {
     var _allowedQs = _allowedQuerystrings.toString().replace(/\,/g, "=|") + "=";
@@ -991,9 +999,9 @@ function _piiredactor(payload, type) {
       var _param = _hitPayloadParts[i].split('=');
       var _val;
       try {
-        _val = decodeURIComponent(decodeURIComponent(_param[1]));
+        _val = decodeURIComponent(decodeURIComponent(_param[1])).replace(/\s/g, '');
       } catch (e) {
-        _val = decodeURIComponent(_param[1]);
+        _val = decodeURIComponent(_param[1]).replace(/\s/g, '');
       }
       if (_param[0].match(new RegExp(checkParams)) != null && _val.indexOf('?') > -1) {
         var paramArray = _val.split('?').splice(1).join('&').split('&');
@@ -1045,7 +1053,7 @@ function _customTask() {
         canSendHit = true;
       try {
         var pl = sendHitTaskModel.get('hitPayload');
-        var redactedPayload = _piiredactor(pl, "UA");
+        var redactedPayload = _piiRedactor(pl, "UA");
         sendHitTaskModel.set('hitPayload', redactedPayload, true);
         if (canSendHit) {
           originalSendHitTask(sendHitTaskModel);
