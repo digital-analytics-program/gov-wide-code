@@ -3,7 +3,7 @@
 Provides a JavaScript file for US federal agencies to link or embed in their websites to participate in the Digital Analytics Program.
 The latest code collects both DAP Universal Analytics and GA4 data as part of the same tag.
 
-The latest version of DAP GA code contains dual tracking code for both Universal Analytics (UA) and GA4: 
+The latest version of DAP GA code contains dual tracking code for both Universal Analytics (UA) and GA4:
 
 * [`Universal-Federated-Analytics.js`](Universal-Federated-Analytics.js) (full)
 * [`Universal-Federated-Analytics-Min.js`](Universal-Federated-Analytics-Min.js) (minified)
@@ -49,7 +49,7 @@ supported scenarios include:
 Analytics code fails: when an agency Universal Analytics tracking code (not DAP)
 uses a custom/non-default tracking object and it is added right after the Federated
 code. In this specific scenario, the Federated code will fail in reporting the first page
-hit and will be able to track normally all the consecutive hits. 
+hit and will be able to track normally all the consecutive hits.
 
 *Limitation:* The Federated DAP code doesn’t fully support older versions of
 Microsoft Internet Explorer. While the Federated DAP code works with all known
@@ -69,6 +69,16 @@ Strict-Transport-Security: max-age=31536000;preload
 Browsers that support HSTS and which have observed this HSTS policy (either from a prior visit or through HSTS preloading) will not issue HTTP requests to `dap.digitalgov.gov` at all, even if instructed.
 
 Together, HTTPS and HSTS offer a strong, necessary level of transport security and integrity.
+
+#### Content Security Policy
+
+A Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks to your website, including Cross-Site Scripting (XSS) and data injection attacks. In order to incorporate the DAP JS into your site which includes a Content Security Policy, add the DAP domain and necessary Google domains to your allowed script sources. Also add the Google Analytics domain to your allowed connect sources. Example follows:
+
+```
+Content-Security-Policy: script-src https://dap.digitalgov.gov https://www.google-analytics.com https://www.googletagmanager.com; connect-src https://www.google-analytics.com;
+```
+
+This whitelists the DAP domain and necessary Google domains as trusted sources for JavaScript downloads to your site. In order to make your CSP as restrictive and secure as possible, use `script-src` rather than `default-src` to only permit JavaScript to be included from these domains and no other file types. The `connect-src` directive allows the DAP JavaScript code to connect to the Google Analytics domain in order to send analytics data from your site to Google Analytics.
 
 #### Data integrity
 
