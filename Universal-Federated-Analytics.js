@@ -9,7 +9,7 @@
 Copyright 2024 by Cardinal Path.
 Dual Tracking Federated Analytics: Google Analytics Government Wide Site Usage Measurement.
 Author: Ahmed Awwad
-26/04/2024 Version: 7.02
+03/05/2024 Version: 7.03
 ***********************************************************************************************************/
 var tObjectCheck,
   _allowedQuerystrings = [],
@@ -21,7 +21,7 @@ var tObjectCheck,
     ANONYMIZE_IP: !0,
     AGENCY: "",
     SUB_AGENCY: "",
-    VERSION: "20240426 v7.02 - Dual Tracking",
+    VERSION: "20240503 v7.03 - Dual Tracking",
     SITE_TOPIC: "",
     SITE_PLATFORM: "",
     SCRIPT_SOURCE: "",
@@ -960,7 +960,7 @@ function _piiRedactor(payload, type) {
     regex: /((tel|(tele)?phone|mob(ile)?|cell(ular)?)\=)?((\+\d{1,2}[\s\.\-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s\.\-]?\d{4})([^\&\s\?\/]*)/gi
   }, {
     name: 'NAME',
-    regex: /((first|last|middle|sur|f|l)([\-\_])?)?name\=([^\&\s\?\/]*)/ig
+    regex: /^((first|last|middle|sur|f|l)([\-\_])?)?name\=([^\&\s\?\/]*)/ig
   }, {
     name: 'PASSWORD',
     regex: /(((confirm([\-\_])?)?password)|passwd|pwd)\=([^\&\s\?\/]*)/ig
@@ -972,22 +972,22 @@ function _piiRedactor(payload, type) {
     regex: /add(ress)?([1-2])?\=([^\&\s\?\/]*)/ig
   }, {
     name: 'SSN',
-    regex: /((full)?(([\-\_])?)?ssn\=)?(\d{3}[\s\.\-]?\d{2}[\s\.\-]?\d{4})([^\&\s\?\/]*)/ig
+    regex: /((full)?(([\-\_])?)?ssn\=)?(\d{3}([\s\.\-]|%20)?\d{2}([\s\.\-]|%20)?\d{4})([^\&\s\?\/]*)/ig
   }, {
     name: 'DOB',
-    regex: /(((birth)?date|dob)\=)?(19|20)\d\d[\-\/\.](0?[1-9]|1[012])[\-\/\.](0?[1-9]|[12][0-9]|3[01])([^\&\s\?\/]*)/ig,
+    regex: /(((birth)?date|dob)\=)?(19|20)\d\d([\s\.\-]|%20)(0?[1-9]|1[012])([\s\.\-]|%20)(0?[1-9]|[12][0-9]|3[01])([^\&\s\?\/]*)/ig,
     format: 'YYYY-MM-DD'
   }, {
     name: 'DOB',
-    regex: /(((birth)?date|dob)\=)?(19|20)\d\d[\-\/\.](0?[1-9]|[12][0-9]|3[01])[\-\/\.](0?[1-9]|1[012])([^\&\s\?\/]*)/ig,
+    regex: /(((birth)?date|dob)\=)?(19|20)\d\d([\s\.\-]|%20)(0?[1-9]|[12][0-9]|3[01])([\s\.\-]|%20)(0?[1-9]|1[012])([^\&\s\?\/]*)/ig,
     format: 'YYYY-DD-MM'
   }, {
     name: 'DOB',
-    regex: /(((birth)?date|dob)\=)?(0?[1-9]|[12][0-9]|3[01])[\-\/\.](0?[1-9]|1[012])[\-\/\.](19|20)\d\d([^\&\s\?\/]*)/ig,
+    regex: /(((birth)?date|dob)\=)?(0?[1-9]|[12][0-9]|3[01])([\s\.\-]|%20)(0?[1-9]|1[012])([\s\.\-]|%20)(19|20)\d\d([^\&\s\?\/]*)/ig,
     format: 'DD-MM-YYYY'
   }, {
     name: 'DOB',
-    regex: /(((birth)?date|dob)\=)?(0?[1-9]|1[012])[\-\/\.](0?[1-9]|[12][0-9]|3[01])[\-\/\.](19|20)\d\d([^\&\s\?\/]*)/ig,
+    regex: /(((birth)?date|dob)\=)?(0?[1-9]|1[012])([\s\.\-]|%20)(0?[1-9]|[12][0-9]|3[01])([\s\.\-]|%20)(19|20)\d\d([^\&\s\?\/]*)/ig,
     format: 'MM-DD-YYYY'
   }];
   try {
@@ -999,9 +999,9 @@ function _piiRedactor(payload, type) {
       var _param = _hitPayloadParts[i].split('=');
       var _val;
       try {
-        _val = decodeURIComponent(decodeURIComponent(_param[1])).replace(/\s/g, '');
+        _val = decodeURIComponent(decodeURIComponent(_param[1]));
       } catch (e) {
-        _val = decodeURIComponent(_param[1]).replace(/\s/g, '');
+        _val = decodeURIComponent(_param[1]);
       }
       if (_param[0].match(new RegExp(checkParams)) != null && _val.indexOf('?') > -1) {
         var paramArray = _val.split('?').splice(1).join('&').split('&');
