@@ -9,7 +9,7 @@
 Copyright 2024 by Cardinal Path.
 Dual Tracking Federated Analytics: Google Analytics Government Wide Site Usage Measurement.
 Author: Ahmed Awwad
-03/05/2024 Version: 7.03
+23/05/2024 Version: 7.04
 ***********************************************************************************************************/
 var tObjectCheck,
   _allowedQuerystrings = [],
@@ -21,7 +21,7 @@ var tObjectCheck,
     ANONYMIZE_IP: !0,
     AGENCY: "",
     SUB_AGENCY: "",
-    VERSION: "20240503 v7.03 - Dual Tracking",
+    VERSION: "20240523 v7.04 - Dual Tracking",
     SITE_TOPIC: "",
     SITE_PLATFORM: "",
     SCRIPT_SOURCE: "",
@@ -104,8 +104,8 @@ tObjectCheck = window.GoogleAnalyticsObject;
 var trackerFlag = true;
 
 function _onEveryPage() {
-  _payloadInterceptor();
   _updateConfig();
+  _payloadInterceptor();
   _defineCookieDomain();
   _defineAgencyCDsValues();
   _setAllowedQS();
@@ -838,27 +838,27 @@ if (oCONFIG.YOUTUBE) {
   };
   onPlayerReady = function (event) { };
   onPlayerError = function (event) {
-    _sendEvent('video_error', { videotitle: ((event.target.playerInfo.title !== undefined) ? event.target.playerInfo.title : event.target.getVideoData().title) });
+    _sendEvent('video_error', { videotitle: ((event.target.playerInfo !== undefined) ? event.target.playerInfo.title : event.target.getVideoData().title) });
   };
   cCi = 0;
   onPlayerStateChange = function (event) {
     try {
-      var videoIndex = 0, video_id = ((event.target.playerInfo.videoData.video_id !== undefined) ? event.target.playerInfo.videoData.video_id : event.target.getVideoData().video_id);
+      var videoIndex = 0, video_id = ((event.target.playerInfo !== undefined) ? event.target.playerInfo.videoData.video_id : event.target.getVideoData().video_id);
       for (var o = 0; o < videoArray.length; o++) {
         if (videoArray[o] == video_id) {
           videoIndex = o;
         }
       }
-      var cTime = ((playerArray[videoIndex].playerInfo.currentTime !== undefined) ? Math.round(playerArray[videoIndex].playerInfo.currentTime) : Math.round(playerArray[videoIndex].getCurrentTime()));
-      var vDuration = ((playerArray[videoIndex].playerInfo.duration !== undefined) ? Math.round(playerArray[videoIndex].playerInfo.duration) : Math.round(playerArray[videoIndex].getDuration()));
+      var cTime = ((playerArray[videoIndex].playerInfo !== undefined) ? Math.round(playerArray[videoIndex].playerInfo.currentTime) : Math.round(playerArray[videoIndex].getCurrentTime()));
+      var vDuration = ((playerArray[videoIndex].playerInfo !== undefined) ? Math.round(playerArray[videoIndex].playerInfo.duration) : Math.round(playerArray[videoIndex].getDuration()));
       var p = {
         video_current_time: cTime,
         video_duration: vDuration,
         video_percent: ((cTime / vDuration) * 100).toFixed(),
         video_provider: "youtube",
-        video_title: ((playerArray[videoIndex].playerInfo.title !== undefined) ? playerArray[videoIndex].playerInfo.title : playerArray[videoIndex].getVideoData().title),
-        video_id: ((playerArray[videoIndex].playerInfo.videoData.video_id !== undefined) ? playerArray[videoIndex].playerInfo.videoData.video_id : playerArray[videoIndex].getVideoData().video_id),
-        video_url: ((playerArray[videoIndex].playerInfo.videoUrl !== undefined) ? playerArray[videoIndex].playerInfo.videoUrl : playerArray[videoIndex].getVideoUrl())
+        video_title: ((playerArray[videoIndex].playerInfo !== undefined) ? playerArray[videoIndex].playerInfo.title : playerArray[videoIndex].getVideoData().title),
+        video_id: ((playerArray[videoIndex].playerInfo !== undefined) ? playerArray[videoIndex].playerInfo.videoData.video_id : playerArray[videoIndex].getVideoData().video_id),
+        video_url: ((playerArray[videoIndex].playerInfo !== undefined) ? playerArray[videoIndex].playerInfo.videoUrl : playerArray[videoIndex].getVideoUrl())
       };
       if (event.data == YT.PlayerState.PLAYING && p.video_percent == 0) {
         _sendEvent('video_start', p);
@@ -868,23 +868,23 @@ if (oCONFIG.YOUTUBE) {
               ((100 / _milestoneController === 4 && b === 100 / _milestoneController) ? _buckets[b - 1] = { milestone: 95, triggered: false } : ((_milestoneController * b !== 100) ? _buckets[b - 1] = { milestone: _milestoneController * b, triggered: false } : ''));
             }
             setInterval(function () {
-              var cTimeP = ((playerArray[videoIndex].playerInfo.currentTime !== undefined) ? Math.round(playerArray[videoIndex].playerInfo.currentTime) : Math.round(playerArray[videoIndex].getCurrentTime()));
-              var vDurationP = ((playerArray[videoIndex].playerInfo.duration !== undefined) ? Math.round(playerArray[videoIndex].playerInfo.duration) : Math.round(playerArray[videoIndex].getDuration()));
+              var cTimeP = ((playerArray[videoIndex].playerInfo !== undefined) ? Math.round(playerArray[videoIndex].playerInfo.currentTime) : Math.round(playerArray[videoIndex].getCurrentTime()));
+              var vDurationP = ((playerArray[videoIndex].playerInfo !== undefined) ? Math.round(playerArray[videoIndex].playerInfo.duration) : Math.round(playerArray[videoIndex].getDuration()));
               var y = {
                 video_current_time: cTimeP,
                 video_duration: vDurationP,
                 video_percent: ((cTimeP / vDurationP) * 100).toFixed(),
                 video_provider: "youtube",
-                video_title: ((playerArray[videoIndex].playerInfo.title !== undefined) ? playerArray[videoIndex].playerInfo.title : playerArray[videoIndex].getVideoData().title),
-                video_id: ((playerArray[videoIndex].playerInfo.videoData.video_id !== undefined) ? playerArray[videoIndex].playerInfo.videoData.video_id : playerArray[videoIndex].getVideoData().video_id),
-                video_url: ((playerArray[videoIndex].playerInfo.videoUrl !== undefined) ? playerArray[videoIndex].playerInfo.videoUrl : playerArray[videoIndex].getVideoUrl())
+                video_title: ((playerArray[videoIndex].playerInfo !== undefined) ? playerArray[videoIndex].playerInfo.title : playerArray[videoIndex].getVideoData().title),
+                video_id: ((playerArray[videoIndex].playerInfo !== undefined) ? playerArray[videoIndex].playerInfo.videoData.video_id : playerArray[videoIndex].getVideoData().video_id),
+                video_url: ((playerArray[videoIndex].playerInfo !== undefined) ? playerArray[videoIndex].playerInfo.videoUrl : playerArray[videoIndex].getVideoUrl())
               };
               if (y.video_percent <= _buckets[_buckets.length - 1] && cCi < _buckets.length) {
                 if (y.video_percent >= _buckets[cCi].milestone && !_buckets[cCi].triggered) {
                   _buckets[cCi].triggered = true; y.video_percent = _buckets[cCi].milestone; y.video_current_time = Math.round((y.video_duration / _buckets.length) * (cCi + 1)); _sendEvent("video_progress", y); cCi++;
                 }
               }
-            }, ((playerArray[videoIndex].playerInfo.duration !== undefined) ? Math.round(playerArray[videoIndex].playerInfo.duration) : Math.round(playerArray[videoIndex].getDuration())) / _buckets.length);
+            }, ((playerArray[videoIndex].playerInfo !== undefined) ? Math.round(playerArray[videoIndex].playerInfo.duration) : Math.round(playerArray[videoIndex].getDuration())) / _buckets.length);
           }]);
           ytUtils[ytUtils.length - 1][1](videoIndex);
         }
@@ -926,8 +926,9 @@ function _payloadInterceptor() {
     window._isRedacted = !0;
     try {
       var pl = window.navigator.sendBeacon;
+      var ga4_props = oCONFIG.GWT_GA4ID.join("|");
       window.navigator.sendBeacon = function () {
-        if (arguments && arguments[0].match(/google-analytics\.com.*v\=2\&/i)) {
+        if (arguments && arguments[0].match(/google-analytics\.com.*v\=2\&/i) && arguments[0].match(new RegExp(ga4_props))) {
           var endpoint = arguments[0].split('?')[0], query = arguments[0].split('?')[1];
           var beacon = {
             endpoint: endpoint, query: _piiRedactor(query, "ga4"), events: []
@@ -957,7 +958,7 @@ function _piiRedactor(payload, type) {
     regex: /[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/gi
   }, {
     name: 'TEL',
-    regex: /((tel|(tele)?phone|mob(ile)?|cell(ular)?)\=)?((\+\d{1,2}[\s\.\-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s\.\-]?\d{4})([^\&\s\?\/]*)/gi
+    regex: /((tel|(tele)?phone|mob(ile)?|cell(ular)?)\=)?((\+\d{1,2}[\s\.\-]?)?\d{3}[\s\.\-]\d{3}[\s\.\-]\d{4})([^\&\s\?\/]*)/gi
   }, {
     name: 'NAME',
     regex: /^((first|last|middle|sur|f|l)([\-\_])?)?name\=([^\&\s\?\/]*)/ig
@@ -966,28 +967,28 @@ function _piiRedactor(payload, type) {
     regex: /(((confirm([\-\_])?)?password)|passwd|pwd)\=([^\&\s\?\/]*)/ig
   }, {
     name: 'ZIP',
-    regex: /((postcode=)|(zipcode=)|(zip=))([^\&\s\?\/]*)/gi
+    regex: /(post(al)?[\s]?code|zip[\s]?code|zip)\=([^\&\s\?\/]*)/gi
   }, {
     name: 'ADDRESS',
     regex: /add(ress)?([1-2])?\=([^\&\s\?\/]*)/ig
   }, {
     name: 'SSN',
-    regex: /((full)?(([\-\_])?)?ssn\=)?(\d{3}([\s\.\-]|%20)?\d{2}([\s\.\-]|%20)?\d{4})([^\&\s\?\/]*)/ig
+    regex: /((full)?(([\-\_])?)?ssn\=)?(\d{3}([\s\.\-\+]|%20)\d{2}([\s\.\-\+]|%20)\d{4})([^\&\s\?\/]*)/ig
   }, {
     name: 'DOB',
-    regex: /(((birth)?date|dob)\=)?(19|20)\d\d([\s\.\-]|%20)(0?[1-9]|1[012])([\s\.\-]|%20)(0?[1-9]|[12][0-9]|3[01])([^\&\s\?\/]*)/ig,
+    regex: /(((birth)?date|dob)\=)?(19|20)\d\d([\s\.\/]|%20)(0?[1-9]|1[012])([\s\.\/]|%20)(0?[1-9]|[12][0-9]|3[01])([^\&\s\?\/]*)/ig,
     format: 'YYYY-MM-DD'
   }, {
     name: 'DOB',
-    regex: /(((birth)?date|dob)\=)?(19|20)\d\d([\s\.\-]|%20)(0?[1-9]|[12][0-9]|3[01])([\s\.\-]|%20)(0?[1-9]|1[012])([^\&\s\?\/]*)/ig,
+    regex: /(((birth)?date|dob)\=)?(19|20)\d\d([\s\.\/]|%20)(0?[1-9]|[12][0-9]|3[01])([\s\.\/]|%20)(0?[1-9]|1[012])([^\&\s\?\/]*)/ig,
     format: 'YYYY-DD-MM'
   }, {
     name: 'DOB',
-    regex: /(((birth)?date|dob)\=)?(0?[1-9]|[12][0-9]|3[01])([\s\.\-]|%20)(0?[1-9]|1[012])([\s\.\-]|%20)(19|20)\d\d([^\&\s\?\/]*)/ig,
+    regex: /(((birth)?date|dob)\=)?(0?[1-9]|[12][0-9]|3[01])([\s\.\/]|%20)(0?[1-9]|1[012])([\s\.\/]|%20)(19|20)\d\d([^\&\s\?\/]*)/ig,
     format: 'DD-MM-YYYY'
   }, {
     name: 'DOB',
-    regex: /(((birth)?date|dob)\=)?(0?[1-9]|1[012])([\s\.\-]|%20)(0?[1-9]|[12][0-9]|3[01])([\s\.\-]|%20)(19|20)\d\d([^\&\s\?\/]*)/ig,
+    regex: /(((birth)?date|dob)\=)?(0?[1-9]|1[012])([\s\.\/]|%20)(0?[1-9]|[12][0-9]|3[01])([\s\.\/]|%20)(19|20)\d\d([^\&\s\?\/]*)/ig,
     format: 'MM-DD-YYYY'
   }];
   try {
@@ -1026,6 +1027,36 @@ function _piiRedactor(payload, type) {
         piiRegex.forEach(function (pii) {
           _val = _val.replace(pii.regex, '[REDACTED_' + pii.name + ']');
         });
+        if ((/dl|dp|dr|dt|ep.search_term/.test(_param[0]))) {
+          var new_val = ((_val.indexOf("?") > 0 && /dl|dp|dr/.test(_param[0])) ? _val.split("?")[1] : (_val.indexOf("?") < 0 && /dl|dp|dr/.test(_param[0]))? null : _val);
+          if(new_val!== null){
+            piiRegex.forEach(function (_pii) {
+              if (_pii.name == "TEL") {
+                _pii.regex = /((tel|(tele)?phone|mob(ile)?|cell(ular)?)\=)?((\+\d{1,2}[\s\.\-]?)?\d{3}[\s\.\-]?\d{3}[\s\.\-]?\d{4})([^\&\s\?\/]*)/gi;
+                new_val = new_val.replace(_pii.regex, '[REDACTED_' + _pii.name + ']');
+                _val = ((_val.indexOf("?") > 0 && /dl|dp|dr/.test(_param[0])) ? _val.split("?")[0]+ "?" + new_val : new_val);
+                //resetting TEL regex
+                _pii.regex = /((tel|(tele)?phone|mob(ile)?|cell(ular)?)\=)?((\+\d{1,2}[\s\.\-]?)?\d{3}[\s\.\-]\d{3}[\s\.\-]\d{4})([^\&\s\?\/]*)/gi;
+              }
+              else if (_pii.name == "SSN") {
+                _pii.regex = /((full)?(([\-\_])?)?ssn\=)?(\d{3}([\s\.\-\+]|%20)?\d{2}([\s\.\-\+]|%20)?\d{4})([^\&\s\?\/]*)/ig;
+                new_val = new_val.replace(_pii.regex, '[REDACTED_' + _pii.name + ']');
+                _val = ((_val.indexOf("?") > 0 && /dl|dp|dr/.test(_param[0])) ? _val.split("?")[0]+ "?" + new_val : new_val);
+                //resetting SSN regex
+                _pii.regex = /((full)?(([\-\_])?)?ssn\=)?(\d{3}([\s\.\-\+]|%20)\d{2}([\s\.\-\+]|%20)\d{4})([^\&\s\?\/]*)/ig;
+              }
+              else if (_pii.name == "DOB") {
+                var ra = _pii.regex.toString().replace(/\./g, "\.\\-" ).replace("\/", "") ; _pii.regex = new RegExp(ra.substring(0, ra.length-3)); 
+                new_val = new_val.replace(_pii.regex, '[REDACTED_' + _pii.name + ']');
+                _val = ((_val.indexOf("?") > 0 && /dl|dp|dr/.test(_param[0])) ? _val.split("?")[0]+ "?" + new_val : new_val);
+                //resetting DOB regex
+                
+                ra = _pii.regex.toString().replace(/\\-/g, "" ).replace("\/", "") ; _pii.regex = new RegExp(ra); 
+              }
+            });
+
+          }
+        }
         _param[1] = encodeURIComponent(_val.replace(/\?$/, '')) || _val.replace(/\?$/, '');
         _hitPayloadParts[i] = _param.join('=');
       }
@@ -1040,6 +1071,20 @@ function _initIdAssigner() {
     var c = a[b].getAttribute("id");
     (null !== c && "" !== c && void 0 !== c) ||
       a[b].setAttribute("id", "anch_" + b);
+  }
+}
+
+function _initBannerTracker() {
+  try {
+    var acord = document.querySelector('section.usa-banner button.usa-accordion__button');
+    if (acord) {
+      acord.addEventListener('click', function (e) {
+        gas("send", "event", "official USA site banner", "click", e.target.textContent.trim(), 0, false);
+      });
+    }
+    
+  } catch (error) {
+    
   }
 }
 // UA customTask 
@@ -1070,7 +1115,7 @@ function _scrubbedURL(z) {
   RegExp.escape = function (s) { return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'); };
   var n = new RegExp(`^(https?:\\/\\/(www\\.)?)?${RegExp.escape(document.location.hostname.replace(/^www\\./, ""))}`, "ig"),
     t = "",
-    o = ((n.test(z)) ? z : document.location.protocol + "//" + document.location.hostname + z).toLowerCase(),
+    o = ((n.test(z)) ? z : document.location.protocol + "//" + document.location.hostname + z),
     a = o.split("?")[0],
     r = o.split("?").length > 1
       ? (o
@@ -1107,6 +1152,7 @@ function _setUpTrackers() {
   oCONFIG.ENHANCED_LINK ? _initIdAssigner() : "";
   oCONFIG.AUTOTRACKER ? _initAutoTracker() : "";
   oCONFIG.YOUTUBE ? _initYouTubeTracker() : "";
+  _initBannerTracker();
 }
 
 function _setUpTrackersIfReady() {
