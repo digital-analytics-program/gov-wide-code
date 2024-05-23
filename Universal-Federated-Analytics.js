@@ -961,7 +961,7 @@ function _piiRedactor(payload, type) {
     regex: /((tel|(tele)?phone|mob(ile)?|cell(ular)?)\=)?((\+\d{1,2}[\s\.\-]?)?\d{3}[\s\.\-]\d{3}[\s\.\-]\d{4})([^\&\s\?\/]*)/gi
   }, {
     name: 'NAME',
-    regex: /^((first|last|middle|sur|f|l)([\-\_])?)?name\=([^\&\s\?\/]*)/ig
+    regex: /((first|last|middle|sur|f|l)([\-\_])?)?name\=([^\&\s\?\/]*)/ig
   }, {
     name: 'PASSWORD',
     regex: /(((confirm([\-\_])?)?password)|passwd|pwd)\=([^\&\s\?\/]*)/ig
@@ -1027,7 +1027,7 @@ function _piiRedactor(payload, type) {
         piiRegex.forEach(function (pii) {
           _val = _val.replace(pii.regex, '[REDACTED_' + pii.name + ']');
         });
-        if ((/dl|dp|dr|dt|ep.search_term/.test(_param[0]))) {
+        if ( (/dl|dp|dr|dt|ep\.(search_term|link_(text|url)|event_(category|action|label))/.test(_param[0]))) {
           var new_val = ((_val.indexOf("?") > 0 && /dl|dp|dr/.test(_param[0])) ? _val.split("?")[1] : (_val.indexOf("?") < 0 && /dl|dp|dr/.test(_param[0]))? null : _val);
           if(new_val!== null){
             piiRegex.forEach(function (_pii) {
