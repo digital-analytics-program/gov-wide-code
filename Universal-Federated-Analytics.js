@@ -9,19 +9,19 @@
 Copyright 2024 by Cardinal Path.
 Dual Tracking Federated Analytics: Google Analytics Government Wide Site Usage Measurement.
 Author: Ahmed Awwad
-23/05/2024 Version: 7.04
+24/05/2024 Version: 7.05
 ***********************************************************************************************************/
 var tObjectCheck,
   _allowedQuerystrings = [],
   isSearch = false,
   oCONFIG = {
     GWT_UAID: ["UA-33523145-1"],
-    GWT_GA4ID: ["G-CSLL4ZEK4L"],
+    GWT_GA4ID: ["G-CSLL4ZEK4L"], 
     FORCE_SSL: !0,
     ANONYMIZE_IP: !0,
     AGENCY: "",
     SUB_AGENCY: "",
-    VERSION: "20240523 v7.04 - Dual Tracking",
+    VERSION: "20240524 v7.05 - Dual Tracking",
     SITE_TOPIC: "",
     SITE_PLATFORM: "",
     SCRIPT_SOURCE: "",
@@ -838,7 +838,7 @@ if (oCONFIG.YOUTUBE) {
   };
   onPlayerReady = function (event) { };
   onPlayerError = function (event) {
-    _sendEvent('video_error', { videotitle: ((event.target.playerInfo !== undefined) ? event.target.playerInfo.title : event.target.getVideoData().title) });
+    _sendEvent('video_error', { videotitle: ((event.target.playerInfo !== undefined) ? event.target.playerInfo.videoData.title : event.target.getVideoData().title) });
   };
   cCi = 0;
   onPlayerStateChange = function (event) {
@@ -856,7 +856,7 @@ if (oCONFIG.YOUTUBE) {
         video_duration: vDuration,
         video_percent: ((cTime / vDuration) * 100).toFixed(),
         video_provider: "youtube",
-        video_title: ((playerArray[videoIndex].playerInfo !== undefined) ? playerArray[videoIndex].playerInfo.title : playerArray[videoIndex].getVideoData().title),
+        video_title: ((playerArray[videoIndex].playerInfo !== undefined) ? playerArray[videoIndex].playerInfo.videoData.title : playerArray[videoIndex].getVideoData().title),
         video_id: ((playerArray[videoIndex].playerInfo !== undefined) ? playerArray[videoIndex].playerInfo.videoData.video_id : playerArray[videoIndex].getVideoData().video_id),
         video_url: ((playerArray[videoIndex].playerInfo !== undefined) ? playerArray[videoIndex].playerInfo.videoUrl : playerArray[videoIndex].getVideoUrl())
       };
@@ -875,7 +875,7 @@ if (oCONFIG.YOUTUBE) {
                 video_duration: vDurationP,
                 video_percent: ((cTimeP / vDurationP) * 100).toFixed(),
                 video_provider: "youtube",
-                video_title: ((playerArray[videoIndex].playerInfo !== undefined) ? playerArray[videoIndex].playerInfo.title : playerArray[videoIndex].getVideoData().title),
+                video_title: ((playerArray[videoIndex].playerInfo !== undefined) ? playerArray[videoIndex].playerInfo.videoData.title : playerArray[videoIndex].getVideoData().title),
                 video_id: ((playerArray[videoIndex].playerInfo !== undefined) ? playerArray[videoIndex].playerInfo.videoData.video_id : playerArray[videoIndex].getVideoData().video_id),
                 video_url: ((playerArray[videoIndex].playerInfo !== undefined) ? playerArray[videoIndex].playerInfo.videoUrl : playerArray[videoIndex].getVideoUrl())
               };
@@ -1046,7 +1046,7 @@ function _piiRedactor(payload, type) {
                 _pii.regex = /((full)?(([\-\_])?)?ssn\=)?(\d{3}([\s\.\-\+]|%20)\d{2}([\s\.\-\+]|%20)\d{4})([^\&\s\?\/]*)/ig;
               }
               else if (_pii.name == "DOB") {
-                var ra = _pii.regex.toString().replace(/\./g, "\.\\-" ).replace("\/", "") ; _pii.regex = new RegExp(ra.substring(0, ra.length-3)); 
+                var ra = _pii.regex.toString().replace(/\./g, "\\.\\-" ).replace("\/", "") ; _pii.regex = new RegExp(ra.substring(0, ra.length-3)); 
                 new_val = new_val.replace(_pii.regex, '[REDACTED_' + _pii.name + ']');
                 _val = ((_val.indexOf("?") > 0 && /dl|dp|dr/.test(_param[0])) ? _val.split("?")[0]+ "?" + new_val : new_val);
                 //resetting DOB regex
