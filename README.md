@@ -94,7 +94,7 @@ The Digital Analytics Program Javascript code must be applied to public-facing w
 
 #### Authenticated or "Priviledged" Pages
 
-For the time being, do not apply DAP script to any webpages behind authentication or log-in, even if the website as a whole is public-facing. However, agencies should continue to apply DAP script to log-in pages that serve as the entry point to authenticated pages on public-facing websites. This policy was determined by OMB in collaboration with the DAP team.
+Agencies are expected to add DAP code to sign-in pages that serve as the entry point to authenticated content on public-facing sites. Implementation of the DAP code beyond this entry point on authenticated pages is permitted on a case-by-case basis only, with DAP's approval and testing as a prerequisite.
 
 This decision tree may help:
 
