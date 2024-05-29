@@ -98,7 +98,7 @@ Agencies are expected to add DAP code to sign-in pages that serve as the entry p
 
 This decision tree may help:
 
-![Decision Tree](/documentation/Copy%20of%20DAP%20Decision%20Tree.png)
+![Decision Tree](/documentation/DAP%20Code%20Placement%20Decision%20Tree.png)
 
 #### Access controls
 
