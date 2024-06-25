@@ -9,41 +9,42 @@
 Copyright 2024 by Cardinal Path.
 Dual Tracking Federated Analytics: Google Analytics Government Wide Site Usage Measurement.
 Author: Ahmed Awwad
-24/05/2024 Version: 7.05
+24/06/2024 Version: 8
 ***********************************************************************************************************/
 var tObjectCheck,
   _allowedQuerystrings = [],
   isSearch = false,
   oCONFIG = {
-    GWT_UAID: ["UA-33523145-1"],
-    GWT_GA4ID: ["G-CSLL4ZEK4L"], 
+    GWT_GA4ID: ["G-CSLL4ZEK4L"],
     FORCE_SSL: !0,
     ANONYMIZE_IP: !0,
     AGENCY: "",
     SUB_AGENCY: "",
-    VERSION: "20240524 v7.05 - Dual Tracking",
+    VERSION: "20240624 v8 - GA4",
     SITE_TOPIC: "",
     SITE_PLATFORM: "",
     SCRIPT_SOURCE: "",
     URL_PROTOCOL: location.protocol,
     USE_MAIN_CUSTOM_DIMENSIONS: !0,
-    MAIN_AGENCY_CUSTOM_DIMENSION_SLOT: "dimension1",
-    MAIN_SUBAGENCY_CUSTOM_DIMENSION_SLOT: "dimension2",
-    MAIN_CODEVERSION_CUSTOM_DIMENSION_SLOT: "dimension3",
-    MAIN_SITE_TOPIC_CUSTOM_DIMENSION_SLOT: "dimension4",
-    MAIN_SITE_PLATFORM_CUSTOM_DIMENSION_SLOT: "dimension5",
-    MAIN_SCRIPT_SOURCE_URL_CUSTOM_DIMENSION_SLOT: "dimension6",
-    MAIN_URL_PROTOCOL_CUSTOM_DIMENSION_SLOT: "dimension7",
-    MAIN_INTERACTION_TYPE_CUSTOM_DIMENSION_SLOT: "dimension8",
+    MAIN_AGENCY_DIMENSION: "agency",
+    MAIN_SUBAGENCY_DIMENSION: "subagency",
+    MAIN_CODEVERSION_DIMENSION: "version",
+    MAIN_SITE_TOPIC_DIMENSION: "site_topic",
+    MAIN_SITE_PLATFORM_DIMENSION: "site_platform",
+    MAIN_SCRIPT_SOURCE_URL_DIMENSION: "script_source",
+    MAIN_URL_PROTOCOL_DIMENSION: "protocol",
+    MAIN_INTERACTION_TYPE_DIMENSION: "interaction_type",
+    MAIN_USING_PARALLEL_DIMENSION: "using_parallel_tracker",
     USE_PARALLEL_CUSTOM_DIMENSIONS: !1,
-    PARALLEL_AGENCY_CUSTOM_DIMENSION_SLOT: "dimension1",
-    PARALLEL_SUBAGENCY_CUSTOM_DIMENSION_SLOT: "dimension2",
-    PARALLEL_CODEVERSION_CUSTOM_DIMENSION_SLOT: "dimension3",
-    PARALLEL_SITE_TOPIC_CUSTOM_DIMENSION_SLOT: "dimension4",
-    PARALLEL_SITE_PLATFORM_CUSTOM_DIMENSION_SLOT: "dimension5",
-    PARALLEL_SCRIPT_SOURCE_URL_CUSTOM_DIMENSION_SLOT: "dimension6",
-    PARALLEL_URL_PROTOCOL_CUSTOM_DIMENSION_SLOT: "dimension7",
-    PARALLEL_INTERACTION_TYPE_CUSTOM_DIMENSION_SLOT: "dimension8",
+    PARALLEL_AGENCY_DIMENSION: "agency",
+    PARALLEL_SUBAGENCY_DIMENSION: "subagency",
+    PARALLEL_CODEVERSION_DIMENSION: "version",
+    PARALLEL_SITE_TOPIC_DIMENSION: "site_topic",
+    PARALLEL_SITE_PLATFORM_DIMENSION: "site_platform",
+    PARALLEL_SCRIPT_SOURCE_URL_DIMENSION: "script_source",
+    PARALLEL_URL_PROTOCOL_DIMENSION: "protocol",
+    PARALLEL_INTERACTION_TYPE_DIMENSION: "interaction_type",
+    PARALLEL_USING_PARALLEL_DIMENSION: "using_parallel_tracker",
     COOKIE_DOMAIN: location.hostname.replace(/^www\./, "").toLowerCase(),
     COOKIE_TIMEOUT: 63072e3,
     SEARCH_PARAMS: "q|query|nasaInclude|k|querytext|keys|qt|search_input|search|globalSearch|goog|s|gsearch|search_keywords|SearchableText|sp_q|qs|psnetsearch|locate|lookup|search_api_views_fulltext|keywords|request|_3_keywords|searchString",
@@ -52,64 +53,42 @@ var tObjectCheck,
     AUTOTRACKER: !0,
     EXTS: "doc|docx|xls|xlsx|xlsm|ppt|pptx|exe|zip|pdf|js|txt|csv|dxf|dwgd|rfa|rvt|dwfx|dwg|wmv|jpg|msi|7z|gz|tgz|wma|mov|avi|mp3|mp4|csv|mobi|epub|swf|rar",
     SUBDOMAIN_BASED: !0,
-    PUA_NAME: "GSA_ENOR",
     GA4_NAME: "GSA_GA4_ENOR",
     USE_CUSTOM_URL: !1,
-    USE_CUSTOM_TITLE: !1
+    USE_CUSTOM_TITLE: !1,
+    USING_PARALLEL_TRACKER: "no",
+    ACTIVATE_DEV: !1
   };
-if (document.location.href.match(/([?&])(dap-dev-env)([^&$]*)/i)) {
-  oCONFIG.GWT_UAID[0] = "UA-33523145-1";
-  oCONFIG.GWT_GA4ID[0] = "G-9TNNMGP8WJ"; //Test Digital Analytics Program GA4
-}
+
+  _updateConfig();
+  _setEnvironment();
+
 //*********GA4************
 var head = document.getElementsByTagName("head").item(0);
 var GA4Object = document.createElement("script");
 GA4Object.setAttribute("type", "text/javascript");
 GA4Object.setAttribute(
   "src",
-  "https://www.googletagmanager.com/gtag/js?id=" + oCONFIG.GWT_GA4ID[0]
+  "https://www.googletagmanager.com/gtag/js?id=" + oCONFIG.GWT_GA4ID[0]+ "&l=dapDL"
 );
 head.appendChild(GA4Object);
-
-window.dataLayer = window.dataLayer || [];
+window.dapDL = window.dapDL || [];
 function gtag() {
-  dataLayer.push(arguments);
+  dapDL.push(arguments);
 }
 gtag("js", new Date());
-gtag('set', 'cookie_flags', 'SameSite=Strict;Secure');
+gtag('set', {'cookie_flags': 'SameSite=Strict;Secure', 'transport_type': 'beacon'});
 //*********GA4************
 
-"undefined" === typeof window.GoogleAnalyticsObject &&
-  (function (a, b, c, d, f, e, h) {
-    a.GoogleAnalyticsObject = f;
-    a[f] =
-      a[f] ||
-      function () {
-        (a[f].q = a[f].q || []).push(arguments);
-      };
-    a[f].l = 1 * new Date();
-    e = b.createElement(c);
-    h = b.getElementsByTagName(c)[0];
-    e.async = 1;
-    e.src = d;
-    h.parentNode.insertBefore(e, h);
-  })(
-    window,
-    document,
-    "script",
-    "https://www.google-analytics.com/analytics.js",
-    "ga"
-  );
-tObjectCheck = window.GoogleAnalyticsObject;
-var trackerFlag = true;
+
 
 function _onEveryPage() {
-  _updateConfig();
   _payloadInterceptor();
   _defineCookieDomain();
   _defineAgencyCDsValues();
   _setAllowedQS();
-  createTracker(trackerFlag);
+  createTracker();
+  
 }
 _onEveryPage();
 
@@ -142,6 +121,12 @@ function _defineAgencyCDsValues() {
     oCONFIG.SITE_PLATFORM || "unspecified:" + oCONFIG.COOKIE_DOMAIN;
 }
 
+function _setEnvironment(){
+  if (document.location.href.match(/([?&])(dap-dev-env)([^&$]*)/i) || oCONFIG.ACTIVATE_DEV) {
+    oCONFIG.GWT_GA4ID[0] = "G-9TNNMGP8WJ"; //Test Digital Analytics Program GA4
+  }
+}
+
 function _cleanBooleanParam(a) {
   switch (a.toString().toLowerCase()) {
     case "true":
@@ -159,27 +144,17 @@ function _cleanBooleanParam(a) {
   }
 }
 
-function _isValidUANum(a) {
-  a = a.toLowerCase();
-  a = a.match(/^ua\-([0-9]+)\-[0-9]+$/);
-  return null !== a && 0 < a.length && a[0] !== oCONFIG.GWT_UAID[0].toLowerCase();
-}
-
 function _isValidGA4Num(a) {
   a = a.toLowerCase();
   a = a.match(/^g\-([0-9a-z])+$/);
   return null !== a && 0 < a.length && a[0] !== oCONFIG.GWT_GA4ID[0].toLowerCase();
 }
 
-function _cleanDimensionValue(a) {
+var d_c=1;
+function _cleanGA4Value(t, a) {
   try {
-    pattern = /^dimension([1-9]|[1-9][0-9]|1([0-9][0-9])|200)$/;
-    if (pattern.test(a)) return a;
-    if (null !== a.match(/\d+$/g)) {
-      var b = "dimension" + a.match(/\d+$/g)[0];
-      if (pattern.test(b)) return b;
-    }
-    return "";
+    a = a.replace(/\s/g, '_').replace(/([^\w]+)/g, '').match(/[A-Za-z]\w*$/ig);
+    return ((null !== a)? a[0].toLowerCase() : t==="d"? "custom_dimension_"+d_c++ : "dap_event");
   } catch (c) { }
 }
 
@@ -200,13 +175,13 @@ function _updateConfig() {
       (_value = _keyValuePair.split("=")[1]),
       _key)
     ) {
-      case "pua":
+       case "pua":
         for (var c = _value.split(","), d = 0; d < c.length; d++)
-          _isValidUANum(c[d]) && oCONFIG.GWT_UAID.push(c[d].toUpperCase());
-        break;
+          _isValidGA4Num(c[d]) && ( oCONFIG.GWT_GA4ID.push(c[d].toUpperCase()), oCONFIG.USING_PARALLEL_TRACKER = "pua" );
+        break; 
       case "pga4":
         for (var c = _value.split(","), d = 0; d < c.length; d++)
-          _isValidGA4Num(c[d]) && oCONFIG.GWT_GA4ID.push(c[d].toUpperCase());
+          _isValidGA4Num(c[d]) && ( oCONFIG.GWT_GA4ID.push(c[d].toUpperCase()), oCONFIG.USING_PARALLEL_TRACKER = "pga4" );
         break;
       case "agency":
         oCONFIG.AGENCY = _value.toUpperCase();
@@ -235,45 +210,50 @@ function _updateConfig() {
         if (!0 === _value || !1 === _value)
           oCONFIG.USE_CUSTOM_TITLE = _value;
         break;
+      case "dapdev":
+        _value = _cleanBooleanParam(_value);
+        if (!0 === _value || !1 === _value)
+          oCONFIG.ACTIVATE_DEV = _value;
+        break;
       case "palagencydim":
-        _value = _cleanDimensionValue(_value);
+        _value = _cleanGA4Value("d", _value);
         "" !== _value &&
-          (oCONFIG.PARALLEL_AGENCY_CUSTOM_DIMENSION_SLOT = _value);
+          (oCONFIG.PARALLEL_AGENCY_DIMENSION = _value);
         break;
       case "palsubagencydim":
-        _value = _cleanDimensionValue(_value);
+        _value = _cleanGA4Value("d", _value);
         "" !== _value &&
-          (oCONFIG.PARALLEL_SUBAGENCY_CUSTOM_DIMENSION_SLOT = _value);
+          (oCONFIG.PARALLEL_SUBAGENCY_DIMENSION = _value);
         break;
       case "palversiondim":
-        _value = _cleanDimensionValue(_value);
+        _value = _cleanGA4Value("d", _value);
         "" !== _value &&
-          (oCONFIG.PARALLEL_CODEVERSION_CUSTOM_DIMENSION_SLOT = _value);
+          (oCONFIG.PARALLEL_CODEVERSION_DIMENSION = _value);
         break;
       case "paltopicdim":
-        _value = _cleanDimensionValue(_value);
+        _value = _cleanGA4Value("d", _value);
         "" !== _value &&
-          (oCONFIG.PARALLEL_SITE_TOPIC_CUSTOM_DIMENSION_SLOT = _value);
+          (oCONFIG.PARALLEL_SITE_TOPIC_DIMENSION = _value);
         break;
       case "palplatformdim":
-        _value = _cleanDimensionValue(_value);
+        _value = _cleanGA4Value("d", _value);
         "" !== _value &&
-          (oCONFIG.PARALLEL_SITE_PLATFORM_CUSTOM_DIMENSION_SLOT = _value);
+          (oCONFIG.PARALLEL_SITE_PLATFORM_DIMENSION = _value);
         break;
       case "palscriptsrcdim":
-        _value = _cleanDimensionValue(_value);
+        _value = _cleanGA4Value("d", _value);
         "" !== _value &&
-          (oCONFIG.PARALLEL_SCRIPT_SOURCE_URL_CUSTOM_DIMENSION_SLOT = _value);
+          (oCONFIG.PARALLEL_SCRIPT_SOURCE_URL_DIMENSION = _value);
         break;
       case "palurlprotocoldim":
-        _value = _cleanDimensionValue(_value);
+        _value = _cleanGA4Value("d", _value);
         "" !== _value &&
-          (oCONFIG.PARALLEL_URL_PROTOCOL_CUSTOM_DIMENSION_SLOT = _value);
+          (oCONFIG.PARALLEL_URL_PROTOCOL_DIMENSION = _value);
         break;
       case "palinteractiontypedim":
-        _value = _cleanDimensionValue(_value);
+        _value = _cleanGA4Value("d", _value);
         "" !== _value &&
-          (oCONFIG.PARALLEL_INTERACTION_TYPE_CUSTOM_DIMENSION_SLOT = _value);
+          (oCONFIG.PARALLEL_INTERACTION_TYPE_DIMENSION = _value);
         break;
       case "cto":
         oCONFIG.COOKIE_TIMEOUT = parseInt(_value) * 2628000;		// = 60 * 60 * 24 * 30.4166666666667;
@@ -303,38 +283,7 @@ function _updateConfig() {
     }
 }
 
-function _sendCustomDimensions(a, b) {
-  if (0 < a.length && "" !== b && void 0 !== b) {
-    tObjectCheck !== window.GoogleAnalyticsObject && createTracker(!1);
-    for (var c = 0; c < oCONFIG.GWT_UAID.length; c++)
-      if ("dimension0" !== a[c])
-        try {
-          window[window.GoogleAnalyticsObject](
-            oCONFIG.PUA_NAME + c + ".set",
-            a[c],
-            b
-          );
-        } catch (d) { }
-  }
-}
-
-function _sendCustomMetrics(a, b) {
-  if (0 < a.length && "" !== b && void 0 !== b) {
-    tObjectCheck != window.GoogleAnalyticsObject && createTracker(!1);
-    for (var c = 0; c < oCONFIG.GWT_UAID.length; c++)
-      if ("metric0" !== a[c])
-        try {
-          window[window.GoogleAnalyticsObject](
-            oCONFIG.PUA_NAME + c + ".set",
-            a[c],
-            b
-          );
-        } catch (d) { }
-  }
-}
-
 function _sendEvent(a, b) {
-  !/^(page_view|view_search_results)$/i.test(a) && _mapGA4toUA(a, b);
   var send_to = "";
   for (var g = 0; g < oCONFIG.GWT_GA4ID.length; g++) {
     try {
@@ -342,125 +291,32 @@ function _sendEvent(a, b) {
     }
     catch (er) { }
   }
-  b.send_to = send_to.replace(/.$/, "");
-  b.event_name_dimension = a;
-  gtag("event", a, b);
+  var c = _piiRedactor(_objToQuery(b), "json");
+  c = _queryToJSON(c);
+  c = _unflattenJSON(c);
+  c.send_to = send_to.replace(/.$/, "");
+  c.event_name_dimension = a;
+  gtag("event", a, c); 
 }
 
-function _mapGA4toUA(en, pa) {
-  var a, b, c, d, f, e;
-  (c = pa.link_url),
-    (d = pa.event_value ? pa.event_value : 0),
-    (f = pa.non_interaction || !1),
-    (e = pa.interaction_type);
-  switch (en) {
-    case "file_download":
-      pa.outbound ? (a = "Outbound Downloads") : (a = "Download");
-      b = pa.file_extension;
-      break;
-    case "email_click":
-      pa.outbound ? (a = "Outbound MailTo") : (a = "Mailto");
-      b = pa.link_url;
-      c = "";
-      break;
-    case "click":
-      a = "Outbound";
-      b = pa.link_domain;
-      c = pa.link_url.split(pa.link_domain)[1];
-      break;
-    case "telephone_click":
-      a = "Telephone Clicks";
-      b = pa.link_url;
-      c = "";
-      break;
-    case "video_start":
-      a = "YouTube Video";
-      b = "play";
-      c = pa.video_url;
-      break;
-    case "video_play":
-      a = "YouTube Video";
-      b = "play";
-      c = pa.video_url;
-      break;
-    case "video_pause":
-      a = "YouTube Video";
-      b = "pause";
-      c = pa.video_url;
-      break;
-    case "video_progress":
-      a = "YouTube Video";
-      b = String(pa.video_percent) + "%";
-      c = pa.video_url;
-      break;
-    case "video_complete":
-      a = "YouTube Video";
-      b = "finish";
-      c = pa.video_url;
-      break;
-    case "dap_event":
-      a = pa.event_category;
-      b = pa.event_action;
-      c = pa.event_label;
-      break;
-    default:
-      break;
-  }
-
-  if ("" !== a && void 0 !== a && "" !== b && void 0 !== b) {
-    var h = oCONFIG.MAIN_INTERACTION_TYPE_CUSTOM_DIMENSION_SLOT;
-    tObjectCheck !== window.GoogleAnalyticsObject && createTracker(!1);
-    for (var g = 0; g < oCONFIG.GWT_UAID.length; g++)
-      try {
-        0 < g &&
-          (!0 === oCONFIG.USE_PARALLEL_CUSTOM_DIMENSIONS
-            ? (h = oCONFIG.PARALLEL_INTERACTION_TYPE_CUSTOM_DIMENSION_SLOT)
-            : (e = void 0)),
-          window[window.GoogleAnalyticsObject](
-            oCONFIG.PUA_NAME + g + ".set",
-            h,
-            e
-          ),
-          window[window.GoogleAnalyticsObject](
-            oCONFIG.PUA_NAME + g + ".send",
-            "event",
-            a,
-            b,
-            void 0 !== c ? c : "",
-            "" === d && isNaN(d) && void 0 === d ? 0 : parseInt(d),
-            {
-              nonInteraction: f,
-            }
-          );
-      } catch (k) { }
-  }
-}
-
-function _sendPageview(a, b) {
-  if ("" !== a && void 0 !== a) {
-    var ur = _URIHandler(_scrubbedURL(a)).split(/[#]/)[0];
-    tObjectCheck !== window.GoogleAnalyticsObject && createTracker(!1);
-    for (var c = 0; c < oCONFIG.GWT_UAID.length; c++) {
-      try {
-        window[window.GoogleAnalyticsObject](
-          oCONFIG.PUA_NAME + c + ".send",
-          "pageview",
-          {
-            page: ur.split(location.hostname)[1],
-            title: "" !== b || void 0 !== b ? b : document.title
-          }
-        );
-      } catch (d) { }
-    }
-
-    _sendEvent("page_view", {
-      page_location: ur,
-      page_title: "" !== b || void 0 !== b ? b : document.title,
-      ignore_referrer: (_isExcludedReferrer() ? true : false)
-    });
-
-    _sendViewSearchResult(ur);
-
+function gas4(a, b) {
+  if (void 0 !== a && "" !== a && void 0 !== b && 'object' === typeof b) {
+    a = _cleanGA4Value("e", a);
+      if ("page_view" === a.toLowerCase())
+          try {
+              if(Object.keys(b).length !== 0){
+                var ur = ((b.page_location)? b.page_location: location.href);
+                  b.page_location = _URIHandler(_scrubbedURL(ur)).split(/[#]/)[0];
+                  b.page_title = ((b.page_title) ? b.page_title : document.title);
+                  _sendEvent("page_view", b), ((isSearch)?(_sendViewSearchResult({search_term: isSearch})) : '');
+              }
+          } catch (n) { }
+      else
+          try {
+            var e_n= ((/((email|telephone|image|cta|navigation|faq|accordion)_)?click|file_download|view_search_results|video_(start|pause|progress|complete|play)|official_USA_site_banner_click|form_(start|submit|progress)|content_view|social_share|error|sort|filter|was_this_helpful_submit/gi.test(a))? a : 'dap_event');
+            if(Object.keys(b).length !== 0){_sendEvent(e_n, b);}
+            else{_sendEvent(e_n);}
+          } catch (n) { }
   }
 }
 
@@ -475,7 +331,10 @@ function gas(a, b, c, d, f, e, h) {
   )
     if ("pageview" === b.toLowerCase())
       try {
-        _sendPageview(c, void 0 === d || "" === d ? document.title : d);
+        c = _URIHandler(_scrubbedURL(c)).split(/[#]/)[0];
+        _sendEvent("page_view", {page_location : c, page_title: void 0 === d || "" === d ? document.title : d}),
+        ((isSearch)? _sendViewSearchResult({search_term : isSearch}) : '' );
+
       } catch (n) { }
     else if ("event" === b.toLowerCase() && void 0 !== d && "" !== d)
       try {
@@ -493,43 +352,17 @@ function gas(a, b, c, d, f, e, h) {
       } catch (n) { }
     else if (-1 != b.toLowerCase().indexOf("dimension"))
       try {
-        g = b.toLowerCase().split(",");
-        var k = [];
-        dimsPattern = /^dimension([1-9]|[1-9][0-9]|1([0-9][0-9])|200)$/;
-        for (var l = 0; l < g.length; l++)
-          if (dimsPattern.test(g[l])) k.push(g[l]);
-          else {
-            var m = "dimension" + g[l].match(/\d+$/g)[0];
-            (dimsPattern.test(m) || "dimension0" === m) && k.push(m);
-          }
-        0 < k.length && _sendCustomDimensions(k, void 0 === c ? "" : c);
       } catch (n) { }
     else if (-1 != b.toLowerCase().indexOf("metric"))
       try {
-        k = b.toLowerCase().split(",");
-        g = [];
-        mtrcsPattern = /^metric([1-9]|[1-9][0-9]|1([0-9][0-9])|200)$/;
-        for (m = 0; m < k.length; m++)
-          mtrcsPattern.test(k[m])
-            ? g.push(k[m])
-            : ((l = "metric" + k[m].match(/\d+$/g)[0]),
-              (mtrcsPattern.test(l) || "metric0" === l) && g.push(l));
-        0 < g.length &&
-          _sendCustomMetrics(
-            g,
-            void 0 === c || "" === c || isNaN(c) ? 1 : parseFloat(c)
-          );
+       
       } catch (n) { }
 }
 
-function _URIHandler(a) {
-  var b = new RegExp("([?&])(" + oCONFIG.SEARCH_PARAMS + ")(=[^&]+)", "i");
-  b.test(a) && (a = a.replace(b, "$1query$3"), isSearch = true);
-  return a;
-}
+
 
 function _sendViewSearchResult(a) {
-  isSearch && (_sendEvent("view_search_results", { search_term: _URIHandler(a).match(/([?&])(query\=)([^&#?]*)/i)[3], page_location: _URIHandler(_scrubbedURL(a)) }), isSearch = false);
+  _sendEvent("view_search_results", a), isSearch = !1;
 }
 
 function _isExcludedReferrer() {
@@ -549,160 +382,76 @@ function _isExcludedReferrer() {
 }
 
 function createTracker(a) {
-  var cc;
-  for (var b = 0; b < oCONFIG.GWT_UAID.length; b++) {
-    var m, n, o = /^\/.*$/i;
-    try { m = ((oCONFIG.USE_CUSTOM_URL && o.test(custom_dap_data.url)) ? location.protocol + "//" + location.hostname + custom_dap_data.url.replace(location.protocol + "//" + location.hostname, "") : document.location.href); n = ((oCONFIG.USE_CUSTOM_TITLE) ? custom_dap_data.title : document.title); } catch (error) { m = document.location.href; n = document.title; }
-    cc = _URIHandler(_scrubbedURL(m));
-    var c = cc.split(document.location.hostname)[1];
-    window[window.GoogleAnalyticsObject](
-      "create",
-      oCONFIG.GWT_UAID[b],
-      oCONFIG.COOKIE_DOMAIN,
-      {
-        name: oCONFIG.PUA_NAME + b,
-        allowLinker: !0,
-        cookieExpires: parseInt(oCONFIG.COOKIE_TIMEOUT),
-        cookieFlags: 'SameSite=Strict;Secure'
-      }
-    );
-    window[window.GoogleAnalyticsObject](
-      oCONFIG.PUA_NAME + b + ".set", 'customTask', _customTask()
-    );
-    window[window.GoogleAnalyticsObject](
-      oCONFIG.PUA_NAME + b + ".set", 'transport', 'beacon'
-    );
-    if (oCONFIG.ANONYMIZE_IP)
-      window[window.GoogleAnalyticsObject](
-        oCONFIG.PUA_NAME + b + ".set",
-        "anonymizeIp",
-        oCONFIG.ANONYMIZE_IP
-      );
-    if (oCONFIG.FORCE_SSL)
-      window[window.GoogleAnalyticsObject](
-        oCONFIG.PUA_NAME + b + ".set",
-        "forceSSL",
-        !0
-      );
-    if (_isExcludedReferrer())
-      window[window.GoogleAnalyticsObject](
-        oCONFIG.PUA_NAME + b + ".set",
-        "referrer",
-        ""
-      );
-    oCONFIG.USE_MAIN_CUSTOM_DIMENSIONS &&
-      0 === b &&
-      (window[window.GoogleAnalyticsObject](
-        oCONFIG.PUA_NAME + b + ".set",
-        oCONFIG.MAIN_AGENCY_CUSTOM_DIMENSION_SLOT,
-        oCONFIG.AGENCY
-      ),
-        window[window.GoogleAnalyticsObject](
-          oCONFIG.PUA_NAME + b + ".set",
-          oCONFIG.MAIN_SUBAGENCY_CUSTOM_DIMENSION_SLOT,
-          oCONFIG.SUB_AGENCY
-        ),
-        window[window.GoogleAnalyticsObject](
-          oCONFIG.PUA_NAME + b + ".set",
-          oCONFIG.MAIN_CODEVERSION_CUSTOM_DIMENSION_SLOT,
-          oCONFIG.VERSION
-        ),
-        window[window.GoogleAnalyticsObject](
-          oCONFIG.PUA_NAME + b + ".set",
-          oCONFIG.MAIN_SITE_TOPIC_CUSTOM_DIMENSION_SLOT,
-          oCONFIG.SITE_TOPIC
-        ),
-        window[window.GoogleAnalyticsObject](
-          oCONFIG.PUA_NAME + b + ".set",
-          oCONFIG.MAIN_SITE_PLATFORM_CUSTOM_DIMENSION_SLOT,
-          oCONFIG.SITE_PLATFORM
-        ),
-        window[window.GoogleAnalyticsObject](
-          oCONFIG.PUA_NAME + b + ".set",
-          oCONFIG.MAIN_SCRIPT_SOURCE_URL_CUSTOM_DIMENSION_SLOT,
-          oCONFIG.SCRIPT_SOURCE
-        ),
-        window[window.GoogleAnalyticsObject](
-          oCONFIG.PUA_NAME + b + ".set",
-          oCONFIG.MAIN_URL_PROTOCOL_CUSTOM_DIMENSION_SLOT,
-          oCONFIG.URL_PROTOCOL
-        ));
-    oCONFIG.USE_PARALLEL_CUSTOM_DIMENSIONS &&
-      0 < b &&
-      (window[window.GoogleAnalyticsObject](
-        oCONFIG.PUA_NAME + b + ".set",
-        oCONFIG.PARALLEL_AGENCY_CUSTOM_DIMENSION_SLOT,
-        oCONFIG.AGENCY
-      ),
-        window[window.GoogleAnalyticsObject](
-          oCONFIG.PUA_NAME + b + ".set",
-          oCONFIG.PARALLEL_SUBAGENCY_CUSTOM_DIMENSION_SLOT,
-          oCONFIG.SUB_AGENCY
-        ),
-        window[window.GoogleAnalyticsObject](
-          oCONFIG.PUA_NAME + b + ".set",
-          oCONFIG.PARALLEL_CODEVERSION_CUSTOM_DIMENSION_SLOT,
-          oCONFIG.VERSION
-        ),
-        window[window.GoogleAnalyticsObject](
-          oCONFIG.PUA_NAME + b + ".set",
-          oCONFIG.PARALLEL_SITE_TOPIC_CUSTOM_DIMENSION_SLOT,
-          oCONFIG.SITE_TOPIC
-        ),
-        window[window.GoogleAnalyticsObject](
-          oCONFIG.PUA_NAME + b + ".set",
-          oCONFIG.PARALLEL_SITE_PLATFORM_CUSTOM_DIMENSION_SLOT,
-          oCONFIG.SITE_PLATFORM
-        ),
-        window[window.GoogleAnalyticsObject](
-          oCONFIG.PUA_NAME + b + ".set",
-          oCONFIG.PARALLEL_SCRIPT_SOURCE_URL_CUSTOM_DIMENSION_SLOT,
-          oCONFIG.SCRIPT_SOURCE
-        ),
-        window[window.GoogleAnalyticsObject](
-          oCONFIG.PUA_NAME + b + ".set",
-          oCONFIG.PARALLEL_URL_PROTOCOL_CUSTOM_DIMENSION_SLOT,
-          oCONFIG.URL_PROTOCOL
-        ));
-    -1 !== document.title.search(/404|not found/i) &&
-      (c = ("/vpv404/" + c).replace(/\/\//g, "/") + ((document.referrer) ? "/" + document.referrer : document.referrer));
-    if (a)
-      window[window.GoogleAnalyticsObject](
-        oCONFIG.PUA_NAME + b + ".send",
-        "pageview", c, { "title": n }
-      );
-  }
-  var p = ((-1 !== document.title.search(/404|not found/ig)) ? document.location.protocol + "//" + document.location.hostname + c : m);
-  var ur = _URIHandler(_scrubbedURL(p));
+  var m, n, o = /^\/.*$/i;
+  try { m = ((oCONFIG.USE_CUSTOM_URL && o.test(custom_dap_data.url)) ? location.protocol + "//" + location.hostname + custom_dap_data.url.replace(location.protocol + "//" + location.hostname, "") : document.location.href); n = ((oCONFIG.USE_CUSTOM_TITLE) ? custom_dap_data.title : document.title); } catch (error) { m = document.location.href; n = document.title; }
+  var c = m.split(document.location.hostname)[1];
+  -1 !== document.title.search(/404|not found/i) && 
+  (c = ("/vpv404/" + c).replace(/\/\//g, "/") + ((document.referrer) ? "/" + document.referrer : document.referrer));
+  var p = ((-1 !== document.title.search(/404|not found/ig))? document.location.protocol + "//" + document.location.hostname + c : m);
+  var ur = _URIHandler(_scrubbedURL(p)); 
+  var r =  {};
   for (var b = 0; b < oCONFIG.GWT_GA4ID.length; b++) {
-    if ((b === 0) || (b > 0 && oCONFIG.USE_PARALLEL_CUSTOM_DIMENSIONS)) {
-      gtag("config", oCONFIG.GWT_GA4ID[b], {
+    if (b === 0) {
+      r = {
         groups: oCONFIG.GA4_NAME + b,
         cookie_expires: parseInt(oCONFIG.COOKIE_TIMEOUT),
+        //ignore_referrer: (_isExcludedReferrer() ? true : false),
         page_location: ur,
         page_title: n,
+        [oCONFIG.MAIN_AGENCY_DIMENSION]: oCONFIG.AGENCY.toUpperCase(),
+        [oCONFIG.MAIN_SUBAGENCY_DIMENSION]: oCONFIG.SUB_AGENCY.toUpperCase(),
+        [oCONFIG.MAIN_SITE_TOPIC_DIMENSION]: oCONFIG.SITE_TOPIC.toLowerCase(),
+        [oCONFIG.MAIN_SITE_PLATFORM_DIMENSION]: oCONFIG.SITE_PLATFORM.toLowerCase(),
+        [oCONFIG.MAIN_SCRIPT_SOURCE_URL_DIMENSION]: oCONFIG.SCRIPT_SOURCE.toLowerCase(),
+        [oCONFIG.MAIN_CODEVERSION_DIMENSION]: oCONFIG.VERSION.toLowerCase(),
+        [oCONFIG.MAIN_URL_PROTOCOL_DIMENSION]: oCONFIG.URL_PROTOCOL.toLowerCase(),
+        [oCONFIG.MAIN_USING_PARALLEL_DIMENSION]: oCONFIG.USING_PARALLEL_TRACKER.toLowerCase()
+      };
+      ((document.referrer && -1 !== document.referrer.search(location.hostname))? (r.page_referrer = _scrubbedURL(document.referrer)) : document.referrer);
+      var rr = _piiRedactor(_objToQuery(r), "default");
+      rr = _queryToJSON(rr);
+      rr = _unflattenJSON(rr);
+      gtag("config", oCONFIG.GWT_GA4ID[b], rr);
+    }
+    else if (b > 0 && oCONFIG.USE_PARALLEL_CUSTOM_DIMENSIONS) {
+      r = {
+        groups: oCONFIG.GA4_NAME + b,
+        cookie_expires: parseInt(oCONFIG.COOKIE_TIMEOUT),
         //ignore_referrer: (_isExcludedReferrer() ? true : false),
-        agency: oCONFIG.AGENCY.toUpperCase(),
-        subagency: oCONFIG.SUB_AGENCY.toUpperCase(),
-        site_topic: oCONFIG.SITE_TOPIC.toLowerCase(),
-        site_platform: oCONFIG.SITE_PLATFORM.toLowerCase(),
-        script_source: oCONFIG.SCRIPT_SOURCE.toLowerCase(),
-        version: oCONFIG.VERSION.toLowerCase(),
-        protocol: oCONFIG.URL_PROTOCOL
-      });
+        page_location: ur,
+        page_title: n,
+        [oCONFIG.PARALLEL_AGENCY_DIMENSION]: oCONFIG.AGENCY.toUpperCase(),
+        [oCONFIG.PARALLEL_SUBAGENCY_DIMENSION]: oCONFIG.SUB_AGENCY.toUpperCase(),
+        [oCONFIG.PARALLEL_SITE_TOPIC_DIMENSION]: oCONFIG.SITE_TOPIC.toLowerCase(),
+        [oCONFIG.PARALLEL_SITE_PLATFORM_DIMENSION]: oCONFIG.SITE_PLATFORM.toLowerCase(),
+        [oCONFIG.PARALLEL_SCRIPT_SOURCE_URL_DIMENSION]: oCONFIG.SCRIPT_SOURCE.toLowerCase(),
+        [oCONFIG.PARALLEL_CODEVERSION_DIMENSION]: oCONFIG.VERSION.toLowerCase(),
+        [oCONFIG.PARALLEL_URL_PROTOCOL_DIMENSION]: oCONFIG.URL_PROTOCOL.toLowerCase(),
+        [oCONFIG.PARALLEL_USING_PARALLEL_DIMENSION]: oCONFIG.USING_PARALLEL_TRACKER.toLowerCase()
+      };
+      ((document.referrer && -1 !== document.referrer.search(location.hostname))? (r.page_referrer = _scrubbedURL(document.referrer)) : document.referrer);
+      var rr = _piiRedactor(_objToQuery(r), "default");
+      rr = _queryToJSON(rr);
+      rr = _unflattenJSON(rr);
+      gtag("config", oCONFIG.GWT_GA4ID[b], rr);
     }
     else {
-      gtag("config", oCONFIG.GWT_GA4ID[b], {
+      r =  {
         groups: oCONFIG.GA4_NAME + b,
         cookie_expires: parseInt(oCONFIG.COOKIE_TIMEOUT),
+        //ignore_referrer: (_isExcludedReferrer() ? true : false),
         page_location: ur,
-        page_title: n,
-        //ignore_referrer: (_isExcludedReferrer() ? true : false)
-      });
+        page_title: n
+      };
+      ((document.referrer && -1 !== document.referrer.search(location.hostname))? (r.page_referrer = _scrubbedURL(document.referrer)) : document.referrer);
+      var rr = _piiRedactor(_objToQuery(r), "default");
+      rr = _queryToJSON(rr);
+      rr = _unflattenJSON(rr);
+      gtag("config", oCONFIG.GWT_GA4ID[b], rr);
     }
   }
-
-  _sendViewSearchResult(cc);
+  ((isSearch)? _sendViewSearchResult({search_term: isSearch}) : "");
+  //window.fetch = wf;
 }
 
 function _initAutoTracker() {
@@ -774,7 +523,10 @@ function _initAutoTracker() {
                 _sendEvent("file_download", _enforeLower(l));
               }
               else if ("l" === i && !_isDownload(a)) {
-                //internal link tracking;
+                //internal link tracking; 
+                /*c = a.closest('section'); var s_n = (('object' === typeof c)? (c.id? c.id : c.className) : '');
+                l = { link_id: a.id, link_url: a.href, link_domain: a.hostname.replace(/^www\./i, ""), link_text: a.text.replace(/(?:[\r\n]+)+/g, "").trim(), link_classes: a.className, interaction_type: t, section:  s_n, menu_type: 'all' };
+                _sendEvent("navigation_click", _enforeLower(l));*/
               }
             }
           }
@@ -840,7 +592,7 @@ if (oCONFIG.YOUTUBE) {
   onPlayerError = function (event) {
     _sendEvent('video_error', { videotitle: ((event.target.playerInfo !== undefined) ? event.target.playerInfo.videoData.title : event.target.getVideoData().title) });
   };
-  cCi = 0;
+  
   onPlayerStateChange = function (event) {
     try {
       var videoIndex = 0, video_id = ((event.target.playerInfo !== undefined) ? event.target.playerInfo.videoData.video_id : event.target.getVideoData().video_id);
@@ -862,10 +614,11 @@ if (oCONFIG.YOUTUBE) {
       };
       if (event.data == YT.PlayerState.PLAYING && p.video_percent == 0) {
         _sendEvent('video_start', p);
+        cCi = 0;
         if (_milestoneController) {
           ytUtils.push([videoIndex, function (videx) {
             for (var b = 1; b <= (100 / _milestoneController); b++) {
-              ((100 / _milestoneController === 4 && b === 100 / _milestoneController) ? _buckets[b - 1] = { milestone: 95, triggered: false } : ((_milestoneController * b !== 100) ? _buckets[b - 1] = { milestone: _milestoneController * b, triggered: false } : ''));
+              ((100 / _milestoneController === 4 && b === 100 / _milestoneController) ? _buckets[b - 1] = { id: videoIndex, milestone: 95, triggered: false } : ((_milestoneController * b !== 100) ? _buckets[b - 1] = { id: videoIndex,  milestone: _milestoneController * b, triggered: false } : ''));
             }
             setInterval(function () {
               var cTimeP = ((playerArray[videoIndex].playerInfo !== undefined) ? Math.round(playerArray[videoIndex].playerInfo.currentTime) : Math.round(playerArray[videoIndex].getCurrentTime()));
@@ -880,7 +633,7 @@ if (oCONFIG.YOUTUBE) {
                 video_url: ((playerArray[videoIndex].playerInfo !== undefined) ? playerArray[videoIndex].playerInfo.videoUrl : playerArray[videoIndex].getVideoUrl())
               };
               if (y.video_percent <= _buckets[_buckets.length - 1] && cCi < _buckets.length) {
-                if (y.video_percent >= _buckets[cCi].milestone && !_buckets[cCi].triggered) {
+                if (y.video_percent >= _buckets[cCi].milestone && !_buckets[cCi].triggered && _buckets[videoIndex].id === videoIndex) {
                   _buckets[cCi].triggered = true; y.video_percent = _buckets[cCi].milestone; y.video_current_time = Math.round((y.video_duration / _buckets.length) * (cCi + 1)); _sendEvent("video_progress", y); cCi++;
                 }
               }
@@ -951,17 +704,99 @@ function _payloadInterceptor() {
 }
 // End GA4 Payload Interceptor
 
-// Payload Redactor
-function _piiRedactor(payload, type) {
-  var piiRegex = [{
+function _unflattenJSON(data) {
+  try {
+    if (Object(data) !== data || Array.isArray(data))
+      return data;
+    var result = {}, cur, prop, idx, last, temp;
+    for (var p in data) {
+      cur = result, prop = "", last = 0;
+      do {
+        idx = p.indexOf(".", last);
+        temp = p.substring(last, idx !== -1 ? idx : undefined);
+        cur = cur[prop] || (cur[prop] = (!isNaN(parseInt(temp)) ? [] : {}));
+        prop = temp;
+        last = idx + 1;
+      } while (idx >= 0);
+      cur[prop] = data[p];
+    }
+    return result[""];
+
+  } catch (error) {
+  }
+}
+function _flattenJSON(data) {
+  try {
+    var result = {};
+    function recurse(cur, prop) {
+      if (Object(cur) !== cur) {
+        result[prop] = cur;
+      } else if (Array.isArray(cur)) {
+        for (var i = 0, l = cur.length; i < l; i++)
+          recurse(cur[i], prop ? prop + "." + i : "" + i);
+        if (l == 0)
+          result[prop] = [];
+      } else {
+        var isEmpty = true;
+        for (var p in cur) {
+          isEmpty = false;
+          recurse(cur[p], prop ? prop + "." + p : p);
+        }
+        if (isEmpty)
+          result[prop] = {};
+      }
+    }
+    recurse(data, "");
+    return result;
+  } catch (error) {
+  }
+}
+
+function _objToQuery(obj) {
+  return Object.keys(obj).reduce(function (str, key, i) {
+    var delimiter, val;
+    delimiter = (i === 0) ? '' : '&';
+    key = encodeURIComponent(key);
+    val = encodeURIComponent(obj[key]);
+    return [str, delimiter, key, '=', val].join('');
+  }, '');
+}
+function _queryToJSON(qs) {
+  var pairs = qs.split('&');
+  var result = {};
+  pairs.forEach(function(p) {
+      var pair = p.split('=');
+      var key = pair[0];
+      var value = decodeURIComponent(pair[1] || '');
+
+      if( result[key] ) {
+          if( Object.prototype.toString.call( result[key] ) === '[object Array]' ) {
+              result[key].push( value );
+          } else {
+              result[key] = [ result[key], value ];
+          }
+      } else {
+          result[key] = value;
+      }
+  });
+
+  return JSON.parse(JSON.stringify(result));
+};
+
+var piiRegex = [];
+function _piiRegexReset() {
+  window.piiRegex = [{
     name: 'EMAIL',
     regex: /[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/gi
   }, {
     name: 'TEL',
     regex: /((tel|(tele)?phone|mob(ile)?|cell(ular)?)\=)?((\+\d{1,2}[\s\.\-]?)?\d{3}[\s\.\-]\d{3}[\s\.\-]\d{4})([^\&\s\?\/]*)/gi
   }, {
+    name: 'SSN',
+    regex: /((full)?(([\-\_])?)?ssn\=)?(\d{3}([\s\.\-\+]|%20)\d{2}([\s\.\-\+]|%20)\d{4})([^\&\s\?\/]*)/ig
+  }, {
     name: 'NAME',
-    regex: /((first|last|middle|sur|f|l)([\-\_])?)?name\=([^\&\s\?\/]*)/ig
+    regex: /((first|last|middle|sur|f|l|user)([\-\_])?)?name\=([^\&\s\?\/]*)/ig
   }, {
     name: 'PASSWORD',
     regex: /(((confirm([\-\_])?)?password)|passwd|pwd)\=([^\&\s\?\/]*)/ig
@@ -971,40 +806,31 @@ function _piiRedactor(payload, type) {
   }, {
     name: 'ADDRESS',
     regex: /add(ress)?([1-2])?\=([^\&\s\?\/]*)/ig
-  }, {
-    name: 'SSN',
-    regex: /((full)?(([\-\_])?)?ssn\=)?(\d{3}([\s\.\-\+]|%20)\d{2}([\s\.\-\+]|%20)\d{4})([^\&\s\?\/]*)/ig
-  }, {
-    name: 'DOB',
-    regex: /(((birth)?date|dob)\=)?(19|20)\d\d([\s\.\/]|%20)(0?[1-9]|1[012])([\s\.\/]|%20)(0?[1-9]|[12][0-9]|3[01])([^\&\s\?\/]*)/ig,
-    format: 'YYYY-MM-DD'
-  }, {
-    name: 'DOB',
-    regex: /(((birth)?date|dob)\=)?(19|20)\d\d([\s\.\/]|%20)(0?[1-9]|[12][0-9]|3[01])([\s\.\/]|%20)(0?[1-9]|1[012])([^\&\s\?\/]*)/ig,
-    format: 'YYYY-DD-MM'
-  }, {
-    name: 'DOB',
-    regex: /(((birth)?date|dob)\=)?(0?[1-9]|[12][0-9]|3[01])([\s\.\/]|%20)(0?[1-9]|1[012])([\s\.\/]|%20)(19|20)\d\d([^\&\s\?\/]*)/ig,
-    format: 'DD-MM-YYYY'
-  }, {
-    name: 'DOB',
-    regex: /(((birth)?date|dob)\=)?(0?[1-9]|1[012])([\s\.\/]|%20)(0?[1-9]|[12][0-9]|3[01])([\s\.\/]|%20)(19|20)\d\d([^\&\s\?\/]*)/ig,
-    format: 'MM-DD-YYYY'
   }];
+}
+
+// Payload Redactor
+function _piiRedactor(payload, type) {
   try {
+    var checkParams = "dl|dr|dt|dt|en|ep.|up.|uid";
+    var UncheckParams = "ep.agency||ep.subagency|ep.site_topic|ep.site_platform|ep.script_source|ep.version|ep.protocol";
+    payload = (("object" === typeof payload && /json|default/.test(type))? (_flattenJSON(payload), payload = _objToQuery(payload)): payload);
+    _piiRegexReset();
+  
     var _allowedQs = _allowedQuerystrings.toString().replace(/\,/g, "=|") + "=";
-    var checkParams = ((type === "ga4") ? "dl|dp|dr|dt|en|ep.|up.|uid" : "dl|dp|dr|dt|ec|ea|el|uid|cd\\d{1,3}|pr\\d{1,3}cd\\d{1,3}");
     var _hitPayloadParts = payload.split('&');
     for (var i = 0; i < _hitPayloadParts.length; i++) {
       var newQueryString = '';
       var _param = _hitPayloadParts[i].split('=');
+      var _para = (_param.length>2)?_param.slice(1).join("="):_param[1]; _param.splice(2); _param[1]  = _para;
       var _val;
       try {
         _val = decodeURIComponent(decodeURIComponent(_param[1]));
       } catch (e) {
         _val = decodeURIComponent(_param[1]);
       }
-      if (_param[0].match(new RegExp(checkParams)) != null && _val.indexOf('?') > -1) {
+
+      if (( _param[0].match(new RegExp(checkParams)) != null || /query|json/ig.test(type) ) && _val.indexOf('?') > -1) {
         var paramArray = _val.split('?').splice(1).join('&').split('&');
         var paramSubArray = [];
         // loop through the parameters in the search query string to see if there are sub-parameters, and build the paramSubArray
@@ -1023,49 +849,68 @@ function _piiRedactor(payload, type) {
         }
         _val = _val.replace(/\?.*/, '?' + newQueryString.replace(/\&$/, ''));
       }
-      if (_param[0].match(new RegExp(checkParams)) != null) {
+
+      if (type === 'json') {
+        window.piiRegex.push(
+        {
+          name: 'DOB',
+          regex: /(((birth)?date|dob)\=)(19|20)\d\d([\s\.\/\-]|%20)(0?[1-9]|1[012])([\s\.\/\-]|%20)(0?[1-9]|[12][0-9]|3[01])([^\&\s\?\/]*)/ig,
+          format: 'YYYY-MM-DD'
+        }, {
+          name: 'DOB',
+          regex: /(((birth)?date|dob)\=)(19|20)\d\d([\s\.\/\-]|%20)(0?[1-9]|[12][0-9]|3[01])([\s\.\/\-]|%20)(0?[1-9]|1[012])([^\&\s\?\/]*)/ig,
+          format: 'YYYY-DD-MM'
+        }, {
+          name: 'DOB',
+          regex: /(((birth)?date|dob)\=)(0?[1-9]|[12][0-9]|3[01])([\s\.\/\-]|%20)(0?[1-9]|1[012])([\s\.\/\-]|%20)(19|20)\d\d([^\&\s\?\/]*)/ig,
+          format: 'DD-MM-YYYY'
+        }, {
+          name: 'DOB',
+          regex: /(((birth)?date|dob)\=)(0?[1-9]|1[012])([\s\.\/\-]|%20)(0?[1-9]|[12][0-9]|3[01])([\s\.\/\-]|%20)(19|20)\d\d([^\&\s\?\/]*)/ig,
+          format: 'MM-DD-YYYY'
+        });
+      }
+      else if (type === 'query' || (type === 'json' && /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/.test(_val))) {
+        window.piiRegex.push(
+          {
+            name: 'TEL',
+            regex: /((tel|(tele)?phone|mob(ile)?|cell(ular)?)\=)?((\+\d{1,2}[\s\.\-]?)?\d{3}[\s\.\-]?\d{3}[\s\.\-]?\d{4})([^\&\s\?\/]*)/gi
+          }, {
+            name: 'SSN',
+            regex: /((full)?(([\-\_])?)?ssn\=)?(\d{3}([\s\.\-\+]|%20)?\d{2}([\s\.\-\+]|%20)?\d{4})([^\&\s\?\/]*)/ig
+          }, {
+          name: 'DOB',
+          regex: /(((birth)?date|dob)\=)?(19|20)\d\d([\s\.\/\-]|%20)(0?[1-9]|1[012])([\s\.\/\-]%20)(0?[1-9]|[12][0-9]|3[01])([^\&\s\?\/]*)/ig,
+          format: 'YYYY-MM-DD'
+        }, {
+          name: 'DOB',
+          regex: /(((birth)?date|dob)\=)?(19|20)\d\d([\s\.\/\-]|%20)(0?[1-9]|[12][0-9]|3[01])([\s\.\/\-]|%20)(0?[1-9]|1[012])([^\&\s\?\/]*)/ig,
+          format: 'YYYY-DD-MM'
+        }, {
+          name: 'DOB',
+          regex: /(((birth)?date|dob)\=)?(0?[1-9]|[12][0-9]|3[01])([\s\.\/\-]|%20)(0?[1-9]|1[012])([\s\.\/\-]|%20)(19|20)\d\d([^\&\s\?\/]*)/ig,
+          format: 'DD-MM-YYYY'
+        }, {
+          name: 'DOB',
+          regex: /(((birth)?date|dob)\=)?(0?[1-9]|1[012])([\s\.\/\-]|%20)(0?[1-9]|[12][0-9]|3[01])([\s\.\/\-]%20)(19|20)\d\d([^\&\s\?\/]*)/ig,
+          format: 'MM-DD-YYYY'
+        });
+      }
+
+      if (( _param[0].match(new RegExp(checkParams)) != null && _param[0].match(new RegExp(UncheckParams)) != null ) || /query|json|default/ig.test(type)) {
         piiRegex.forEach(function (pii) {
           _val = _val.replace(pii.regex, '[REDACTED_' + pii.name + ']');
         });
-        if ( (/dl|dp|dr|dt|ep\.(search_term|link_(text|url)|event_(category|action|label))/.test(_param[0]))) {
-          var new_val = ((_val.indexOf("?") > 0 && /dl|dp|dr/.test(_param[0])) ? _val.split("?")[1] : (_val.indexOf("?") < 0 && /dl|dp|dr/.test(_param[0]))? null : _val);
-          if(new_val!== null){
-            piiRegex.forEach(function (_pii) {
-              if (_pii.name == "TEL") {
-                _pii.regex = /((tel|(tele)?phone|mob(ile)?|cell(ular)?)\=)?((\+\d{1,2}[\s\.\-]?)?\d{3}[\s\.\-]?\d{3}[\s\.\-]?\d{4})([^\&\s\?\/]*)/gi;
-                new_val = new_val.replace(_pii.regex, '[REDACTED_' + _pii.name + ']');
-                _val = ((_val.indexOf("?") > 0 && /dl|dp|dr/.test(_param[0])) ? _val.split("?")[0]+ "?" + new_val : new_val);
-                //resetting TEL regex
-                _pii.regex = /((tel|(tele)?phone|mob(ile)?|cell(ular)?)\=)?((\+\d{1,2}[\s\.\-]?)?\d{3}[\s\.\-]\d{3}[\s\.\-]\d{4})([^\&\s\?\/]*)/gi;
-              }
-              else if (_pii.name == "SSN") {
-                _pii.regex = /((full)?(([\-\_])?)?ssn\=)?(\d{3}([\s\.\-\+]|%20)?\d{2}([\s\.\-\+]|%20)?\d{4})([^\&\s\?\/]*)/ig;
-                new_val = new_val.replace(_pii.regex, '[REDACTED_' + _pii.name + ']');
-                _val = ((_val.indexOf("?") > 0 && /dl|dp|dr/.test(_param[0])) ? _val.split("?")[0]+ "?" + new_val : new_val);
-                //resetting SSN regex
-                _pii.regex = /((full)?(([\-\_])?)?ssn\=)?(\d{3}([\s\.\-\+]|%20)\d{2}([\s\.\-\+]|%20)\d{4})([^\&\s\?\/]*)/ig;
-              }
-              else if (_pii.name == "DOB") {
-                var ra = _pii.regex.toString().replace(/\./g, "\\.\\-" ).replace("\/", "") ; _pii.regex = new RegExp(ra.substring(0, ra.length-3)); 
-                new_val = new_val.replace(_pii.regex, '[REDACTED_' + _pii.name + ']');
-                _val = ((_val.indexOf("?") > 0 && /dl|dp|dr/.test(_param[0])) ? _val.split("?")[0]+ "?" + new_val : new_val);
-                //resetting DOB regex
-                
-                ra = _pii.regex.toString().replace(/\\-/g, "" ).replace("\/", "") ; _pii.regex = new RegExp(ra); 
-              }
-            });
-
-          }
-        }
         _param[1] = encodeURIComponent(_val.replace(/\?$/, '')) || _val.replace(/\?$/, '');
         _hitPayloadParts[i] = _param.join('=');
       }
     }
+    _piiRegexReset();
     return _hitPayloadParts.join("&");
   } catch (error) {
   }
 }
-// Payload Redactor
+// End Payload Redactor
 function _initIdAssigner() {
   for (var a = document.getElementsByTagName("a"), b = 0; b < a.length; b++) {
     var c = a[b].getAttribute("id");
@@ -1079,43 +924,27 @@ function _initBannerTracker() {
     var acord = document.querySelector('section.usa-banner button.usa-accordion__button');
     if (acord) {
       acord.addEventListener('click', function (e) {
-        gas("send", "event", "official USA site banner", "click", e.target.textContent.trim(), 0, false);
+        gas4("official_usa_site_banner_click", {link_text: e.target.textContent.trim(), section: "header"});
       });
     }
-    
+
   } catch (error) {
-    
+
   }
 }
-// UA customTask 
-function _customTask() {
-  var globalSendHitTaskName = '_ga_originalSendHitTask';
-  return function (customTaskModel) {
-    window[globalSendHitTaskName] = window[globalSendHitTaskName] || customTaskModel.get('sendHitTask');
-    customTaskModel.set('sendHitTask', function (sendHitTaskModel) {
-      var originalSendHitTaskModel = sendHitTaskModel,
-        originalSendHitTask = window[globalSendHitTaskName],
-        canSendHit = true;
-      try {
-        var pl = sendHitTaskModel.get('hitPayload');
-        var redactedPayload = _piiRedactor(pl, "UA");
-        sendHitTaskModel.set('hitPayload', redactedPayload, true);
-        if (canSendHit) {
-          originalSendHitTask(sendHitTaskModel);
-        }
-      } catch (error) {
-        originalSendHitTask(originalSendHitTaskModel);
-      }
-    });
-  };
-}
-// End UA customTask
 // ************ GA4 ************
+
+function _URIHandler(a) {
+  var b = new RegExp("([?&])(" + oCONFIG.SEARCH_PARAMS + ")(=[^&]+)", "i");
+  b.test(a) && (a = a.replace(b, "$1query$3"), isSearch = a.match(/([?&])(query\=)([^&#?]*)/i)[3] );
+  return a;
+}
+
 function _scrubbedURL(z) {
   RegExp.escape = function (s) { return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'); };
   var n = new RegExp(`^(https?:\\/\\/(www\\.)?)?${RegExp.escape(document.location.hostname.replace(/^www\\./, ""))}`, "ig"),
     t = "",
-    o = ((n.test(z)) ? z : document.location.protocol + "//" + document.location.hostname + z),
+    o = ((n.test(z)) ? z : document.location.protocol + "//" + document.location.hostname + z).toLowerCase(),
     a = o.split("?")[0],
     r = o.split("?").length > 1
       ? (o
@@ -1124,7 +953,7 @@ function _scrubbedURL(z) {
         .forEach(function (o, i) {
           _allowedQuerystrings.indexOf(o.split("=")[0]) > -1 && (t = t + "&" + o);
         }),
-        t.length > 0 ? a + "?" + t.substring(1) : a)
+        t.length > 0 ? a + "?" + _piiRedactor(t.substring(1),"query") : a)
       : a;
   return r;
 }
@@ -1148,11 +977,11 @@ function _setAllowedQS() {
 }
 
 function _setUpTrackers() {
-  tObjectCheck !== window.GoogleAnalyticsObject && createTracker(!1);
+  //createTracker(!1);
   oCONFIG.ENHANCED_LINK ? _initIdAssigner() : "";
   oCONFIG.AUTOTRACKER ? _initAutoTracker() : "";
   oCONFIG.YOUTUBE ? _initYouTubeTracker() : "";
-  _initBannerTracker();
+  _initBannerTracker(); 
 }
 
 function _setUpTrackersIfReady() {
