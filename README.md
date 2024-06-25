@@ -1,7 +1,7 @@
 ## Digital Analytics Program Government-wide Code
 
 Provides a JavaScript file for US federal agencies to link or embed in their websites to participate in the Digital Analytics Program.
-The latest version 8.0 of DAP GA code contains only GA4 tracking. GA Universal Analytics (UA) data collection and reporting was retired on June 24, 2024.
+The latest version 8.0 of DAP GA code contains only GA4 tracking. GA UA data collection and reporting was retired on June 24, 2024.
 
 * [`Universal-Federated-Analytics.js`](Universal-Federated-Analytics.js) (full)
 * [`Universal-Federated-Analytics-Min.js`](Universal-Federated-Analytics-Min.js) (minified)
