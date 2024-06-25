@@ -3,7 +3,7 @@
 Provides a JavaScript file for US federal agencies to link or embed in their websites to participate in the Digital Analytics Program.
 The latest code collects both DAP Universal Analytics and GA4 data as part of the same tag.
 
-The latest version of DAP GA code contains dual tracking code for both Universal Analytics (UA) and GA4:
+The latest version 8.0 of DAP GA code contains only GA4 tracking. IMPORTANT: Universal Analytics (UA) data collection and reporting has been retired as of June 24, 2024:
 
 * [`Universal-Federated-Analytics.js`](Universal-Federated-Analytics.js) (full)
 * [`Universal-Federated-Analytics-Min.js`](Universal-Federated-Analytics-Min.js) (minified)
