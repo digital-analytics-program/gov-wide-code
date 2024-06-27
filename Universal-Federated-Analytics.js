@@ -9,7 +9,7 @@
 Copyright 2024 by Cardinal Path.
 Dual Tracking Federated Analytics: Google Analytics Government Wide Site Usage Measurement.
 Author: Ahmed Awwad
-24/06/2024 Version: 8
+27/06/2024 Version: 8.1
 ***********************************************************************************************************/
 var tObjectCheck,
   _allowedQuerystrings = [],
@@ -20,7 +20,7 @@ var tObjectCheck,
     ANONYMIZE_IP: !0,
     AGENCY: "",
     SUB_AGENCY: "",
-    VERSION: "20240624 v8 - GA4",
+    VERSION: "20240627 v8.1 - GA4",
     SITE_TOPIC: "",
     SITE_PLATFORM: "",
     SCRIPT_SOURCE: "",
@@ -69,12 +69,12 @@ var GA4Object = document.createElement("script");
 GA4Object.setAttribute("type", "text/javascript");
 GA4Object.setAttribute(
   "src",
-  "https://www.googletagmanager.com/gtag/js?id=" + oCONFIG.GWT_GA4ID[0]+ "&l=dapDL"
+  "https://www.googletagmanager.com/gtag/js?id=" + oCONFIG.GWT_GA4ID[0]
 );
 head.appendChild(GA4Object);
-window.dapDL = window.dapDL || [];
+window.dataLayer = window.dataLayer || [];
 function gtag() {
-  dapDL.push(arguments);
+  dataLayer.push(arguments);
 }
 gtag("js", new Date());
 gtag('set', {'cookie_flags': 'SameSite=Strict;Secure', 'transport_type': 'beacon'});
@@ -88,7 +88,6 @@ function _onEveryPage() {
   _defineAgencyCDsValues();
   _setAllowedQS();
   createTracker();
-  
 }
 _onEveryPage();
 
