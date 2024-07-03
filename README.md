@@ -1,4 +1,4 @@
-## Digital Analytics Program Government-wide Code
+## Digital Analytics Program Government-wide Web Analytics Solution
 
 Provides a JavaScript file for US federal agencies to link or embed in their websites to participate in the Digital Analytics Program.
 The latest version 8.1 of DAP GA code contains GA4 tracking only. DAP UA data collection and reporting was removed on June 24, 2024 in prepration for a global sunset of UA on July 1, 2024.
@@ -27,7 +27,8 @@ For more details about the DAP script capabilities, steps for adding DAP code to
 * [DAP GA4 Tracking Quick Guide](https://github.com/digital-analytics-program/gov-wide-code/wiki/DAP-Quick-Technical-Guide)
 * [DAP GA4 Tracking Capabilities Summary](https://github.com/digital-analytics-program/gov-wide-code/wiki/DAP-Code-Capabilities-Summary)
 * [DAP GA4 Custom Events Implementation Example](https://github.com/digital-analytics-program/gov-wide-code/blob/master/documentation/DAP_Custom_Events%20(1).pdf)
-* [Guide to the Digital Analytics Program](https://digital.gov/guide/dap/add-your-site-dap/#participating-in-the-program)
+* [DAP Wiki - a one-stop place for DAP technical instructions and training resources](https://github.com/digital-analytics-program/gov-wide-code/wiki)
+* [Digital.gov Guide to the Digital Analytics Program](https://digital.gov/guide/dap/add-your-site-dap/#participating-in-the-program)
 
 
 #### Known implementation limitations
