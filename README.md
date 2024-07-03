@@ -18,14 +18,13 @@ The latest version 8.1 of DAP GA code contains GA4 tracking only. DAP UA data co
 
 ### DAP Code Implementation
 
-Agencies should use the following HTML snippet to participate in the Digital Analytics Program. Please note that gencies must replace `AGENCY` with their agency's standard acronym (e.g. DHS, EPA, GSA, DOC etc.):
+Agencies should use the following HTML snippet to participate in the Digital Analytics Program. Please note that gencies must replace `AGENCY` with their agency's standard acronym (e.g. DHS, EPA, GSA, DOC etc.)
 
-]```html
 <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
 <script async type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=AGENCY" id="_fed_an_ua_tag"></script>
-```
 
 ### DAP Documentation and Resources
+
 For more details about the DAP script capabilities, steps for adding DAP code to your website (including implementing with a tag manager), using custom parameters, DAP training etc., please refer to:
 * [DAP GA4 Release Notes](https://github.com/digital-analytics-program/gov-wide-code/wiki/DAP-Release-Notes)
 * [DAP GA4 Tracking Quick Guide](https://github.com/digital-analytics-program/gov-wide-code/wiki/DAP-Quick-Technical-Guide)
@@ -33,7 +32,6 @@ For more details about the DAP script capabilities, steps for adding DAP code to
 * [DAP GA4 Custom Events Implementation Example](https://github.com/digital-analytics-program/gov-wide-code/blob/master/documentation/DAP_Custom_Events%20(1).pdf)
 * [DAP Wiki - a one-stop place for DAP technical instructions and training resources](https://github.com/digital-analytics-program/gov-wide-code/wiki)
 * [Digital.gov Guide to the Digital Analytics Program](https://digital.gov/guide/dap/add-your-site-dap/#participating-in-the-program)
-
 
 #### Known implementation limitations
 
