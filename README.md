@@ -7,7 +7,7 @@ The latest version 8.1 of DAP GA code contains GA4 tracking only. DAP UA data co
 * [`Universal-Federated-Analytics-Min.js`](Universal-Federated-Analytics-Min.js) (minified)
 * [`Federated.js.map`](Federated.js.map) (source map)
 
-### Participating in the DAP
+### Participating in DAP
 
 On September 22, 2023, the Office of Management and Budget (OMB) released a memorandum on ["Delivering a Digital-First Public Experience"](https://www.whitehouse.gov/wp-content/uploads/2023/09/M-23-22-Delivering-a-Digital-First-Public-Experience.pdf), which requires federal agencies to implement the DAP javascript code on all public-facing federal websites. The requirement was originally introduced on November 8, 2016, in the OMB memorandum M-17-06 "Policies for Federal Agency Public Websites and Digital Services."
 
@@ -20,7 +20,7 @@ Agencies are encouraged to use the following HTML snippet to participate in the 
 <script async type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=AGENCY" id="_fed_an_ua_tag"></script>
 ```
 
-### Agencies must replace `AGENCY` with their agency's standard acronym (e.g. DHS, EPA, GSA, DOC etc.)
+#### Agencies must replace `AGENCY` with their agency's standard acronym (e.g. DHS, EPA, GSA, DOC etc.)
 
 For more details about the DAP script capabilities, steps for adding DAP code to your website (including implementing with a tag manager), using custom parameters, DAP training etc., please refer to:
 * [DAP GA4 Release Notes](https://github.com/digital-analytics-program/gov-wide-code/wiki/DAP-Release-Notes)
