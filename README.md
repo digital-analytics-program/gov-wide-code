@@ -20,7 +20,7 @@ Agencies are encouraged to use the following HTML snippet to participate in the 
 <script async type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=AGENCY" id="_fed_an_ua_tag"></script>
 ```
 
-Replace `AGENCY` with your agency's standard abbreviation, such as DHS or EPA.
+Replace `AGENCY` with your agency's standard abbreviation or acronym (e.g. DHS, EPA, GSA, DOC etc.)
 
 For more details about the DAP script capabilities, steps for adding DAP code to your website (including implementing with a tag manager), using custom parameters, DAP training etc., please refer to:
 * [DAP GA4 Release Notes](https://github.com/digital-analytics-program/gov-wide-code/wiki/DAP-Release-Notes)
