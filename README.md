@@ -1,27 +1,31 @@
 ## Digital Analytics Program Government-wide Web Analytics Solution
 
-Provides a JavaScript file for US federal agencies to link or embed in their websites to participate in the Digital Analytics Program.
+DAP provides a JavaScript file for US federal agencies to link or embed in their website(s) to participate in the Digital Analytics Program. Participating agencies are granted access to the reporting portal with real-time and historical summary and detailed-level data by GSA's DAP team. DAP top-level summary real-time and historical data are also reported publicly on analytics.usa.gov 
+
+### DAP Participation is a Requirement
+
+On September 22, 2023, the Office of Management and Budget (OMB) released a memorandum on ["Delivering a Digital-First Public Experience"](https://www.whitehouse.gov/wp-content/uploads/2023/09/M-23-22-Delivering-a-Digital-First-Public-Experience.pdf), which requires federal agencies to implement the DAP javascript code on all public-facing federal websites. The requirement was originally introduced on November 8, 2016, in the OMB memorandum M-17-06 "Policies for Federal Agency Public Websites and Digital Services."
+
+### DAP Code
+
+DAP offers a central hosting server for its minified JavaScript file at `https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js`. As of August 2018, the file is gzipped and served compressed by default, but will be served uncompressed where `Accept-Encoding: gzip` is not present in the viewer. 
+
 The latest version 8.1 of DAP GA code contains GA4 tracking only. DAP UA data collection and reporting was removed on June 24, 2024 in prepration for a global sunset of UA on July 1, 2024.
 
 * [`Universal-Federated-Analytics.js`](Universal-Federated-Analytics.js) (full)
 * [`Universal-Federated-Analytics-Min.js`](Universal-Federated-Analytics-Min.js) (minified)
 * [`Federated.js.map`](Federated.js.map) (source map)
 
-### Participating in DAP
+### DAP Code Implementation
 
-On September 22, 2023, the Office of Management and Budget (OMB) released a memorandum on ["Delivering a Digital-First Public Experience"](https://www.whitehouse.gov/wp-content/uploads/2023/09/M-23-22-Delivering-a-Digital-First-Public-Experience.pdf), which requires federal agencies to implement the DAP javascript code on all public-facing federal websites. The requirement was originally introduced on November 8, 2016, in the OMB memorandum M-17-06 "Policies for Federal Agency Public Websites and Digital Services."
+Agencies should use the following HTML snippet to participate in the Digital Analytics Program. Please note that gencies must replace `AGENCY` with their agency's standard acronym (e.g. DHS, EPA, GSA, DOC etc.):
 
-The Digital Analytics Program offers a central hosting server for its minified JavaScript file at `https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js`. As of August 2018, the file is gzipped and served compressed by default, but will be served uncompressed where `Accept-Encoding: gzip` is not present in the viewer.
-
-Agencies are encouraged to use the following HTML snippet to participate in the Digital Analytics Program:
-
-```html
+]```html
 <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
 <script async type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=AGENCY" id="_fed_an_ua_tag"></script>
 ```
 
-#### Agencies must replace `AGENCY` with their agency's standard acronym (e.g. DHS, EPA, GSA, DOC etc.)
-
+### DAP Documentation and Resources
 For more details about the DAP script capabilities, steps for adding DAP code to your website (including implementing with a tag manager), using custom parameters, DAP training etc., please refer to:
 * [DAP GA4 Release Notes](https://github.com/digital-analytics-program/gov-wide-code/wiki/DAP-Release-Notes)
 * [DAP GA4 Tracking Quick Guide](https://github.com/digital-analytics-program/gov-wide-code/wiki/DAP-Quick-Technical-Guide)
