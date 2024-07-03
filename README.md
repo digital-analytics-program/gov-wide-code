@@ -1,7 +1,7 @@
 ## Digital Analytics Program Government-wide Code
 
 Provides a JavaScript file for US federal agencies to link or embed in their websites to participate in the Digital Analytics Program.
-The latest version 8.0 of DAP GA code contains only GA4 tracking. DAP UA data collection and reporting was retired on June 24, 2024.
+The latest version 8.1 of DAP GA code contains GA4 tracking only. DAP UA data collection and reporting was removed on June 24, 2024 in prepration for a global sunset of UA on July 1, 2024.
 
 * [`Universal-Federated-Analytics.js`](Universal-Federated-Analytics.js) (full)
 * [`Universal-Federated-Analytics-Min.js`](Universal-Federated-Analytics-Min.js) (minified)
@@ -36,9 +36,9 @@ The Federated DAP code is designed to work on all government sites, whether they
 already have inline, site-specific/independent GA tracking or not. Specific
 supported scenarios include:
 
-* UA/GA4 Site Specific before the Federated code (Default Tracking Object)
-* UA/GA4 Site Specific after the Federated code (Default Tracking Object)
-* UA/GA4 Site Specific before the Federated code (Custom Tracking Object)
+* GA4 Site Specific before the Federated code (Default Tracking Object)
+* GA4 Site Specific after the Federated code (Default Tracking Object)
+* GA4 Site Specific before the Federated code (Custom Tracking Object)
 * GA4 Site Specific after the Federated code (Custom Tracking Object)
 * Classic GA Site Specific before the Federated code
 * Classic GA Site Specific after the Federated code
