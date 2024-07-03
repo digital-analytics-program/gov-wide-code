@@ -1,5 +1,4 @@
-## Digital Analytics Program Government-wide Web Analytics Solution
-
+## Digital Analytics Program Government-wide Web Analytics Solution ![image](https://github.com/digital-analytics-program/gov-wide-code/assets/161525037/6ad28f50-889e-4e52-ab18-31481e9406cf)
 DAP provides a JavaScript file for US federal agencies to link or embed in their website(s) to participate in the Digital Analytics Program. Participating agencies are granted access to the reporting portal with real-time and historical summary and detailed-level data by GSA's DAP team. DAP top-level summary real-time and historical data are also reported publicly on https://analytics.usa.gov/ 
 
 ### DAP Participation is a Requirement
