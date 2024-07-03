@@ -20,8 +20,10 @@ The latest version 8.1 of DAP GA code contains GA4 tracking only. DAP UA data co
 
 Agencies should use the following HTML snippet to participate in the Digital Analytics Program. Note: replace `AGENCY` with their agency's standard acronym (e.g. DHS, EPA, GSA, DOC etc.)
 
+```
 <!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
 <script async type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=AGENCY" id="_fed_an_ua_tag"></script>
+```
 
 ### DAP Documentation and Resources
 
