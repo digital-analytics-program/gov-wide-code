@@ -5,7 +5,8 @@
   "main": "Universal-Federated-Analytics.js",
   "scripts": {
     "build": "npx uglifyjs Universal-Federated-Analytics.js --output Universal-Federated-Analytics-Min.js --source-map url=Universal-Federated-Analytics-Min.js.map",
-    "clean": "rm ./Universal-Federated-Analytics-Min.js"
+    "clean": "rm ./Universal-Federated-Analytics-Min.js",
+    "lint": "eslint Universal-Federated-Analytics.js"
   },
   "repository": {
     "type": "git",
@@ -18,5 +19,9 @@
   "homepage": "https://github.com/digital-analytics-program/gov-wide-code#readme",
   "dependencies": {
     "uglify-js": "^3.4.9"
+  },
+  "devDependencies": {
+    "eslint": "^9.8.0",
+    "eslint-plugin-compat": "^6.0.0"
   }
 }
