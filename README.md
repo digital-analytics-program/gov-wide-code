@@ -54,10 +54,11 @@ uses a custom/non-default tracking object and it is added right after the Federa
 code. In this specific scenario, the Federated code will fail in reporting the first page
 hit and will be able to track normally all the consecutive hits.
 
-*Limitation:* The Federated DAP code doesn’t fully support older versions of
-Microsoft Internet Explorer. While the Federated DAP code works with all known
-browsers, some features (e.g. the YouTube tracker) may not work properly on
-Internet Explorer 8 and earlier versions due to limitations in the YouTube API.
+#### Browser support
+
+The DAP code is written to be compatible with a broad range of browsers. We want to learn about all the obscure technologies that your visitors are using! Officially, our own code [supports](.browserslistrc) any browser with > 0.1% market share. However, we depend on scripts from Google Tag Manager so ultimately we can only support browsers [that GTM supports](https://developers.google.com/tag-platform/support/supported-browsers). Most notably, GTM dropped official support for Internet Explorer in July 2024, so we cannot officially support IE11 even though it still had 0.5% of the market at the time it was dropped.
+
+On browsers not supported by DAP, user visits to your site may record limited or no analytics events, but the user's experience will not be affected.
 
 #### Transport security
 
