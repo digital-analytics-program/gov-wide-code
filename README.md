@@ -56,9 +56,7 @@ hit and will be able to track normally all the consecutive hits.
 
 #### Browser support
 
-The DAP code is written to be compatible with a broad range of browsers. We want to learn about all the obscure technologies that your visitors are using! Officially, our own code [supports](.browserslistrc) any browser with > 0.1% market share. However, we depend on scripts from Google Tag Manager so ultimately we can only support browsers [that GTM supports](https://developers.google.com/tag-platform/support/supported-browsers). Most notably, GTM dropped official support for Internet Explorer in July 2024, so we cannot officially support IE11 even though it still had 0.5% of the market at the time it was dropped.
-
-On browsers not supported by DAP, user visits to your site may record limited or no analytics events, but the user's experience will not be affected.
+The DAP code is written to be compatible with a broad range of browsers [supports](.browserslistrc) supported by the [Google Tag Manager (GTM)](https://developers.google.com/tag-platform/support/supported-browsers). NOTE: As of July 2024, [GTM and DAP no longer support Internet Explorer](https://support.google.com/tagmanager/answer/4620708#july2nd). On browsers not supported by DAP, user visits to websites may record limited to no analytics events.
 
 #### Transport security
 
