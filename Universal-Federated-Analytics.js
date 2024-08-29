@@ -64,7 +64,7 @@ var tObjectCheck,
   _setEnvironment();
 
 //*********GA4************
-var head = document.getElementsByTagName("head").item(0);
+var head = document.head;
 var GA4Object = document.createElement("script");
 GA4Object.setAttribute("type", "text/javascript");
 GA4Object.setAttribute(
