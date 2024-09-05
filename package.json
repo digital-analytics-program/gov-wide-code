@@ -3,10 +3,13 @@
   "version": "4.1.0",
   "description": "Provides a JavaScript file for US federal agencies to link or embed in their websites to participate in the Digital Analytics Program.",
   "main": "Universal-Federated-Analytics.js",
+  "type": "module",
   "scripts": {
     "build": "npx uglifyjs Universal-Federated-Analytics.js --output Universal-Federated-Analytics-Min.js --source-map url=Universal-Federated-Analytics-Min.js.map",
     "clean": "rm ./Universal-Federated-Analytics-Min.js",
-    "lint": "eslint Universal-Federated-Analytics.js"
+    "lint": "eslint Universal-Federated-Analytics.js",
+    "cucumber": "node node_modules/@cucumber/cucumber/bin/cucumber-js",
+    "cucumber:debug": "node --inspect-brk node_modules/@cucumber/cucumber/bin/cucumber-js"
   },
   "repository": {
     "type": "git",
@@ -21,7 +24,10 @@
     "uglify-js": "^3.4.9"
   },
   "devDependencies": {
+    "@cucumber/cucumber": "^11.0.0",
+    "chai": "^5.1.1",
     "eslint": "^9.8.0",
-    "eslint-plugin-compat": "^6.0.0"
+    "eslint-plugin-compat": "^6.0.0",
+    "puppeteer": "^23.3.0"
   }
 }
