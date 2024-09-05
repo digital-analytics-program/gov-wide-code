@@ -1,6 +1,6 @@
 ## Digital Analytics Program (DAP) - a Federal Government-wide Analytics Solution
 
-DAP provides a JavaScript file for US federal agencies to link or embed in their website(s) to participate in the Digital Analytics Program. Participating agencies are granted access to the reporting portal with real-time and historical summary and detailed-level data by GSA's DAP team. DAP top-level summary real-time and historical data are also reported publicly on https://analytics.usa.gov/ 
+DAP provides a JavaScript file for US federal agencies to link or embed in their website(s) to participate in the Digital Analytics Program. Participating agencies are granted access to the reporting portal with real-time and historical summary and detailed-level data by GSA's DAP team. DAP top-level summary real-time and historical data are also reported publicly on https://analytics.usa.gov/
 
 ### DAP Participation is a Requirement
 
@@ -8,7 +8,7 @@ On September 22, 2023, the Office of Management and Budget (OMB) released a memo
 
 ### DAP Code
 
-DAP offers a central hosting server for its minified JavaScript file at `https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js`. As of August 2018, the file is gzipped and served compressed by default, but will be served uncompressed where `Accept-Encoding: gzip` is not present in the viewer. 
+DAP offers a central hosting server for its minified JavaScript file at `https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js`. As of August 2018, the file is gzipped and served compressed by default, but will be served uncompressed where `Accept-Encoding: gzip` is not present in the viewer.
 
 The latest version 8.1 of DAP GA code contains GA4 tracking only. DAP UA data collection and reporting was removed on June 24, 2024 in prepration for a global sunset of UA on July 1, 2024.
 
@@ -107,5 +107,32 @@ This decision tree may help:
 This repository is maintained in its own GitHub organization, `digital-analytics-program`, and is operated by the Digital Analytics Program team.
 
 Only Digital Analytics Program staff have been granted write access to this repository.
+
+### Local development
+
+#### Prerequistites
+
+* NodeJS > v20.x
+
+#### Install dependencies
+
+```bash
+npm install
+```
+
+#### Linting
+
+This repo uses Eslint and Prettier for code static analysis and formatting. Run
+the linter with:
+
+```bash
+npm run lint
+```
+
+#### Run integration tests
+
+```bash
+npm run cucumber
+```
 
 **All members of the digital-analytics-program GitHub organization are required to have two-factor authentication enabled.**
