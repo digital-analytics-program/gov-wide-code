@@ -122,8 +122,7 @@ npm install
 
 #### Linting
 
-This repo uses Eslint and Prettier for code static analysis and formatting. Run
-the linter with:
+This repo uses Eslint for code static analysis. Run the linter with:
 
 ```bash
 npm run lint
