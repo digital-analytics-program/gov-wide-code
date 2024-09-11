@@ -4,13 +4,33 @@
            888            o888oo888
            888            888
            `"88888"       888
-                                  
+
 ***********************************************************************************************************
 Copyright 2024 by Cardinal Path.
 Dual Tracking Federated Analytics: Google Analytics Government Wide Site Usage Measurement.
 Author: Ahmed Awwad
 12/07/2024 Version: 8.2
 ***********************************************************************************************************/
+
+/**
+ * The Universal-Federated-Analytics.js file is part of the Digital Analytics
+ * Program (DAP), designed to help US federal agencies implement a unified web
+ * analytics solution. This script integrates Google Analytics (GA4) tracking
+ * into government websites, ensuring data consistency and centralized reporting
+ * across agencies.
+ *
+ * This code provides a robust and customizable solution for tracking user
+ * interactions and page views on a website using GA4. It includes various
+ * features and functions to ensure accurate and reliable data collection, while
+ * also protecting user privacy by redacting any potential PII.
+ */
+
+/**
+ * Defines a configuration object oCONFIG which contains various settings and
+ * parameters for the tracking script. This includes the GA4 property ID,
+ * whether to force SSL, anonymize IP addresses, and other tracking and data
+ * collection settings.
+ */
 var tObjectCheck,
   _allowedQuerystrings = [],
   isSearch = false,
@@ -60,8 +80,8 @@ var tObjectCheck,
     ACTIVATE_DEV: !1
   };
 
-  _updateConfig();
-  _setEnvironment();
+_updateConfig();
+_setEnvironment();
 
 //*********GA4************
 var head = document.getElementsByTagName("head").item(0);
@@ -73,15 +93,30 @@ GA4Object.setAttribute(
 );
 head.appendChild(GA4Object);
 window.dataLayer = window.dataLayer || [];
-function gtag() {
+/**
+ * Pushes commands to the data layer array which is used by the Google gtag.js
+ * library. More details are provided here:
+ * https://developers.google.com/tag-platform/gtagjs/reference
+ *
+ * @param {string} command the name of the gtag command. Valid commands are:
+ * "js", "config", "get", "set", "event", "consent"
+ * @param {...*} commandParameters parameters passed to the gtag command. These
+ * vary according to the command.
+ */
+function gtag(command, commandParameters) {
   dataLayer.push(arguments);
 }
 gtag("js", new Date());
-gtag('set', {'cookie_flags': 'SameSite=Strict;Secure', 'transport_type': 'beacon'});
+gtag('set', { 'cookie_flags': 'SameSite=Strict;Secure', 'transport_type': 'beacon' });
 //*********GA4************
 
 
-
+/**
+ * This function initializes the payload interceptor, defines the cookie domain,
+ * defines agency custom dimensions values, sets allowed query strings, and
+ * creates trackers. This function should be called immediately when every page
+ * is loaded in order to begin tracking analytics data.
+ */
 function _onEveryPage() {
   _payloadInterceptor();
   _defineCookieDomain();
@@ -91,6 +126,10 @@ function _onEveryPage() {
 }
 _onEveryPage();
 
+/**
+ * This function configures the cookie domain. The oCONFIG.COOKIE_DOMAIN value
+ * is set based on the oCONFIG.SUBDOMAIN_BASED configuration value.
+ */
 function _defineCookieDomain() {
   /(([^.\/]+\.[^.\/]{2,3}\.[^.\/]{2})|(([^.\/]+\.)[^.\/]{2,4}))(\/.*)?$/.test(
     oCONFIG.SUBDOMAIN_BASED.toString()
@@ -111,6 +150,9 @@ function _defineCookieDomain() {
         (oCONFIG.SUBDOMAIN_BASED = !1));
 }
 
+/**
+ * This function sets configuration values of agency custom dimensions.
+ */
 function _defineAgencyCDsValues() {
   oCONFIG.AGENCY = oCONFIG.AGENCY || "unspecified:" + oCONFIG.COOKIE_DOMAIN;
   oCONFIG.SUB_AGENCY = oCONFIG.SUB_AGENCY || "" + oCONFIG.COOKIE_DOMAIN;
@@ -120,12 +162,22 @@ function _defineAgencyCDsValues() {
     oCONFIG.SITE_PLATFORM || "unspecified:" + oCONFIG.COOKIE_DOMAIN;
 }
 
-function _setEnvironment(){
+/**
+ * This function sets the environment to production or dev, and drives the
+ * traffic to the respective GA4 data stream based on the presence of
+ * dap-dev-env query parameter in the page URL or dapdev parameter in the DAP
+ * code script reference.
+ */
+function _setEnvironment() {
   if (document.location.href.match(/([?&])(dap-dev-env)([^&$]*)/i) || oCONFIG.ACTIVATE_DEV) {
     oCONFIG.GWT_GA4ID[0] = "G-9TNNMGP8WJ"; //Test Digital Analytics Program GA4
   }
 }
 
+/**
+ * @param {string} a a string to convert to a boolean value.
+ * @returns {boolean} true or false based on parsing the string parameter.
+ */
 function _cleanBooleanParam(a) {
   switch (a.toString().toLowerCase()) {
     case "true":
@@ -143,20 +195,38 @@ function _cleanBooleanParam(a) {
   }
 }
 
+/**
+ * @param {string} a a GA4 measurement ID
+ * @returns {boolean} true if the GA4 measurement ID is valid, false otherwise.
+ */
 function _isValidGA4Num(a) {
   a = a.toLowerCase();
   a = a.match(/^g\-([0-9a-z])+$/);
   return null !== a && 0 < a.length && a[0] !== oCONFIG.GWT_GA4ID[0].toLowerCase();
 }
 
-var d_c=1;
+var d_c = 1;
+/**
+ * This function cleans a GA4 value of event names and custom dimension names by
+ * replacing whitespace and non-alphanumeric characters with underscores.
+ *
+ * @param {string} t a key name for the event
+ * @param {string} a the event name or custom dimension name
+ * @returns {string|undefined} the event name or custom dimension name formatted
+ * with underscores. Returns undefined if an error occurs while processing the
+ * params.
+ */
 function _cleanGA4Value(t, a) {
   try {
     a = a.replace(/\s/g, '_').replace(/([^\w]+)/g, '').match(/[A-Za-z]\w*$/ig);
-    return ((null !== a)? a[0].toLowerCase() : t==="d"? "custom_dimension_"+d_c++ : "dap_event");
+    return ((null !== a) ? a[0].toLowerCase() : t === "d" ? "custom_dimension_" + d_c++ : "dap_event");
   } catch (c) { }
 }
 
+/**
+ * This function updates oCONFIG configuration values based on the query
+ * parameters of the DAP script element.
+ */
 function _updateConfig() {
   if ("undefined" !== typeof _fedParmsGTM) {
     var a = _fedParmsGTM.toLowerCase().split("&");
@@ -174,13 +244,13 @@ function _updateConfig() {
       (_value = _keyValuePair.split("=")[1]),
       _key)
     ) {
-       case "pua":
+      case "pua":
         for (var c = _value.split(","), d = 0; d < c.length; d++)
-          _isValidGA4Num(c[d]) && ( oCONFIG.GWT_GA4ID.push(c[d].toUpperCase()), oCONFIG.USING_PARALLEL_TRACKER = "pua" );
-        break; 
+          _isValidGA4Num(c[d]) && (oCONFIG.GWT_GA4ID.push(c[d].toUpperCase()), oCONFIG.USING_PARALLEL_TRACKER = "pua");
+        break;
       case "pga4":
         for (var c = _value.split(","), d = 0; d < c.length; d++)
-          _isValidGA4Num(c[d]) && ( oCONFIG.GWT_GA4ID.push(c[d].toUpperCase()), oCONFIG.USING_PARALLEL_TRACKER = "pga4" );
+          _isValidGA4Num(c[d]) && (oCONFIG.GWT_GA4ID.push(c[d].toUpperCase()), oCONFIG.USING_PARALLEL_TRACKER = "pga4");
         break;
       case "agency":
         oCONFIG.AGENCY = _value.toUpperCase();
@@ -282,6 +352,16 @@ function _updateConfig() {
     }
 }
 
+/**
+ * This function sends an event command to the Google gtag.js library with the
+ * specified event name and parameters. PII is redacted from the event
+ * parameters.
+ *
+ * @param {string} a the event name
+ * @param {object} b the event parameters. The parameters are modified to add
+ * 'send_to' and 'event_name_dimension' keys before sending the parameters to
+ * the gtag.js library's event command
+ */
 function _sendEvent(a, b) {
   var send_to = "";
   for (var g = 0; g < oCONFIG.GWT_GA4ID.length; g++) {
@@ -295,30 +375,59 @@ function _sendEvent(a, b) {
   c = _unflattenJSON(c);
   c.send_to = send_to.replace(/.$/, "");
   c.event_name_dimension = a;
-  gtag("event", a, c); 
+  gtag("event", a, c);
 }
 
+/**
+ * This function is a public interface function that enables sites which include
+ * the DAP JavaScript to send custom GA4 events with the specified event name
+ * and parameters to the DAP GA4 property and all other parallel properties set
+ * as query parameters to the DAP JavaScript source URL.
+ *
+ * @param {string} a the event name to be sent. This will default to 'dap_event'
+ * if the event name is not in a hard-coded list of supported event names.
+ * @param {object} b the event parameters to be sent. These parameters are
+ * modified for the 'page_view' event to include page_location, page_title, and
+ * search_term
+ */
 function gas4(a, b) {
   if (void 0 !== a && "" !== a && void 0 !== b && 'object' === typeof b) {
     a = _cleanGA4Value("e", a);
-      if ("page_view" === a.toLowerCase())
-          try {
-              if(Object.keys(b).length !== 0){
-                var ur = ((b.page_location)? b.page_location: location.href);
-                  b.page_location = _URIHandler(_scrubbedURL(ur)).split(/[#]/)[0];
-                  b.page_title = ((b.page_title) ? b.page_title : document.title);
-                  _sendEvent("page_view", b), ((isSearch)?(_sendViewSearchResult({search_term: isSearch})) : '');
-              }
-          } catch (n) { }
-      else
-          try {
-            var e_n= ((/((email|telephone|image|cta|navigation|faq|accordion)_)?click|file_download|view_search_results|video_(start|pause|progress|complete|play)|official_USA_site_banner_click|form_(start|submit|progress)|content_view|social_share|error|sort|filter|was_this_helpful_submit/gi.test(a))? a : 'dap_event');
-            if(Object.keys(b).length !== 0){_sendEvent(e_n, b);}
-            else{_sendEvent(e_n);}
-          } catch (n) { }
+    if ("page_view" === a.toLowerCase())
+      try {
+        if (Object.keys(b).length !== 0) {
+          var ur = ((b.page_location) ? b.page_location : location.href);
+          b.page_location = _URIHandler(_scrubbedURL(ur)).split(/[#]/)[0];
+          b.page_title = ((b.page_title) ? b.page_title : document.title);
+          _sendEvent("page_view", b), ((isSearch) ? (_sendViewSearchResult({ search_term: isSearch })) : '');
+        }
+      } catch (n) { }
+    else
+      try {
+        var e_n = ((/((email|telephone|image|cta|navigation|faq|accordion)_)?click|file_download|view_search_results|video_(start|pause|progress|complete|play)|official_USA_site_banner_click|form_(start|submit|progress)|content_view|social_share|error|sort|filter|was_this_helpful_submit/gi.test(a)) ? a : 'dap_event');
+        if (Object.keys(b).length !== 0) { _sendEvent(e_n, b); }
+        else { _sendEvent(e_n); }
+      } catch (n) { }
   }
 }
 
+/**
+ * This function is an interface function that enables DAP users to send their
+ * custom GA4 events with the specified event name and parameters to the DAP GA4
+ * property and all other parallel properties set through the DAP. This is an
+ * older version of the gas4() function, which is kept for backward
+ * compatibility. Some agencies are still using this function since it was the
+ * older version created for the same purpose but mainly for Universal
+ * Analytics.
+ *
+ * @param {*} a unknown
+ * @param {*} b unknown
+ * @param {*} c unknown
+ * @param {*} d unknown
+ * @param {*} f unknown
+ * @param {*} e unknown
+ * @param {*} h unknown
+ */
 function gas(a, b, c, d, f, e, h) {
   if (
     void 0 !== a &&
@@ -331,8 +440,8 @@ function gas(a, b, c, d, f, e, h) {
     if ("pageview" === b.toLowerCase())
       try {
         c = _URIHandler(_scrubbedURL(c)).split(/[#]/)[0];
-        _sendEvent("page_view", {page_location : c, page_title: void 0 === d || "" === d ? document.title : d}),
-        ((isSearch)? _sendViewSearchResult({search_term : isSearch}) : '' );
+        _sendEvent("page_view", { page_location: c, page_title: void 0 === d || "" === d ? document.title : d }),
+          ((isSearch) ? _sendViewSearchResult({ search_term: isSearch }) : '');
 
       } catch (n) { }
     else if ("event" === b.toLowerCase() && void 0 !== d && "" !== d)
@@ -354,16 +463,27 @@ function gas(a, b, c, d, f, e, h) {
       } catch (n) { }
     else if (-1 != b.toLowerCase().indexOf("metric"))
       try {
-       
+
       } catch (n) { }
 }
 
-
-
+/**
+ * This function sends a GA4 view_search_results event with the specified search
+ * term.
+ *
+ * @param {string} a the search term.
+ */
 function _sendViewSearchResult(a) {
   _sendEvent("view_search_results", a), isSearch = !1;
 }
 
+/**
+ * This function checks for self-referrals to check if the referrer should be
+ * excluded based on the SUBDOMAIN_BASED configuration.
+ *
+ * @returns {boolean|undefined} true if the referrer should be excluded,
+ * undefined if the document.referrer is empty, false otherwise.
+ */
 function _isExcludedReferrer() {
   if ("" !== document.referrer) {
     var a = document.referrer
@@ -380,15 +500,23 @@ function _isExcludedReferrer() {
   }
 }
 
+/**
+ * This function creates a GA4 tracker with the configuration set in the oCONFIG
+ * object. A "config" command is sent to the gtag.js library for the DAP GA4
+ * configuration. A "config" command is also sent to the gtag.js library for
+ * each configured parallel tracker.
+ *
+ * @param {*} a this parameter isn't used
+ */
 function createTracker(a) {
   var m, n, o = /^\/.*$/i;
   try { m = ((oCONFIG.USE_CUSTOM_URL && o.test(custom_dap_data.url)) ? location.protocol + "//" + location.hostname + custom_dap_data.url.replace(location.protocol + "//" + location.hostname, "") : document.location.href); n = ((oCONFIG.USE_CUSTOM_TITLE) ? custom_dap_data.title : document.title); } catch (error) { m = document.location.href; n = document.title; }
   var c = m.split(document.location.hostname)[1];
-  -1 !== document.title.search(/404|not found/i) && 
-  (c = ("/vpv404/" + c).replace(/\/\//g, "/") + ((document.referrer) ? "/" + document.referrer : document.referrer));
-  var p = ((-1 !== document.title.search(/404|not found/ig))? document.location.protocol + "//" + document.location.hostname + c : m);
-  var ur = _URIHandler(_scrubbedURL(p)); 
-  var r =  {};
+  -1 !== document.title.search(/404|not found/i) &&
+    (c = ("/vpv404/" + c).replace(/\/\//g, "/") + ((document.referrer) ? "/" + document.referrer : document.referrer));
+  var p = ((-1 !== document.title.search(/404|not found/ig)) ? document.location.protocol + "//" + document.location.hostname + c : m);
+  var ur = _URIHandler(_scrubbedURL(p));
+  var r = {};
   for (var b = 0; b < oCONFIG.GWT_GA4ID.length; b++) {
     if (b === 0) {
       r = {
@@ -406,7 +534,7 @@ function createTracker(a) {
         [oCONFIG.MAIN_URL_PROTOCOL_DIMENSION]: oCONFIG.URL_PROTOCOL.toLowerCase(),
         [oCONFIG.MAIN_USING_PARALLEL_DIMENSION]: oCONFIG.USING_PARALLEL_TRACKER.toLowerCase()
       };
-      ((document.referrer && -1 !== document.referrer.search(location.hostname))? (r.page_referrer = _scrubbedURL(document.referrer)) : document.referrer);
+      ((document.referrer && -1 !== document.referrer.search(location.hostname)) ? (r.page_referrer = _scrubbedURL(document.referrer)) : document.referrer);
       var rr = _piiRedactor(_objToQuery(r), "default");
       rr = _queryToJSON(rr);
       rr = _unflattenJSON(rr);
@@ -428,32 +556,42 @@ function createTracker(a) {
         [oCONFIG.PARALLEL_URL_PROTOCOL_DIMENSION]: oCONFIG.URL_PROTOCOL.toLowerCase(),
         [oCONFIG.PARALLEL_USING_PARALLEL_DIMENSION]: oCONFIG.USING_PARALLEL_TRACKER.toLowerCase()
       };
-      ((document.referrer && -1 !== document.referrer.search(location.hostname))? (r.page_referrer = _scrubbedURL(document.referrer)) : document.referrer);
+      ((document.referrer && -1 !== document.referrer.search(location.hostname)) ? (r.page_referrer = _scrubbedURL(document.referrer)) : document.referrer);
       var rr = _piiRedactor(_objToQuery(r), "default");
       rr = _queryToJSON(rr);
       rr = _unflattenJSON(rr);
       gtag("config", oCONFIG.GWT_GA4ID[b], rr);
     }
     else {
-      r =  {
+      r = {
         groups: oCONFIG.GA4_NAME + b,
         cookie_expires: parseInt(oCONFIG.COOKIE_TIMEOUT),
         //ignore_referrer: (_isExcludedReferrer() ? true : false),
         page_location: ur,
         page_title: n
       };
-      ((document.referrer && -1 !== document.referrer.search(location.hostname))? (r.page_referrer = _scrubbedURL(document.referrer)) : document.referrer);
+      ((document.referrer && -1 !== document.referrer.search(location.hostname)) ? (r.page_referrer = _scrubbedURL(document.referrer)) : document.referrer);
       var rr = _piiRedactor(_objToQuery(r), "default");
       rr = _queryToJSON(rr);
       rr = _unflattenJSON(rr);
       gtag("config", oCONFIG.GWT_GA4ID[b], rr);
     }
   }
-  ((isSearch)? _sendViewSearchResult({search_term: isSearch}) : "");
+  ((isSearch) ? _sendViewSearchResult({ search_term: isSearch }) : "");
   //window.fetch = wf;
 }
 
+/**
+ * This function initializes the auto-tracker for links and downloads. It sets
+ * event listeners to the document for mousedown and keydown events.
+ */
 function _initAutoTracker() {
+  /**
+   * This function checks if a link is a download based on the file extension.
+   *
+   * @param {string} a the link URL
+   * @returns {boolean} true if the URL is a download link, false otherwise.
+   */
   var _isDownload = function (a) {
     var ex = a.href.toLowerCase().replace(/[#?&].*/, '').split(a.hostname)[1].split("."); var ext = ex[ex.length - 1];
     if (ext.match(new RegExp("^(" + oCONFIG.EXTS + ")$")) != null) {
@@ -463,6 +601,12 @@ function _initAutoTracker() {
       return false;
     }
   };
+
+  /**
+   * @param {object} j the object to modify.
+   * @returns {object|undefined} the object with all keys and values converted
+   * to lower case, undefined if there is an error processing the object.
+   */
   var _enforeLower = function (j) {
     try {
       var d = JSON.stringify(j);
@@ -470,6 +614,13 @@ function _initAutoTracker() {
     } catch (error) { }
   };
 
+  /**
+   * This function handles events for the auto-tracker. It sends event commands
+   * to the Google gtag.js library when links are clicked by the user. The event
+   * name is determined by the type of link that was clicked.
+   *
+   * @param {object} event the browser event to handle
+   */
   var _eventHandler = function (event) {
     try {
       if ("mousedown" === event.type || ("keydown" === event.type && 13 === event.keyCode)) {
@@ -522,7 +673,7 @@ function _initAutoTracker() {
                 _sendEvent("file_download", _enforeLower(l));
               }
               else if ("l" === i && !_isDownload(a)) {
-                //internal link tracking; 
+                //internal link tracking;
                 /*c = a.closest('section'); var s_n = (('object' === typeof c)? (c.id? c.id : c.className) : '');
                 l = { link_id: a.id, link_url: a.href, link_domain: a.hostname.replace(/^www\./i, ""), link_text: a.text.replace(/(?:[\r\n]+)+/g, "").trim(), link_classes: a.className, interaction_type: t, section:  s_n, menu_type: 'all' };
                 _sendEvent("navigation_click", _enforeLower(l));*/
@@ -571,11 +722,14 @@ if (oCONFIG.YOUTUBE) {
   var videoArray = [];
   var playerArray = [];
   var _buckets = [];
-
-  var _milestoneController = oCONFIG.YT_MILESTONE; /* accepted values 10, 20 or 25 */
+  // accepted values for milestone 10, 20 or 25
+  var _milestoneController = oCONFIG.YT_MILESTONE;
   var ytUtils = [];
 
 
+  /**
+   * Initializes the YouTube API
+   */
   onYouTubeIframeAPIReady = function () {
     for (var i = 0; i < videoArray.length; i++) {
       playerArray[i] = new YT.Player(videoArray[i], {
@@ -587,11 +741,28 @@ if (oCONFIG.YOUTUBE) {
       });
     }
   };
+  /**
+   * Called when the YouTube player is ready
+   *
+   * @param {object} event the ready event.
+   */
   onPlayerReady = function (event) { };
+  /**
+   * Called when the YouTube player has an error. Sends a 'video_error' event
+   * command to the Google gtag.js library.
+   *
+   * @param {object} event the error event.
+   */
   onPlayerError = function (event) {
     _sendEvent('video_error', { videotitle: ((event.target.playerInfo !== undefined) ? event.target.playerInfo.videoData.title : event.target.getVideoData().title) });
   };
-  
+  /**
+   * Called when the YouTube player state changes. Sends a 'video_start',
+   * "video_play", "video_complete", and "video_pause" event commands to the
+   * Google gtag.js library based on the state of the player.
+   *
+   * @param {object} event the state change event.
+   */
   onPlayerStateChange = function (event) {
     try {
       var videoIndex = 0, video_id = ((event.target.playerInfo !== undefined) ? event.target.playerInfo.videoData.video_id : event.target.getVideoData().video_id);
@@ -617,7 +788,7 @@ if (oCONFIG.YOUTUBE) {
         if (_milestoneController) {
           ytUtils.push([videoIndex, function (videx) {
             for (var b = 1; b <= (100 / _milestoneController); b++) {
-              ((100 / _milestoneController === 4 && b === 100 / _milestoneController) ? _buckets[b - 1] = { id: videoIndex, milestone: 95, triggered: false } : ((_milestoneController * b !== 100) ? _buckets[b - 1] = { id: videoIndex,  milestone: _milestoneController * b, triggered: false } : ''));
+              ((100 / _milestoneController === 4 && b === 100 / _milestoneController) ? _buckets[b - 1] = { id: videoIndex, milestone: 95, triggered: false } : ((_milestoneController * b !== 100) ? _buckets[b - 1] = { id: videoIndex, milestone: _milestoneController * b, triggered: false } : ''));
             }
             setInterval(function () {
               var cTimeP = ((playerArray[videoIndex].playerInfo !== undefined) ? Math.round(playerArray[videoIndex].playerInfo.currentTime) : Math.round(playerArray[videoIndex].getCurrentTime()));
@@ -650,9 +821,27 @@ if (oCONFIG.YOUTUBE) {
     }
 
   };
+  /**
+   * @param {string} e a URL
+   * @returns {string|undefined} the YouTube video ID if the URL is a YouTube
+   * video URL, returns undefined otherwise.
+   */
   youtube_parser = function (e) { var t = e.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/); if (t && 11 == t[2].length) return t[2] };
+  /**
+   * @param {string} u a URL
+   * @returns {boolean} true if the URL is a YouTube video URL, false otherwise.
+   */
   IsYouTube = function (u) { var e = u.match(/(.*)(youtu\.be\/|youtube(\-nocookie)?\.([A-Za-z]{2,4}|[A-Za-z]{2,3}\.[A-Za-z]{2})\/)(watch|embed\/|vi?\/)?(\?vi?=)?([^#&\?\/]{11}).*/); return null != e && e.length > 0 };
+  /**
+   * @param {string} t a URL
+   * @returns {string} the URL with 'origin', 'protocol', and 'enablejsapi'
+   * query params altered.
+   */
   YTUrlHandler = function (t) { return t = t.replace(/origin\=(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})\&?/gi, "origin=" + document.location.protocol + "//" + document.location.host), stAdd = "", adFlag = !1, -1 == t.indexOf("https") && (t = t.replace("http", "https")), -1 == t.indexOf("?") && (stAdd = "?flag=1"), -1 == t.indexOf("enablejsapi") && (stAdd += "&enablejsapi=1", adFlag = !0), -1 == t.indexOf("origin") && (stAdd += "&origin=" + document.location.protocol + "//" + document.location.host, adFlag = !0), 1 == adFlag ? t + stAdd : t };
+  /**
+   * Selects every iframe element in the page and modifies those which are
+   * YouTube players with a parsed 'src' field and 'id' field.
+   */
   _initYouTubeTracker = function () {
     var i = 0;
     var allIframes = document.getElementsByTagName('iframe');
@@ -671,7 +860,15 @@ if (oCONFIG.YOUTUBE) {
 }
 // END YT TRACKER //
 
-// GA4 Payload Interceptor
+/**
+ * GA4 Payload Interceptor. This function intercepts the GA4 beacon requests to
+ * redact personally identifiable information from the beacon request's
+ * arguments.
+ *
+ * @returns {boolean|undefined} the result of the window.navigator.sendBeacon
+ * function call if there is an error during this method's processing, returns
+ * undefined otherwise.
+ */
 function _payloadInterceptor() {
   window._isRedacted = window._isRedacted || false;
   if (!window._isRedacted) {
@@ -679,7 +876,17 @@ function _payloadInterceptor() {
     try {
       var pl = window.navigator.sendBeacon;
       var ga4_props = oCONFIG.GWT_GA4ID.join("|");
-      window.navigator.sendBeacon = function () {
+      /**
+       * Attempts to redact PII from the arguments to beacon requests that are
+       * directed to google analytics APIs. The beacon requests are then sent
+       * with the modified arguments.
+       *
+       * @param {string} url the URL of the beacon request
+       * @param {string|undefined} data the data for the beacon request.
+       * @returns {boolean} true if the beacon request was queued successfully,
+       * false otherwise.
+       */
+      window.navigator.sendBeacon = function (url, data) {
         if (arguments && arguments[0].match(/google-analytics\.com.*v\=2\&/i) && arguments[0].match(new RegExp(ga4_props))) {
           var endpoint = arguments[0].split('?')[0], query = arguments[0].split('?')[1];
           var beacon = {
@@ -703,6 +910,12 @@ function _payloadInterceptor() {
 }
 // End GA4 Payload Interceptor
 
+/**
+ * @param {object} data a JSON object
+ * @returns {object|undefined} the JSON object with nested objects restored if
+ * nested keys exist in the object. Returns undefined if there is an error
+ * during processing.
+ */
 function _unflattenJSON(data) {
   try {
     if (Object(data) !== data || Array.isArray(data))
@@ -724,9 +937,23 @@ function _unflattenJSON(data) {
   } catch (error) {
   }
 }
+
+/**
+ * @param {object} data a JSON object
+ * @returns {object|undefined} the JSON object with nested objects flattenned to
+ * be at a single key depth in the main object. Returns undefined if there is an
+ * error during processing.
+ */
 function _flattenJSON(data) {
   try {
     var result = {};
+    /**
+     * Recursively sets keys on an external "result" object to a flattenned
+     * version of the cur object.
+     *
+     * @param {object} cur the object to flatten
+     * @param {string} prop a key name
+     */
     function recurse(cur, prop) {
       if (Object(cur) !== cur) {
         result[prop] = cur;
@@ -751,6 +978,10 @@ function _flattenJSON(data) {
   }
 }
 
+/**
+ * @param {object} obj the object
+ * @returns {string} the object converted to a URL query string
+ */
 function _objToQuery(obj) {
   return Object.keys(obj).reduce(function (str, key, i) {
     var delimiter, val;
@@ -760,29 +991,37 @@ function _objToQuery(obj) {
     return [str, delimiter, key, '=', val].join('');
   }, '');
 }
+
+/**
+ * @param {string} qs a URL querystring
+ * @returns {object} the query string converted to a JSON object
+ */
 function _queryToJSON(qs) {
   var pairs = qs.split('&');
   var result = {};
-  pairs.forEach(function(p) {
-      var pair = p.split('=');
-      var key = pair[0];
-      var value = decodeURIComponent(pair[1] || '');
+  pairs.forEach(function (p) {
+    var pair = p.split('=');
+    var key = pair[0];
+    var value = decodeURIComponent(pair[1] || '');
 
-      if( result[key] ) {
-          if( Object.prototype.toString.call( result[key] ) === '[object Array]' ) {
-              result[key].push( value );
-          } else {
-              result[key] = [ result[key], value ];
-          }
+    if (result[key]) {
+      if (Object.prototype.toString.call(result[key]) === '[object Array]') {
+        result[key].push(value);
       } else {
-          result[key] = value;
+        result[key] = [result[key], value];
       }
+    } else {
+      result[key] = value;
+    }
   });
 
   return JSON.parse(JSON.stringify(result));
 };
 
 var piiRegex = [];
+/**
+ * Sets the window.piiRegex value to the expected regexes for PII redaction.
+ */
 function _piiRegexReset() {
   window.piiRegex = [{
     name: 'EMAIL',
@@ -809,19 +1048,25 @@ function _piiRegexReset() {
 }
 
 // Payload Redactor
+/**
+ * @param {*} payload event parameters to be redacted
+ * @param {string} type the type of payload data
+ * @returns {string|undefined} the payload converted to a query string and with
+ * PII redacted. Returns undefined if there is an error during processing.
+ */
 function _piiRedactor(payload, type) {
   try {
     var checkParams = "dl|dr|dt|dt|en|ep.|up.|uid";
     var UncheckParams = "ep.agency||ep.subagency|ep.site_topic|ep.site_platform|ep.script_source|ep.version|ep.protocol";
-    payload = (("object" === typeof payload && /json|default/.test(type))? (_flattenJSON(payload), payload = _objToQuery(payload)): payload);
+    payload = (("object" === typeof payload && /json|default/.test(type)) ? (_flattenJSON(payload), payload = _objToQuery(payload)) : payload);
     _piiRegexReset();
-  
+
     var _allowedQs = _allowedQuerystrings.toString().replace(/\,/g, "=|") + "=";
     var _hitPayloadParts = payload.split('&');
     for (var i = 0; i < _hitPayloadParts.length; i++) {
       var newQueryString = '';
       var _param = _hitPayloadParts[i].split('=');
-      var _para = (_param.length>2)?_param.slice(1).join("="):_param[1]; _param.splice(2); _param[1]  = _para;
+      var _para = (_param.length > 2) ? _param.slice(1).join("=") : _param[1]; _param.splice(2); _param[1] = _para;
       var _val;
       try {
         _val = decodeURIComponent(decodeURIComponent(_param[1]));
@@ -829,7 +1074,7 @@ function _piiRedactor(payload, type) {
         _val = decodeURIComponent(_param[1]);
       }
 
-      if (( _param[0].match(new RegExp(checkParams)) != null || /query|json/ig.test(type) ) && _val.indexOf('?') > -1) {
+      if ((_param[0].match(new RegExp(checkParams)) != null || /query|json/ig.test(type)) && _val.indexOf('?') > -1) {
         var paramArray = _val.split('?').splice(1).join('&').split('&');
         var paramSubArray = [];
         // loop through the parameters in the search query string to see if there are sub-parameters, and build the paramSubArray
@@ -851,11 +1096,11 @@ function _piiRedactor(payload, type) {
 
       if (type === 'json') {
         window.piiRegex.push(
-        {
-          name: 'DOB',
-          regex: /(((birth)?date|dob)\=)(19|20)\d\d([\s\.\/\-]|%20)(0?[1-9]|1[012])([\s\.\/\-]|%20)(0?[1-9]|[12][0-9]|3[01])([^\&\s\?\/]*)/ig,
-          format: 'YYYY-MM-DD'
-        }, {
+          {
+            name: 'DOB',
+            regex: /(((birth)?date|dob)\=)(19|20)\d\d([\s\.\/\-]|%20)(0?[1-9]|1[012])([\s\.\/\-]|%20)(0?[1-9]|[12][0-9]|3[01])([^\&\s\?\/]*)/ig,
+            format: 'YYYY-MM-DD'
+          }, {
           name: 'DOB',
           regex: /(((birth)?date|dob)\=)(19|20)\d\d([\s\.\/\-]|%20)(0?[1-9]|[12][0-9]|3[01])([\s\.\/\-]|%20)(0?[1-9]|1[012])([^\&\s\?\/]*)/ig,
           format: 'YYYY-DD-MM'
@@ -875,9 +1120,9 @@ function _piiRedactor(payload, type) {
             name: 'TEL',
             regex: /((tel|(tele)?phone|mob(ile)?|cell(ular)?)\=)?((\+\d{1,2}[\s\.\-]?)?\d{3}[\s\.\-]?\d{3}[\s\.\-]?\d{4})([^\&\s\?\/]*)/gi
           }, {
-            name: 'SSN',
-            regex: /((full)?(([\-\_])?)?ssn\=)?(\d{3}([\s\.\-\+]|%20)?\d{2}([\s\.\-\+]|%20)?\d{4})([^\&\s\?\/]*)/ig
-          }, {
+          name: 'SSN',
+          regex: /((full)?(([\-\_])?)?ssn\=)?(\d{3}([\s\.\-\+]|%20)?\d{2}([\s\.\-\+]|%20)?\d{4})([^\&\s\?\/]*)/ig
+        }, {
           name: 'DOB',
           regex: /(((birth)?date|dob)\=)?(19|20)\d\d([\s\.\/\-]|%20)(0?[1-9]|1[012])([\s\.\/\-]%20)(0?[1-9]|[12][0-9]|3[01])([^\&\s\?\/]*)/ig,
           format: 'YYYY-MM-DD'
@@ -896,7 +1141,7 @@ function _piiRedactor(payload, type) {
         });
       }
 
-      if (( _param[0].match(new RegExp(checkParams)) != null && _param[0].match(new RegExp(UncheckParams)) != null ) || /query|json|default/ig.test(type)) {
+      if ((_param[0].match(new RegExp(checkParams)) != null && _param[0].match(new RegExp(UncheckParams)) != null) || /query|json|default/ig.test(type)) {
         piiRegex.forEach(function (pii) {
           _val = _val.replace(pii.regex, '[REDACTED_' + pii.name + ']');
         });
@@ -910,6 +1155,10 @@ function _piiRedactor(payload, type) {
   }
 }
 // End Payload Redactor
+
+/**
+ * Assigns an ID to every anchor tag on the page which does not have an ID
+ */
 function _initIdAssigner() {
   for (var a = document.getElementsByTagName("a"), b = 0; b < a.length; b++) {
     var c = a[b].getAttribute("id");
@@ -918,12 +1167,15 @@ function _initIdAssigner() {
   }
 }
 
+/**
+ * Adds a click handler to track 'Official USA Site' banner clicks.
+ */
 function _initBannerTracker() {
   try {
     var acord = document.querySelector('section.usa-banner button.usa-accordion__button');
     if (acord) {
       acord.addEventListener('click', function (e) {
-        gas4("official_usa_site_banner_click", {link_text: e.target.textContent.trim(), section: "header"});
+        gas4("official_usa_site_banner_click", { link_text: e.target.textContent.trim(), section: "header" });
       });
     }
 
@@ -933,13 +1185,33 @@ function _initBannerTracker() {
 }
 // ************ GA4 ************
 
+/**
+ * @param {string} a a URL
+ * @returns {string} the URL modified by replacing certain query parameters with
+ * the string "query" before sending it to the Google Analytics server.
+ * Specifically, it replaces query parameters that match a regular expression.
+ */
 function _URIHandler(a) {
   var b = new RegExp("([?&])(" + oCONFIG.SEARCH_PARAMS + ")(=[^&]+)", "i");
-  b.test(a) && (a = a.replace(b, "$1query$3"), isSearch = a.match(/([?&])(query\=)([^&#?]*)/i)[3] );
+  b.test(a) && (a = a.replace(b, "$1query$3"), isSearch = a.match(/([?&])(query\=)([^&#?]*)/i)[3]);
   return a;
 }
 
+/**
+ * @param {string} z a URL
+ * @returns {string} a modified version of the URL with certain query parameters
+ * removed. It first defines a regular expression that matches the domain name
+ * of the current page. It then extracts the protocol, domain name, and path
+ * from the input URL, and constructs a new URL by concatenating the protocol,
+ * domain name, and path. If the input URL contains any query parameters that
+ * are not allowed (i.e., not in the _allowedQuerystrings array), it removes
+ * those query parameters from the new URL.
+ */
 function _scrubbedURL(z) {
+  /**
+   * @param {string} s a URL
+   * @returns {string} the URL with special characters escaped
+   */
   RegExp.escape = function (s) { return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'); };
   var n = new RegExp(`^(https?:\\/\\/(www\\.)?)?${RegExp.escape(document.location.hostname.replace(/^www\\./, ""))}`, "ig"),
     t = "",
@@ -952,11 +1224,19 @@ function _scrubbedURL(z) {
         .forEach(function (o, i) {
           _allowedQuerystrings.indexOf(o.split("=")[0]) > -1 && (t = t + "&" + o);
         }),
-        t.length > 0 ? a + "?" + _piiRedactor(t.substring(1),"query") : a)
+        t.length > 0 ? a + "?" + _piiRedactor(t.substring(1), "query") : a)
       : a;
   return r;
 }
 
+/**
+ * This function sets the _allowedQuerystrings array to include a set of default
+ * query parameters, as well as query parameters that are specific to the
+ * current page's agency. The default query parameters include those used by
+ * Google Analytics, as well as some common query parameters used by government
+ * websites. The agency-specific query parameters are determined by the value of
+ * the oCONFIG.AGENCY variable.
+ */
 function _setAllowedQS() {
   var queries = {
     "default": ["utm_id", "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "utm_source_platform", "utm_creative_format", "utm_marketing_tactic", "gbraid", "wbraid", "_gl", "gclid", "dclid", "gclsrc", "affiliate", "dap-dev-env", "v"],
@@ -975,14 +1255,22 @@ function _setAllowedQS() {
   _allowedQuerystrings = queries.default.concat(queries[oCONFIG.AGENCY.toLowerCase()]).concat(oCONFIG.SEARCH_PARAMS.toLowerCase().split("|"));
 }
 
+/**
+ * Creates the USA Site banner tracker
+ */
 function _setUpTrackers() {
   //createTracker(!1);
   oCONFIG.ENHANCED_LINK ? _initIdAssigner() : "";
   oCONFIG.AUTOTRACKER ? _initAutoTracker() : "";
   oCONFIG.YOUTUBE ? _initYouTubeTracker() : "";
-  _initBannerTracker(); 
+  _initBannerTracker();
 }
 
+/**
+ * Sets up the USA Site banner tracker if the document is loaded.
+ * @returns {boolean} true if the document was loaded when this function was
+ * called.
+ */
 function _setUpTrackersIfReady() {
   return (("interactive" === document.readyState || "complete" === document.readyState) ? (_setUpTrackers(), !0) : !1);
 }
