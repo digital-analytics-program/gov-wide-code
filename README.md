@@ -110,9 +110,10 @@ Only Digital Analytics Program staff have been granted write access to this repo
 
 ### Local development
 
-#### Prerequistites
+#### Prerequisites
 
 * NodeJS > v20.x
+* Docker
 
 #### Install dependencies
 
@@ -129,6 +130,13 @@ npm run lint
 ```
 
 #### Run integration tests
+Start up the test site at http://localhost:8080/:
+
+```bash
+npm run test-site
+```
+
+Then run the tests against the test site:
 
 ```bash
 npm run cucumber

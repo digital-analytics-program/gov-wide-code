@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+<title>DAP test site</title>
+<script>
+	(function() {
+		const queryParams = new URLSearchParams(window.location.search);
+		if (!queryParams.has("agency")) {
+			queryParams.set("agency", "GSA");
+		}
+		const dapScriptTag = document.createElement("script");
+		dapScriptTag.id = "_fed_an_ua_tag";
+		dapScriptTag.async = true;
+		dapScriptTag.src = `Universal-Federated-Analytics-Min.js?dapdev=true&${queryParams.toString()}`;
+		document.head.appendChild(dapScriptTag);
+	})();
+
+</script>
+</head>
+
+<body>
+
+<div class="header">
+	<p> Digital Analytics Program (DAP) Code - QA Website</p>
+</div>
+
+<h2>Banner Click</h2>
+<section class="usa-banner" aria-label="Official website of the United States government" id="usagov-banner">
+	<div class="usa-accordion">
+		<div class="usa-banner__header">
+			<div class="usa-banner__inner">
+				<div class="grid-col-auto">
+				</div>
+				<div class="grid-col-fill tablet:grid-col-auto">
+					<p class="usa-banner__header-text">
+						An official website of the United States government
+					</p>
+					<p class="usa-banner__header-action">Here’s how you know</p>
+				</div>
+				<button type="button" class="usa-accordion__button usa-banner__button" aria-expanded="false" aria-controls="gov-banner-default-default" id="banner-button">
+					<span class="usa-banner__button-text">Here’s how you know</span>
+				</button>
+			</div>
+		</div>
+		<div class="usa-banner__content usa-accordion__content" id="gov-banner-default-default" hidden="until-found">
+			<div class="grid-row grid-gap-lg">
+				<div class="usa-banner__guidance tablet:grid-col-6">
+					<div class="usa-media-block__body">
+						<p>
+							<strong>Official websites use .gov</strong><br>A <strong>.gov</strong> website belongs to an official government organization in the United States.
+						</p>
+					</div>
+				</div>
+				<div class="usa-banner__guidance tablet:grid-col-6">
+					<div class="usa-media-block__body">
+						<p>
+							<strong>Secure .gov websites use HTTPS</strong><br>A <strong>lock</strong>
+							(
+							<span class="icon-lock">
+								<svg xmlns="http://www.w3.org/2000/svg" width="52" height="64" viewBox="0 0 52 64" class="usa-banner__lock-image" role="img" aria-labelledby="banner-lock-description-default" focusable="false">
+									<title id="banner-lock-title-default">Lock</title>
+									<desc id="banner-lock-description-default">Locked padlock icon</desc>
+									<path fill="#000000" fill-rule="evenodd" d="M26 0c10.493 0 19 8.507 19 19v9h3a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V32a4 4 0 0 1 4-4h3v-9C7 8.507 15.507 0 26 0zm0 8c-5.979 0-10.843 4.77-10.996 10.712L15 19v9h22v-9c0-6.075-4.925-11-11-11z"></path>
+								</svg>
+							</span>)
+              or <strong>https://</strong>	means you’ve safely connected to the .gov website. Share sensitive information only on official, secure websites.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+
+
+<section>
+	<h2>Email Click</h2>
+	<h4>shouldn't match</h4>
+	<a href="mailto:?subject=DailyMed Web site information&amp;Body=I would like to share this page from the DailyMed website with you:%0A%0ADailyMed%0Ahttps://dailymed.nlm.nih.gov/dailymed/index.cfm%0A%0ADailyMed is a site provided by The National Library of Medicine (NLM) and is the official provider of FDA drug label information (package inserts)."
+		title="Share by Email">email link (shouldn't match)</a><br />
+	<h4>Internal Emails (Same Domain & SubDomain)</h4>
+	<a href="mailto:test@dap-test-site.app.cloud.gov">mailto:test@dap-test-site.app.cloud.gov</a><br />
+	<a href="mailto:test2@dap-test-site.app.cloud.gov">mailto:test2@dap-test-site.app.cloud.gov</a><br />
+	<h4>Internal Emails (Same Domain & SubDomain - Level 1)</h4>
+	<a href="MAILTO:TEST@TEST1.dap-test-site.app.cloud.gov">MAILTO:TEST@TEST1.dap-test-site.app.cloud.gov</a><br />
+	<a href="mailto:test2@test1.dap-test-site.app.cloud.gov">mailto:test2@test1.dap-test-site.app.cloud.gov</a><br />
+	<h4>Internal Emails (Same Domain & SubDomain - Level 2)</h4>
+	<a href="mailto:test@level2.test1.dap-test-site.app.cloud.gov">mailto:test@level2.test1.dap-test-site.app.cloud.gov</a><br />
+	<a href="mailto:test2@level2.test1.dap-test-site.app.cloud.gov">mailto:test2@level2.test1.dap-test-site.app.cloud.gov</a><br />
+	<h4>External Links (Different Domain)</h4>
+	<a href="mailto:test@domain.com">mailto:test@domain.com</a><br />
+	<a href="mailto:test2@domain.com">mailto:test2@domain.com</a><br />
+</section>
+
+
+
+<section>
+	<h2>Telephone Click</h2>
+	<a href="tel:+14379251855">Telephone +14379251855 (shouldn't match)</a><br />
+	<a href="tel:1111111111">Telephone 1111111111 (shouldn't match)</a></a><br />
+	<a href="tel:+1437-925-1855">Telephone +1437-925-1855</a><br />
+	<a href="tel:111-111-1111">Telephone 111-111-1111</a><br />
+	<a href="tel:111 111 1111">Telephone 111 111 1111</a><br />
+	<a href="tel:111.111.1111">Telephone 111.111.1111</a><br />
+</section>
+
+
+<section>
+	<h2>File Download</h2>
+	<h4>Internal Downloads (Same Domain & SubDomain) - Relative Path </h4><p>
+	<a href="/about.zip" id="internalDownload" download>/about.zip</a><br />
+	<a href="../../3.0/about.zip">../../3.0/about.zip</a><br />
+	<a href="/policy/about.zip">/policy/about.zip </a><br />
+	<a href="/plocy/about.zip">/plocy/about.zip</a><br />
+	<h4>Internal Downloads (Same Domain & SubDomain) - Absolute Path</h4><p>
+	<a href="https://www.dap-test-site.app.cloud.gov/about.zip">https://www.dap-test-site.app.cloud.gov/about.zip</a><br />
+	<a href="https://www.dap-test-site.app.cloud.gov/policy/about.zip">https://www.dap-test-site.app.cloud.gov/policy/about.zip</a><br />
+	<h4>Internal Downloads (Same Domain & Different SubDomain - Level 1) - Absolute Path</h4>
+	<a href="https://test1.dap-test-site.app.cloud.gov/about.zip">https://test1.dap-test-site.app.cloud.gov/about.zip</a><br />
+	<a href="https://test1.dap-test-site.app.cloud.gov/policy/about.zip">https://test1.dap-test-site.app.cloud.gov/policy/about.zip</a><br />
+	<h4>Internal Downloads (Same Domain & Different SubDomain - Level 2) - Absolute Path</h4><p>
+	<a href="https://level2.test1.dap-test-site.app.cloud.gov/about.zip">https://level2.test1.dap-test-site.app.cloud.gov/about.zip</a><br />
+	<a href="https://level2.test1.dap-test-site.app.cloud.gov/policy/about.zip">https://level2.test1.dap-test-site.app.cloud.gov/policy/about.zip</a><br />
+	<h4>External Downloads (Different Domain) - Absolute Path</h4><p>
+	<a href="https://www.dol.gov/sites/dolgov/files/EBSA/employers-and-advisers/plan-administration-and-compliance/reporting-and-filing/form-5500/2021-schedule-a.pdf">Scheudle A</a><br />
+	<a href="https://www.dol.gov/sites/dolgov/files/EBSA/employers-and-advisers/plan-administration-and-compliance/reporting-and-filing/form-5500/2021-schedule-c.pdf">Schedule C</a><br />
+</section>
+
+
+
+<section>
+	<h2>Internal Links</h2>
+	<a href="/travelpolicy.pim">Federal Travel Policy - /travelpolicy.pim</a><br />
+
+	<h4>(Same Domain & SubDomain) - Relative Path</h4>
+	<a href="/about.php">/about.php</a><br />
+	<a href="../../3.0/about.php">./../3.0/about.php</a><br />
+	<a href="/about/">/about/</a><br />
+	<a href="../../3.0/about">../../3.0/about</a><br />
+	<a href="/about">/about </a><br />
+	<a href="/policy/about.php">/policy/about.php</a><br />
+	<a href="../../3.0/plocy/about.php">../../3.0/plocy/about.php</a><br />
+	<a href="../../3.0/ploicy/about">../../3.0/ploicy/about</a><br />
+	<a href="/policy/about/">/policy/about/</a><br />
+	<a href="/poicy/about">/poicy/about</a><br />
+	<a href="/policy/about">/policy/about</a><br />
+
+	<h4>(Same Domain & SubDomain) - Absolute Path</h4>
+	<a href="https://www.dap-test-site.app.cloud.gov/about.php">https://www.dap-test-site.app.cloud.gov/about.php</a><br />
+	<a href="https://www.dap-test-site.app.cloud.gov/about/">https://www.dap-test-site.app.cloud.gov/about/</a><br />
+	<a href="https://www.dap-test-site.app.cloud.gov/policy/about.php">https://www.dap-test-site.app.cloud.gov/policy/about.php</a><br />
+	<a href="https://www.dap-test-site.app.cloud.gov/ploicy/about/">https://www.dap-test-site.app.cloud.gov/ploicy/about/</a><br />
+
+	<h4>(Same Domain & Different SubDomain - Level 1) - Absolute Path</h4>
+	<a href="https://test1.dap-test-site.app.cloud.gov/about.php">https://test1.dap-test-site.app.cloud.gov/about.php</a><br />
+	<a href="https://test1.dap-test-site.app.cloud.gov/about/">https://test1.dap-test-site.app.cloud.gov/about/</a><br />
+	<a href="https://test1.dap-test-site.app.cloud.gov/policy/about.php">https://test1.dap-test-site.app.cloud.gov/policy/about.php</a><br />
+	<a href="https://test1.dap-test-site.app.cloud.gov/ploicy/about/">https://test1.dap-test-site.app.cloud.gov/ploicy/about/</a><br />
+
+	<h4>(Same Domain & Different SubDomain - Level 2) - Absolute Path</h4>
+	<a href="https://level2.test1.dap-test-site.app.cloud.gov/about.php">https://level2.test1.dap-test-site.app.cloud.gov/about.php</a><br />
+	<a href="https://level2.test1.dap-test-site.app.cloud.gov/about/">https://level2.test1.dap-test-site.app.cloud.gov/about/</a><br />
+	<a href="https://level2.test1.dap-test-site.app.cloud.gov/policy/about.php">https://level2.test1.dap-test-site.app.cloud.gov/policy/about.php</a><br />
+	<a href="https://level2.test1.dap-test-site.app.cloud.gov/ploicy/about/">https://level2.test1.dap-test-site.app.cloud.gov/ploicy/about/</a><br />
+</section>
+
+<section>
+	<h2>External Links</h2>
+	<h4>(Different Domain) - Absolute Path </h4><p>
+	<a href="http://www.gsa.gov/travelpolicy">http://www.gsa.gov/travelpolicy</a><br />
+	<a href="http://www.gsa.gov/travelpolicy/home.aspx?id=12#top">http://www.gsa.gov/travelpolicy/home.aspx?id=12#top</a><br />
+	<a href="http://www.domain.com/about.php">http://www.domain.com/about.php</a><br />
+	<a href="http://www.domain.com/about/">http://www.domain.com/about/ S1</a><br />
+	<a href="http://www.domain.com/about">http://www.domain.com/about S2</a><br />
+	<a href="http://www.domain.com/policy/about.php">http://www.domain.com/policy/about.php</a><br />
+	<a href="http://www.domain.com/about/">http://www.domain.com/about/</a><br />
+</section>
+
+
+
+<section>
+	<h2>Dynamic Content</h2>
+	<p id="newLinkWrapper"></p><br />
+</section>
+
+
+
+<section>
+	<h2>Youtube Tracking</h2>
+	<a href="youtube.html">Go to YouTube tracking test page</a>
+</section>
+
+
+
+<section>
+	<h2>gas() - Custom Events / Pageviews / Custom Dimensions / Custom Metrics (Federated Only)</h2>
+		<a href="#pageview without title" onclick="gas('send','pageview','/dir/virtual-page?query=term')">Pageview without title</a><br />
+		<a href="#pageview with title" onclick="gas('send','pageview','/dir/virtual-page','virtual page title')">Pageview with title</a><br />
+		<a href="#Event" onclick="gas('send','event','category event','action event','label event',10)">Event</a><br />
+		<a href="#Custom Dimension" onclick="gas('set','dimension0,dimension9','dimension value'); gas('send','event','custom dimension','slot 9','dimension value',0, true)">Custom Dimension</a><br />
+		<a href="#Custom Dimension" onclick="gas('set','dimension18,dimension0','dimension value');gas('send','event','custom dimension','slot 18','dimension value',0, false)">Custom Dimension</a><br />
+		<a href="#Custom Metric" onclick="gas('set','metric2, metric0',2);gas('send','event','custom metric','slot 2',' ',0, false)">Custom Metric</a><br />
+		<a href="#Custom Metric" onclick="gas('set','metric0, metric4',2);gas('send','event','custom metric','slot 4',' ',0, true)">Custom Metric</a><br />
+</section>
+
+
+
+<section>
+	<h2>gas4() - Form Interaction</h2>
+	<div class="row">
+		<div class="column">
+			<h4>gas4()</h4>
+			<form action="#newpage" onclick="gas4('form_submit',{'form_name':'<form_name>','form_id':'<form_id>','form_destination':'<form_destination>','section':'<section>','form_submit_text':'<form_submit_text>'})">
+				<label for="fname">Input 1:</label><br>
+				<input type="text" id="input1" value="Input"><br>
+				<label for="lname">Input 2:</label><br>
+				<input type="text" id="input2" value="Input"><br><br>
+				<input type="submit" value="Submit">
+			  </form>
+		</div>
+		<div class="column">
+			<h4>Incorrect Parameters</h4>
+			<form action="#newpage" onclick="gas4('form_submit',{'name':'<form_name>','id':'<form_id>','destination':'<form_destination>','section':'<section>','submit_text':'<form_submit_text>'})">
+				<label for="fname">Input 1:</label><br>
+				<input type="text" id="input1" value="Input"><br>
+				<label for="lname">Input 2:</label><br>
+				<input type="text" id="input2" value="Input"><br><br>
+				<input type="submit" value="Submit">
+			  </form>
+		</div>
+		<div class="column">
+			<h4>Incorrect Event Name</h4>
+			<form action="#newpage" onclick="gas4('f_submit',{'form_name':'<form_name>','form_id':'<form_id>','form_destination':'<form_destination>','section':'<section>','form_destination':'<form_destination>','form_submit_text':'<form_submit_text>'})">
+				<label for="fname">Input 1:</label><br>
+				<input type="text" id="input1" value="Input"><br>
+				<label for="lname">Input 2:</label><br>
+				<input type="text" id="input2" value="Input"><br><br>
+				<input type="submit" value="Submit">
+			  </form>
+		</div>
+	  </div>
+</section>
+
+
+<section>
+	<h2>gas4() - Social click</h2>
+	<div class="row">
+		<div class="column">
+			<h4>gas4()</h4>
+			<a href="https://www.facebook.com/" class="fa fa-facebook" onclick="gas4('social_click',{'link_text':'<link_text>','link_domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','social_network':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
+			<a href="https://www.instagram.com/" class="fa fa-instagram" onclick="gas4('social_click',{'link_text':'<link_text>','link_domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','social_network':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
+			<a href="https://www.google.com/" class="fa fa-google" onclick="gas4('social_click',{'link_text':'<link_text>','link_domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','social_network':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
+			<a href="https://ca.linkedin.com/" class="fa fa-linkedin"  onclick="gas4('social_click',{'link_text':'<link_text>','link_domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','social_network':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
+		</div>
+		<div class="column">
+			<h4>Incorrect Parameters</h4>
+			<a href="https://www.facebook.com/" class="fa fa-facebook" onclick="gas4('social_click',{'text':'<link_text>','domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','s':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
+			<a href="https://www.instagram.com/" class="fa fa-instagram" onclick="gas4('social_click',{'text':'<link_text>','domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','sociatwork':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
+			<a href="https://www.google.com/" class="fa fa-google" onclick="gas4('social_click',{'text':'<link_text>','domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','sociwork':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
+			<a href="https://ca.linkedin.com/" class="fa fa-linkedin"  onclick="gas4('social_click',{'text':'<link_text>','domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','socwork':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
+		</div>
+		<div class="column">
+			<h4>Incorrect Event Name</h4>
+			<a href="https://www.facebook.com/" class="fa fa-facebook" onclick="gas4('social',{'link_text':'<link_text>','link_domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','social_network':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
+			<a href="https://www.instagram.com/" class="fa fa-instagram" onclick="gas4('social',{'link_text':'<link_text>','link_domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','social_network':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
+			<a href="https://www.google.com/" class="fa fa-google" onclick="gas4('social',{'link_text':'<link_text>','link_domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','social_network':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
+			<a href="https://ca.linkedin.com/" class="fa fa-linkedin"  onclick="gas4('social',{'link_text':'<link_text>','link_domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','social_network':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
+		</div>
+	  </div>
+	
+	
+
+</section>
+
+
+<section>
+	<h2>gas4() - Social share</h2>
+	<div class="row">
+		<div class="column">
+			<h4>gas4()</h4>
+			<a href="https://www.facebook.com/" class="fa fa-facebook" onclick="gas4('social_share',{'link_text':'<link_text>','link_domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','social_network':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
+			<a href="https://www.instagram.com/" class="fa fa-instagram" onclick="gas4('social_share',{'link_text':'<link_text>','link_domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','social_network':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
+			<a href="https://www.google.com/" class="fa fa-google" onclick="gas4('social_share',{'link_text':'<link_text>','link_domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','social_network':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
+			<a href="https://ca.linkedin.com/" class="fa fa-linkedin"  onclick="gas4('social_share',{'link_text':'<link_text>','link_domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','social_network':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
+		</div>
+		<div class="column">
+			<h4>Incorrect Parameters</h4>
+			<a href="https://www.facebook.com/" class="fa fa-facebook" onclick="gas4('social_share',{'text':'<link_text>','domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','s':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
+			<a href="https://www.instagram.com/" class="fa fa-instagram" onclick="gas4('social_share',{'text':'<link_text>','domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','sociatwork':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
+			<a href="https://www.google.com/" class="fa fa-google" onclick="gas4('social_share',{'text':'<link_text>','domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','sociwork':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
+			<a href="https://ca.linkedin.com/" class="fa fa-linkedin"  onclick="gas4('social_share',{'text':'<link_text>','domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','socwork':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
+		</div>
+		<div class="column">
+			<h4>Incorrect Event Name</h4>
+			<a href="https://www.facebook.com/" class="fa fa-facebook" onclick="gas4('social',{'link_text':'<link_text>','link_domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','social_network':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
+			<a href="https://www.instagram.com/" class="fa fa-instagram" onclick="gas4('social',{'link_text':'<link_text>','link_domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','social_network':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
+			<a href="https://www.google.com/" class="fa fa-google" onclick="gas4('social',{'link_text':'<link_text>','link_domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','social_network':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
+			<a href="https://ca.linkedin.com/" class="fa fa-linkedin"  onclick="gas4('social',{'link_text':'<link_text>','link_domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','social_network':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
+		</div>
+	  </div>
+	
+	
+
+</section>
+
+<section>
+	<h2>gas4() - Navigation Click</h2>
+	<div>
+	<ul>
+		<li><a href="#home" onclick="gas4('navigation_click',{'link_text':'<link_text>','link_domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','outbound':'<outbound>','section':'<section>','menu_type':'<menu_type>'});"> Home</a></li>
+		<li><a href="#news" onclick="gas4('navigation_click',{'text':'<link_text>','domain':'<link_domain>','url':'<link_url>','link_id':'<link_id>','classes':'<link_classes>','outbound':'<outbound>','type':'<section>','menu_type':'<menu_type>'});"> Incorrent Parameter</a></li>
+		<li><a href="#about" onclick="gas4('navigation',{'link_text':'<link_text>','link_domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','outbound':'<outbound>','section':'<section>','menu_type':'<menu_type>'});"> Incorrent Event name</a></li>
+	  </ul>
+	</div>
+	<br>	<br>
+</section>
+
+<section>
+	<h2>gas4() - Accordion</h2>
+	<button class="accordion" onclick="gas4('accordion_click',{'selection':'selection 1','section':'<section>'});"></a>Accordion</button>
+	<div class="panel">
+	<p>one</p>
+	</div>
+
+	<button class="accordion" onclick="gas4('accordion_click',{'select':'selection 2','type':'<section>'});"></a>Incorrect Parameter</button>
+	<div class="panel">
+	<p>two</p>
+	</div>
+
+	<button class="accordion" onclick="gas4('accordion',{'selection':'selection 3','section':'<section>'});"></a>Incorrect Event name</button>
+	<div class="panel">
+	<p>three</p>
+	</div>
+</section>
+
+
+<section>
+	<h2>gas4() - FAQ Click	</h2>
+	<button class="accordion" onclick="gas4('faq_click',{'selection':'selection 1','section':'<section>'});"></a>FAQ</button>
+	<div class="panel">
+	<p>one</p>
+	</div>
+
+	<button class="accordion" onclick="gas4('faq_click',{'select':'selection 2','type':'<section>'});"></a>Incorrect Parameter</button>
+	<div class="panel">
+	<p>two</p>
+	</div>
+
+	<button class="accordion" onclick="gas4('faq',{'selection':'selection 3','section':'<section>'});"></a>Incorrect Event name</button>
+	<div class="panel">
+	<p>three</p>
+	</div>
+</section>
+
+
+<section>
+	<h2>gas4() - Call to Action Click	</h2>
+	<button  type="button" onclick="gas4('cta_click',{'link_text':'<link_text>','link_domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','outbound':'<outbound>','section':'<section>'});"></a>Learn More</button></br></br>
+	<button  type="button" onclick="gas4('cta_click',{'link':'<link_text>','linkn':'<link_domain>','url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','out':'<outbound>','type':'<section>'});"></a>Incorrect Parameter</button></br></br>
+	<button  type="button" onclick="gas4('cta',{'link_text':'<link_text>','link_domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','outbound':'<outbound>','section':'<section>'});"></a>Incorrect Event name</button></br></br>
+</section>
+
+</body>
+
+<style>
+
+body{
+	font-family: Arial, Helvetica, sans-serif;
+}
+.header {
+  padding: 5px;
+  text-align: center;
+  background: #12295D;
+  color: white;
+  font-size: 30px;
+}
+
+h4{
+	color: #F23A1D;
+}
+h2{
+	color: white;
+	background: #12295D;
+	padding: 8px;
+
+
+}
+
+a{
+	color: #000000;
+
+}
+
+.column {
+  float: left;
+  width: 33.33%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.fa {
+  padding: 20px;
+  font-size: 30px;
+  width: 50px;
+  text-align: center;
+  text-decoration: none;
+  margin: 5px 2px;
+}
+
+.fa:hover {
+    opacity: 0.7;
+}
+
+.fa-facebook {
+  background: #3B5998;
+  color: white;
+}
+
+.fa-instagram {
+  background: #125688;
+  color: white;
+}
+
+
+.fa-google {
+  background: #dd4b39;
+  color: white;
+}
+
+.fa-linkedin {
+  background: #007bb5;
+  color: white;
+}
+
+.container{
+width:90%;
+
+}
+
+.accordion {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  transition: 0.4s;
+}
+
+.active, .accordion:hover {
+  background-color: #ccc; 
+}
+
+.panel {
+  padding: 0 18px;
+  display: none;
+  background-color: white;
+  overflow: hidden;
+}
+
+li {
+  float: left;
+  display: block;
+  padding: 8px;
+  background-color: #dddddd;
+}
+
+</style>
+
+<script>
+
+var acc = document.getElementsByClassName("accordion");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.display === "block") {
+      panel.style.display = "none";
+    } else {
+      panel.style.display = "block";
+    }
+  });
+}
+</script>
+</html>
+
+
+
