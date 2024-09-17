@@ -20,7 +20,6 @@ Given("I set the browser to intercept outbound requests", async function () {
   this.responses = [];
 
   this.page.on('request', (request) => {
-    console.log(request.url());
     this.requests.push({ method: request.method(), headers: request.headers(), url: request.url() });
     request.continue();
   });
