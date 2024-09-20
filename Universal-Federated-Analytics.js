@@ -91,6 +91,7 @@ GA4Object.setAttribute(
   "src",
   "https://www.googletagmanager.com/gtag/js?id=" + oCONFIG.GWT_GA4ID[0]
 );
+GA4Object.async = true;
 head.appendChild(GA4Object);
 window.dataLayer = window.dataLayer || [];
 /**
