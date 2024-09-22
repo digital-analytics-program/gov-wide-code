@@ -1,8 +1,8 @@
-import {Given, Then} from "@cucumber/cucumber";
+import { Then } from "@cucumber/cucumber";
 import * as chai from 'chai'
 const expect = chai.expect;
 
-Given("DAP will set custom dimensions", async function (table) {
+Then("DAP will set custom dimensions", async function (table) {
   const configCommand = await this.page.evaluate(() => {
     return window.dataLayer.find(item => item[0] === 'config');
   });
