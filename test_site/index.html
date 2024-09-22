@@ -8,9 +8,6 @@
 <script>
 	(function() {
 		const queryParams = new URLSearchParams(window.location.search);
-		if (!queryParams.has("agency")) {
-			queryParams.set("agency", "GSA");
-		}
 		const dapScriptTag = document.createElement("script");
 		dapScriptTag.id = "_fed_an_ua_tag";
 		dapScriptTag.async = true;
