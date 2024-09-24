@@ -1,14 +1,7 @@
 import { Given, When, Then } from "@cucumber/cucumber";
 import puppeteer from 'puppeteer';
-import path from 'path';
 import * as chai from 'chai'
-import * as fs from 'fs'
 const expect = chai.expect;
-
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 function delay(milliseconds) {
   return new Promise((resolve) => {
@@ -36,23 +29,18 @@ Given("I set the browser to intercept outbound requests", async function () {
   })
 });
 
-When("I set the page content with {string} HTML file", async function (fileName) {
-  await this.page.setContent(fs.readFileSync(path.join(__dirname, `..`, fileName), 'utf8'));
+When("I wait {int} seconds", async function (delaySeconds) {
+  await delay(delaySeconds * 1000);
 });
 
-// This is still in progress. GA requests don't currently occur after clicking a button element.
-When("I click on element with selector {string}", async function (elementSelector) {
-  await this.page.locator(elementSelector).click();
-  await delay(2000)
-})
+Then("there is a GA4 request", function() {
+  const ga4Request = this.requests.find(request => request.url.includes("https://www.google-analytics.com/g/collect"));
+  expect(ga4Request).to.exist;
+});
 
 Then("there are no unexpected requests", function () {
-  this.requests.forEach((request) => {
-    let isAllowed = false;
-    if (request.url.includes('https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js') || request.url.includes("https://www.googletagmanager.com/gtag/js?id=G-CSLL4ZEK4L")) {
-      isAllowed = true;
-    }
-    expect(isAllowed).to.equal(true)
-  })
+  const requestUrls = this.requests.map((request) => {
+    return (new URL(request.url)).host;
+  });
+  expect(["localhost:8080", "www.googletagmanager.com", "www.google-analytics.com"]).to.include.members(requestUrls);
 })
-

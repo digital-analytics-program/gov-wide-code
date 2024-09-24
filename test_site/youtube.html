@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+    <title>DAP test site - YouTube tracking</title>
+    <script>
+      (function() {
+        const queryParams = new URLSearchParams(window.location.search);
+        if (!queryParams.has("agency")) {
+          queryParams.set("agency", "GSA");
+        }
+        const dapScriptTag = document.createElement("script");
+        dapScriptTag.id = "_fed_an_ua_tag";
+        dapScriptTag.async = true;
+        dapScriptTag.src = `Universal-Federated-Analytics-Min.js?dapdev=true&${queryParams.toString()}`;
+        document.head.appendChild(dapScriptTag);
+      })();
+
+    </script>
+</head>
+
+<body>
+<section>
+    <div class="flex-video widescreen"><iframe title="MedWatch Tips &amp; Tools (January 2016)" height="250"
+                                               src="https://www.youtube-nocookie.com/embed/7b-fcRQ2Q7k" frameborder="0" width="500"
+                                               allowfullscreen="" alt="MedWatch Tips &amp; Tools (January 2016)"></iframe></div>
+    <p><iframe title="Time-lapse of X-59 aircraft (May 2019 - June 2021)" width="500" height="250"
+               src="https://www.youtube.com/embed/LcvYjkCBY28?feature=oembed" frameborder="0"
+               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;"
+               allowfullscreen=""></iframe></p>
+    <iframe width="500" height="250" src="https://www.youtube-nocookie.com/embed/BkvRu5-Cuz4"
+            title="YouTube video player" frameborder="0" allowfullscreen></iframe>
+</section>
+</body>
+</html>
