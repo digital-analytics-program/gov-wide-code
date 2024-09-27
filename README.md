@@ -10,7 +10,7 @@ On September 22, 2023, the Office of Management and Budget (OMB) released a memo
 
 DAP offers a central hosting server for its minified JavaScript file at `https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js`. As of August 2018, the file is gzipped and served compressed by default, but will be served uncompressed where `Accept-Encoding: gzip` is not present in the viewer.
 
-The latest version 8.1 of DAP GA code contains GA4 tracking only. DAP UA data collection and reporting was removed on June 24, 2024 in prepration for a global sunset of UA on July 1, 2024.
+The latest version 8.3 of DAP GA code contains GA4 tracking only. DAP UA data collection and reporting was removed on June 24, 2024 as part of the global sunset of Universal Analytics on July 1, 2024.
 
 * [`Universal-Federated-Analytics.js`](Universal-Federated-Analytics.js) (full)
 * [`Universal-Federated-Analytics-Min.js`](Universal-Federated-Analytics-Min.js) (minified)
