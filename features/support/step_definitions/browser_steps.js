@@ -34,7 +34,14 @@ When("I wait {int} seconds", async function (delaySeconds) {
 });
 
 Then("there is a GA4 request", function() {
-  const ga4Request = this.requests.find(request => request.url.includes("https://www.google-analytics.com/g/collect"));
+  const ga4Request = this.requests.find(request => {
+    try {
+      const url = new URL(request.url);
+      return url.host === "www.google-analytics.com" && url.pathname === "/g/collect";
+    } catch (e) {
+      return false;
+    }
+  });
   expect(ga4Request).to.exist;
 });
 
