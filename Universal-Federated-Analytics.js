@@ -193,7 +193,7 @@ Author: Ahmed Awwad
         } catch (n) { }
       else
         try {
-          var e_n = ((/^(((email|telephone|image|cta|navigation|faq|accordion)_)?click|file_download|view_search_results|video_(start|pause|progress|complete|play)|official_USA_site_banner_click|form_(start|submit|progress)|content_view|social_share|error|sort|filter|was_this_helpful_submit)$/gi.test(a)) ? a : 'dap_event');
+          var e_n = ((/^(((email|telephone|image|cta|navigation|faq|accordion)_)?click|file_download|view_search_results|video_(start|pause|progress|complete|play)|official_USA_site_banner_click|form_(start|submit|progress)|content_view|social_share|error|sort|filter|was_this_helpful_submit|lcp|cls|inp|performance.*)$/gi.test(a)) ? a : 'dap_event');
           if (Object.keys(b).length !== 0) { _sendEvent(e_n, b); }
           else { _sendEvent(e_n); }
         } catch (n) { }
