@@ -5,7 +5,6 @@
   "main": "Universal-Federated-Analytics.js",
   "type": "module",
   "scripts": {
-    "build": "npx uglifyjs Universal-Federated-Analytics.js --output Universal-Federated-Analytics-Min.js --source-map url=Universal-Federated-Analytics-Min.js.map",
     "clean": "rm ./Universal-Federated-Analytics-Min.js",
     "lint": "eslint Universal-Federated-Analytics.js",
     "cucumber": "cucumber-js",
@@ -21,9 +20,6 @@
     "url": "https://github.com/digital-analytics-program/gov-wide-code/issues"
   },
   "homepage": "https://github.com/digital-analytics-program/gov-wide-code#readme",
-  "dependencies": {
-    "uglify-js": "^3.4.9"
-  },
   "devDependencies": {
     "@cucumber/cucumber": "^11.0.0",
     "chai": "^5.1.1",
