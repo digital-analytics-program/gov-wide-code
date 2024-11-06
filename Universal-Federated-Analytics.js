@@ -1,15 +1,7 @@
-/*
-            .ooooo.        oooooooo
-           d88" `88b      888    P88
-           888            o888oo888
-           888            888
-           `"88888"       888
-
-***********************************************************************************************************
-Copyright 2024 by Cardinal Path.
-Dual Tracking Federated Analytics: Google Analytics Government Wide Site Usage Measurement.
-Author: Ahmed Awwad
-25/09/2024 Version: 8.3
+/***********************************************************************************************************
+U.S. General Services Administration (GSA).
+Digital Analytics Program Government Wide Site Usage Measurement and Tracking. 
+07/11/2024 Version: 8.4
 ***********************************************************************************************************/
 
 /**
@@ -34,13 +26,14 @@ Author: Ahmed Awwad
  */
 (function () {
   var isSearch = false,
+  _allowedQuerystrings = [],
     oCONFIG = {
       GWT_GA4ID: ["G-CSLL4ZEK4L"],
       FORCE_SSL: !0,
       ANONYMIZE_IP: !0,
       AGENCY: "",
       SUB_AGENCY: "",
-      VERSION: "20240925 v8.3 - GA4",
+      VERSION: "20240711 v8.4 - GA4",
       SITE_TOPIC: "",
       SITE_PLATFORM: "",
       SCRIPT_SOURCE: "",
@@ -193,7 +186,7 @@ Author: Ahmed Awwad
         } catch (n) { }
       else
         try {
-          var e_n = ((/^(((email|telephone|image|cta|navigation|faq|accordion)_)?click|file_download|view_search_results|video_(start|pause|progress|complete|play)|official_USA_site_banner_click|form_(start|submit|progress)|content_view|social_share|error|sort|filter|was_this_helpful_submit)$/gi.test(a)) ? a : 'dap_event');
+          var e_n = ((/^(((email|telephone|image|cta|navigation|faq|accordion|social)_)?click|file_download|view_search_results|video_(start|pause|progress|complete|play)|official_USA_site_banner_click|form_(start|submit|progress)|content_view|social_share|error|sort|filter|was_this_helpful_submit)$/gi.test(a)) ? a : 'dap_event');
           if (Object.keys(b).length !== 0) { _sendEvent(e_n, b); }
           else { _sendEvent(e_n); }
         } catch (n) { }
@@ -609,13 +602,13 @@ Author: Ahmed Awwad
      * @returns {object|undefined} the object with all keys and values converted
      * to lower case, undefined if there is an error processing the object.
      */
-    var _enforeLower = function (j) {
+  /*   var _enforeLower = function (j) {
       try {
         var d = JSON.stringify(j);
         return JSON.parse(d.toLowerCase());
       } catch (error) { }
     };
-
+ */
     /**
      * This function handles events for the auto-tracker. It sends event commands
      * to the Google gtag.js library when links are clicked by the user. The event
@@ -661,7 +654,7 @@ Author: Ahmed Awwad
               if ("m" === i) {
                 c = a.href.match(/[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/);
                 l = { link_id: a.id, link_url: c[0], link_domain: c[0].split("@")[1], link_text: a.text.replace(/(?:[\r\n]+)+/g, "").trim(), link_classes: a.className, interaction_type: t };
-                _sendEvent("email_click", _enforeLower(l));
+                _sendEvent("email_click", l);
               }
               /*else if("t"===i){
                 l = {link_id: a.id, link_url: a.href.split("tel:")[1], link_text: a.text.replace(/(?:[\r\n]+)+/g, "").trim(), link_classes: a.className, interaction_type: t};
@@ -672,13 +665,13 @@ Author: Ahmed Awwad
                   c = a.pathname.split(/[#?&?]/)[0];
                   d = _isDownload(a);
                   l = { file_name: c, file_extension: d, link_text: a.text.replace(/(?:[\r\n]+)+/g, "").trim(), link_id: a.id, link_url: a.href.replace(/[#?&].*/, ""), link_domain: a.hostname.replace(/^www\./i, ""), interaction_type: t };
-                  _sendEvent("file_download", _enforeLower(l));
+                  _sendEvent("file_download", l);
                 }
                 else if ("l" === i && !_isDownload(a)) {
                   //internal link tracking;
                   /*c = a.closest('section'); var s_n = (('object' === typeof c)? (c.id? c.id : c.className) : '');
                   l = { link_id: a.id, link_url: a.href, link_domain: a.hostname.replace(/^www\./i, ""), link_text: a.text.replace(/(?:[\r\n]+)+/g, "").trim(), link_classes: a.className, interaction_type: t, section:  s_n, menu_type: 'all' };
-                  _sendEvent("navigation_click", _enforeLower(l));*/
+                  _sendEvent("navigation_click", l);*/
                 }
               }
             }
@@ -687,20 +680,20 @@ Author: Ahmed Awwad
                 c = a.pathname.split(/[#?&?]/)[0];
                 d = _isDownload(a);
                 l = { file_name: c, file_extension: d, link_text: a.text.replace(/(?:[\r\n]+)+/g, "").trim(), link_id: a.id, link_url: a.href.replace(/[#?&].*/, ""), link_domain: a.hostname.replace(/^www\./i, ""), outbound: true, interaction_type: t };
-                _sendEvent("file_download", _enforeLower(l));
+                _sendEvent("file_download", l);
               }
               else if ("l" === i && !_isDownload(a)) {
                 l = { link_id: a.id, link_url: a.href.replace(/[#?&].*/, ""), link_domain: a.hostname.replace(/^www\./i, ""), link_text: a.text.replace(/(?:[\r\n]+)+/g, "").trim(), link_classes: a.className, outbound: true, interaction_type: t };
-                _sendEvent("click", _enforeLower(l));
+                _sendEvent("click", l);
               }
               else if ("m" === i) {
                 c = a.href.match(/[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/);
                 l = { link_id: a.id, link_url: c[0], link_domain: c[0].split("@")[1], link_text: a.text.replace(/(?:[\r\n]+)+/g, "").trim(), link_classes: a.className, outbound: true, interaction_type: t };
-                _sendEvent("email_click", _enforeLower(l));
+                _sendEvent("email_click", l);
               }
               else if ("t" === i) {
                 l = { link_id: a.id, link_url: a.href.split("tel:")[1], link_text: a.text.replace(/(?:[\r\n]+)+/g, "").trim(), link_classes: a.className, interaction_type: t };
-                _sendEvent("telephone_click", _enforeLower(l));
+                _sendEvent("telephone_click", l);
               }
             }
           }
@@ -1158,7 +1151,7 @@ Author: Ahmed Awwad
       payload = (("object" === typeof payload && /json|default/.test(type)) ? (_flattenJSON(payload), payload = _objToQuery(payload)) : payload);
       _piiRegexReset();
 
-      var _allowedQs = _setAllowedQS().toString().replace(/\,/g, "=|") + "=";
+      var _allowedQs = _allowedQuerystrings.toString().toLowerCase().replace(/\,/g, "=|") + "=";
       var _hitPayloadParts = payload.split('&');
       for (var i = 0; i < _hitPayloadParts.length; i++) {
         var newQueryString = '';
@@ -1308,7 +1301,7 @@ Author: Ahmed Awwad
           .split("?")[1]
           .split("&")
           .forEach(function (o, i) {
-            _setAllowedQS().indexOf(o.split("=")[0]) > -1 && (t = t + "&" + o);
+            _allowedQuerystrings.toString().toLowerCase().indexOf(o.split("=")[0]) > -1 && (t = t + "&" + o);
           }),
           t.length > 0 ? a + "?" + _piiRedactor(t.substring(1), "query") : a)
         : a;
@@ -1316,29 +1309,29 @@ Author: Ahmed Awwad
   }
 
   /**
-   * This function returns a set of default query parameters, as well as query
+   * This function sets the default query parameters, as well as query
    * parameters that are specific to the configured agency. The default query
    * parameters include those used by Google Analytics, as well as some common
    * query parameters used by government websites. The agency-specific query
    * parameters are determined by the value of the oCONFIG.AGENCY variable.
-   * @returns {string[]} an array of allowed querystring parameter strings.
+   * {string[]} an array of allowed querystring parameter strings is set to _allowedQuerystrings variable.
    */
   function _setAllowedQS() {
     var queries = {
       "default": ["utm_id", "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "utm_source_platform", "utm_creative_format", "utm_marketing_tactic", "gbraid", "wbraid", "_gl", "gclid", "dclid", "gclsrc", "affiliate", "dap-dev-env", "v"],
       "gsa": ["challenge", "state"],
       "dhs": ["appreceiptnum"],
-      "doc": ["station", "meas", "start", "atlc", "epac", "cpac", "basin", "fdays", "cone", "tswind120", "gm_track", "50wind120", "hwind120", "mltoa34", "swath", "radii", "wsurge", "key_messages", "inundation", "rainqpf", "ero", "gage", "wfo", "spanish_key_messages", "key_messages", "sid", "lan", "office", "pil"],
-      "hhs": ["s_cid", "selectedFacets"],
-      "hud": ["PostID"],
-      "nasa": ["feature", "ProductID", "selectedFacets"],
+      "doc": ["station", "meas", "start", "atlc", "epac", "cpac", "basin", "fdays", "cone", "tswind120", "gm_track", "50wind120", "hwind120", "mltoa34", "swath", "radii", "wsurge", "key_messages", "inundation", "rainqpf", "ero", "gage", "wfo", "spanish_key_messages", "key_messages", "sid", "lan", "office", "pil", "product", "site", "lat", "lon"],
+      "hhs": ["s_cid", "selectedfacets"],
+      "hud": ["postid"],
+      "nasa": ["feature", "productid", "selectedfacets"],
       "nps": ["gid", "mapid", "site", "webcam", "id"],
       "nsf": ["meas", "start", "atlc", "epac", "cpac", "basin", "fdays", "cone", "tswind120", "gm_track", "50wind120", "hwind120", "mltoa34", "swath", "radii", "wsurge", "key_messages", "inundation", "rainqpf", "ero", "gage", "wfo", "spanish_key_messages", "key_messages", "sid"],
       "va": ["id"],
       "dod": ["p"],
       "opm": ["l", "soc", "jt", "j", "rmi", "smin", "hp", "g", "d", "a"]
     };
-    return queries.default.concat(queries[oCONFIG.AGENCY.toLowerCase()]).concat(oCONFIG.SEARCH_PARAMS.toLowerCase().split("|"));
+    _allowedQuerystrings =  queries.default.concat(queries[oCONFIG.AGENCY.toLowerCase()]).concat(oCONFIG.SEARCH_PARAMS.toLowerCase().split("|"));
   }
 
   /**
