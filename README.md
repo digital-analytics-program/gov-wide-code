@@ -130,6 +130,7 @@ npm run lint
 ```
 
 #### Run integration tests
+
 Start up the test site at http://localhost:8080/:
 
 ```bash
@@ -141,5 +142,7 @@ Then run the tests against the test site:
 ```bash
 npm run cucumber
 ```
+
+See more details in the [testing docs](features/README.md).
 
 **All members of the digital-analytics-program GitHub organization are required to have two-factor authentication enabled.**
