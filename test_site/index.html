@@ -6,15 +6,26 @@
 
 <title>DAP test site</title>
 <script>
-	(function() {
+  (function() {
 		const queryParams = new URLSearchParams(window.location.search);
-		const dapScriptTag = document.createElement("script");
-		dapScriptTag.id = "_fed_an_ua_tag";
-		dapScriptTag.async = true;
-		dapScriptTag.src = `Universal-Federated-Analytics-Min.js?dapdev=true&${queryParams.toString()}`;
-		document.head.appendChild(dapScriptTag);
-	})();
+    const dapScriptTag = document.createElement("script");
+		let dapCodeLocation;
+    dapScriptTag.id = "_fed_an_ua_tag";
+    dapScriptTag.async = true;
 
+    if (queryParams.get('testEnv') == 'production') {
+      queryParams.delete('testEnv');
+      dapCodeLocation = 'https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js';
+    } else if (queryParams.get('testEnv') == 'staging') {
+      queryParams.delete('testEnv');
+      dapCodeLocation = 'https://d3vtlq0ztv2u27.cloudfront.net/Universal-Federated-Analytics-Min.js';
+    } else {
+      dapCodeLocation = 'Universal-Federated-Analytics-Min.js';
+    }
+
+		dapScriptTag.src = `${dapCodeLocation}?dapdev=true&${queryParams.toString()}`
+    document.head.appendChild(dapScriptTag);
+  })();
 </script>
 </head>
 
@@ -269,8 +280,8 @@
 			<a href="https://ca.linkedin.com/" class="fa fa-linkedin"  onclick="gas4('social',{'link_text':'<link_text>','link_domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','social_network':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
 		</div>
 	  </div>
-	
-	
+
+
 
 </section>
 
@@ -300,8 +311,8 @@
 			<a href="https://ca.linkedin.com/" class="fa fa-linkedin"  onclick="gas4('social',{'link_text':'<link_text>','link_domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','social_network':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
 		</div>
 	  </div>
-	
-	
+
+
 
 </section>
 
@@ -458,7 +469,7 @@ width:90%;
 }
 
 .active, .accordion:hover {
-  background-color: #ccc; 
+  background-color: #ccc;
 }
 
 .panel {

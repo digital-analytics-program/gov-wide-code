@@ -12,6 +12,18 @@ function delay(milliseconds) {
 Given("I load an empty browser", async function () {
   this.browser = await puppeteer.launch();
   this.page = await this.browser.newPage();
+
+  if (process.env.VERBOSE == 'true') {
+    // Log page events to the node console
+    this.page
+      .on('console', message =>
+        console.log(`${message.type().substr(0, 3).toUpperCase()} ${message.text()}`))
+      .on('pageerror', ({ message }) => console.log(message))
+      .on('response', response =>
+        console.log(`${response.status()} ${response.url()}`))
+      .on('requestfailed', request =>
+        console.log(`${request.failure().errorText} ${request.url()}`))
+  }
 });
 
 Given("I set the browser to intercept outbound requests", async function () {
@@ -33,7 +45,7 @@ When("I wait {int} seconds", async function (delaySeconds) {
   await delay(delaySeconds * 1000);
 });
 
-Then("there is a GA4 request", function() {
+Then("there is a GA4 request", function () {
   const ga4Request = this.requests.find(request => {
     try {
       const url = new URL(request.url);
@@ -46,8 +58,19 @@ Then("there is a GA4 request", function() {
 });
 
 Then("there are no unexpected requests", function () {
-  const requestUrls = this.requests.map((request) => {
+  const requestURLs = this.requests.map((request) => {
     return (new URL(request.url)).host;
   });
-  expect(["localhost:8080", "www.googletagmanager.com", "www.google-analytics.com"]).to.include.members(requestUrls);
+
+  const allowedURLs = ["localhost:8080", "www.googletagmanager.com", "www.google-analytics.com"];
+
+  if (process.env.DAP_ENV == 'production') {
+    allowedURLs.push("dap.digitalgov.gov")
+  } else if (process.env.DAP_ENV == 'staging') {
+    allowedURLs.push("d3vtlq0ztv2u27.cloudfront.net")
+  }
+
+  requestURLs.forEach((requestURL) => {
+    expect(allowedURLs).to.include(requestURL);
+  })
 })
