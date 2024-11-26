@@ -6,6 +6,20 @@
 
 <title>DAP test site</title>
 <script>
+	/**
+	 * The event listener and global prop are used in the test suite to test
+	 * whether the analytics script fires a custom event when loaded. For testing purposes,
+	 * we add it here before the script is included on the page so it's reliable in the test suite.
+	 *
+	 * Adding the global property isn't needed normally, but the thought is that the event is a way to make sure
+	 * the analytics is loaded before calling any of the functions it exports.
+	 */
+	window.dapLoadedEventName = '';
+	window.addEventListener('dap-universal-federated-analytics-load', (e) => {
+		window.dapLoadedEventName = e.type;
+	});
+
+	// Include the analytics script...
 	(function() {
 		const queryParams = new URLSearchParams(window.location.search);
 		const dapScriptTag = document.createElement("script");

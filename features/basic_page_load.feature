@@ -17,3 +17,8 @@ Feature: Test the outgoing requests sent by a basic page with DAP code loaded
     And I wait 5 seconds
     Then there is a GA4 request
     But there are no unexpected requests
+
+  Scenario: Fire an event when DAP is loaded
+    When I load the test site
+    And I wait 5 seconds
+    Then the custom event "dap-universal-federated-analytics-load" is fired on window
