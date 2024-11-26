@@ -1354,4 +1354,8 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
     return (("interactive" === document.readyState || "complete" === document.readyState) ? (_setUpTrackers(), !0) : !1);
   }
   _setUpTrackersIfReady() || (document.addEventListener ? document.addEventListener("DOMContentLoaded", _setUpTrackers) : document.attachEvent && document.attachEvent("onreadystatechange", _setUpTrackersIfReady));
+
+  if(typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('dap-universal-federated-analytics-load'));
+  }
 })();
