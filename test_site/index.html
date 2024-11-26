@@ -11,8 +11,8 @@
 	 * whether the analytics script fires a custom event when loaded. For testing purposes,
 	 * we add it here before the script is included on the page so it's reliable in the test suite.
 	 *
-	 * Adding the global property isn't needed normally, but the thought is that the event is a way to make sure
-	 * the analytics is loaded before calling any of the functions it exports.
+	 * Adding the global property isn't needed normally, but the event could be leveraged to make sure
+	 * the analytics is loaded before calling any of the functions it exports (e.g. gas4).
 	 */
 	window.dapLoadedEventName = '';
 	window.addEventListener('dap-universal-federated-analytics-load', (e) => {
