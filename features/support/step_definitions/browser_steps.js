@@ -50,4 +50,9 @@ Then("there are no unexpected requests", function () {
     return (new URL(request.url)).host;
   });
   expect(["localhost:8080", "www.googletagmanager.com", "www.google-analytics.com"]).to.include.members(requestUrls);
-})
+});
+
+Then("the custom event {string} is fired on window", async function(eventName) {
+  const eventFired = await this.page.evaluate(() => window.dapLoadedEventName);
+  expect(eventFired).to.equal(eventName);
+});
