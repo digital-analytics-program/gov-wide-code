@@ -1,0 +1,12 @@
+# Snyk (https://snyk.io) policy file
+---
+exclude:
+  code:
+    # Exclude non-code directories and files for only local development use.
+    - changelog/**
+    - documentation/**
+    - errorpages/**
+    - features/**
+    - test_site/**
+    - Dockerfile
+    - eslint.config.js
