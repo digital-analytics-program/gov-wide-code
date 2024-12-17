@@ -1,7 +1,7 @@
 /***********************************************************************************************************
 U.S. General Services Administration (GSA).
 Digital Analytics Program Government Wide Site Usage Measurement and Tracking. 
-07/11/2024 Version: 8.4
+18/12/2024 Version: 8.5
 ***********************************************************************************************************/
 
 /**
@@ -26,14 +26,14 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
  */
 (function () {
   var isSearch = false,
-  _allowedQuerystrings = [],
+    _allowedQuerystrings = [],
     oCONFIG = {
       GWT_GA4ID: ["G-CSLL4ZEK4L"],
       FORCE_SSL: !0,
       ANONYMIZE_IP: !0,
       AGENCY: "",
       SUB_AGENCY: "",
-      VERSION: "20240711 v8.4 - GA4",
+      VERSION: "20241218 v8.5 - GA4",
       SITE_TOPIC: "",
       SITE_PLATFORM: "",
       SCRIPT_SOURCE: "",
@@ -65,6 +65,7 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
       HTMLVIDEO: !0,
       YT_MILESTONE: 25, //accepts 10, 20, and 25
       AUTOTRACKER: !0,
+      WEBVITALS: !1,
       EXTS: "doc|docx|xls|xlsx|xlsm|ppt|pptx|exe|zip|pdf|js|txt|csv|dxf|dwgd|rfa|rvt|dwfx|dwg|wmv|jpg|msi|7z|gz|tgz|wma|mov|avi|mp3|mp4|csv|mobi|epub|swf|rar",
       SUBDOMAIN_BASED: !0,
       GA4_NAME: "GSA_GA4_ENOR",
@@ -76,6 +77,7 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
 
   _updateConfig();
   _setEnvironment();
+  _initWebvitals();
 
   //*********GA4************
   var dap_head = document.getElementsByTagName("head").item(0);
@@ -257,6 +259,53 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
   }
 
   /**
+   * This function intialize Core Web Vitals, and reports the performance
+   * metrics of only the home page to GA4.  This function should be called immediately when every page
+   * is loaded in order to begin tracking performance data.
+   */
+  function _initWebvitals(){
+    (/^(\/((index|home(page)?)(\.[a-zA-Z]{2,5})?)?)$/i.test(location.pathname)? oCONFIG.WEBVITALS = !0 : oCONFIG.WEBVITALS = !1)    
+    if(oCONFIG.WEBVITALS){
+      (function () {
+        var WVscript = document.createElement('script');
+        WVscript.src = 'https://unpkg.com/web-vitals@4/dist/web-vitals.attribution.iife.js';
+        WVscript.onload = function () {
+          webVitals.onCLS(sendToGoogleAnalytics);
+          webVitals.onFID(sendToGoogleAnalytics);
+          webVitals.onLCP(sendToGoogleAnalytics);
+          webVitals.onFCP(sendToGoogleAnalytics);
+          webVitals.onTTFB(sendToGoogleAnalytics);
+          webVitals.onINP(sendToGoogleAnalytics);
+        };
+        document.head.appendChild(WVscript);
+      })();
+
+
+      function sendToGoogleAnalytics({name, delta, value, id, entries, rating, attribution}) {
+        var debugTarget = attribution ? attribution.largestShiftTarget||attribution.element||attribution.eventTarget||'' : '(not set)';
+        _sendEvent(name, {
+          // Built-in params:
+          value: delta, // Use `delta` so the value can be summed.
+          // Custom params:
+          metric_id: id, // Needed to aggregate events.
+          metric_value: value, // Optional.
+          metric_delta: delta, // Optional.
+      
+          // OPTIONAL: any additional params or debug info here.
+          // See: https://web.dev/debug-web-vitals-in-the-field/
+          // metric_rating: 'good' | 'needs-improvement' | 'poor'. 'needs-improvement' was 'ni'
+          metric_rating: rating, 
+          // debug_info
+          debug_target: debugTarget,
+          debug_event_type: attribution ? attribution.eventType||'' : '',
+          debug_timing: attribution ? attribution.loadState||'' : '',
+          event_time: attribution ? attribution.largestShiftTime||(attribution.lcpEntry&&attribution.lcpEntry.startTime)||attribution.eventTime||'': ''
+        });
+      }
+    }
+  }
+
+  /**
    * @param {string} a a string to convert to a boolean value.
    * @returns {boolean} true or false based on parsing the string parameter.
    */
@@ -430,6 +479,10 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
           _value = _cleanBooleanParam(_value);
           if (!0 === _value || !1 === _value) oCONFIG.AUTOTRACKER = _value;
           break;
+        case "webvitals":
+          _value = _cleanBooleanParam(_value);
+          if (!0 === _value || !1 === _value) oCONFIG.WEBVITALS = _value;
+          break;
         case "sdor":
           oCONFIG.SUBDOMAIN_BASED = _cleanBooleanParam(_value);
           break;
@@ -602,13 +655,13 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
      * @returns {object|undefined} the object with all keys and values converted
      * to lower case, undefined if there is an error processing the object.
      */
-  /*   var _enforeLower = function (j) {
-      try {
-        var d = JSON.stringify(j);
-        return JSON.parse(d.toLowerCase());
-      } catch (error) { }
-    };
- */
+    /*   var _enforeLower = function (j) {
+        try {
+          var d = JSON.stringify(j);
+          return JSON.parse(d.toLowerCase());
+        } catch (error) { }
+      };
+   */
     /**
      * This function handles events for the auto-tracker. It sends event commands
      * to the Google gtag.js library when links are clicked by the user. The event
@@ -1092,6 +1145,10 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
       var pair = p.split('=');
       var key = pair[0];
       var value = decodeURIComponent(pair[1] || '');
+      if(!isNaN(Number(value)) && /^(value|metric_(value|delta)|event_time|(video|audio)_(duration|percent|current_time))$/i.test(key)){
+        value = Number(value);
+      }
+
 
       if (result[key]) {
         if (Object.prototype.toString.call(result[key]) === '[object Array]') {
@@ -1234,7 +1291,12 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
 
         if ((_param[0].match(new RegExp(checkParams)) != null && _param[0].match(new RegExp(UncheckParams)) != null) || /query|json|default/ig.test(type)) {
           piiRegex.forEach(function (pii) {
-            _val = _val.replace(pii.regex, '[REDACTED_' + pii.name + ']');
+            if ((/^lat$/i.test(_param[0]) && /^(-?[1-8]?\d(?:\.\d{1,18})?|90(?:\.0{1,18})?)$/.test(_val)) || (/^lon$/i.test(_param[0]) && /^(-?(?:1[0-7]|[1-9])?\d(?:\.\d{1,18})?|180(?:\.0{1,18})?)$/.test(_val))) {
+              //if(!/^(lon|lat)$/i.test(_param[0]) || (/^(lon|lat)$/i.test(_param[0]) && (_val && !isFinite(_val)) ) ){
+            }
+            else {
+              _val = _val.replace(pii.regex, '[REDACTED_' + pii.name + ']');
+            }
           });
           _param[1] = encodeURIComponent(_val.replace(/\?$/, '')) || _val.replace(/\?$/, '');
           _hitPayloadParts[i] = _param.join('=');
@@ -1321,7 +1383,7 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
       "default": ["utm_id", "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "utm_source_platform", "utm_creative_format", "utm_marketing_tactic", "gbraid", "wbraid", "_gl", "gclid", "dclid", "gclsrc", "affiliate", "dap-dev-env", "v"],
       "gsa": ["challenge", "state"],
       "dhs": ["appreceiptnum"],
-      "doc": ["station", "meas", "start", "atlc", "epac", "cpac", "basin", "fdays", "cone", "tswind120", "gm_track", "50wind120", "hwind120", "mltoa34", "swath", "radii", "wsurge", "key_messages", "inundation", "rainqpf", "ero", "gage", "wfo", "spanish_key_messages", "key_messages", "sid", "lan", "office", "pil", "product", "site", "lat", "lon"],
+      "doc": ["station", "meas", "start", "atlc", "epac", "cpac", "basin", "fdays", "cone", "tswind120", "gm_track", "50wind120", "hwind120", "mltoa34", "swath", "radii", "wsurge", "key_messages", "inundation", "rainqpf", "ero", "gage", "wfo", "spanish_key_messages", "key_messages", "sid", "lan", "office", "pil", "product", "site", "lat", "lon", "issuedby", "wwa"],
       "hhs": ["s_cid", "selectedfacets"],
       "hud": ["postid"],
       "nasa": ["feature", "productid", "selectedfacets"],
@@ -1331,7 +1393,7 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
       "dod": ["p"],
       "opm": ["l", "soc", "jt", "j", "rmi", "smin", "hp", "g", "d", "a"]
     };
-    _allowedQuerystrings =  queries.default.concat(queries[oCONFIG.AGENCY.toLowerCase()]).concat(oCONFIG.SEARCH_PARAMS.toLowerCase().split("|"));
+    _allowedQuerystrings = queries.default.concat(queries[oCONFIG.AGENCY.toLowerCase()]).concat(oCONFIG.SEARCH_PARAMS.toLowerCase().split("|"));
   }
 
   /**
