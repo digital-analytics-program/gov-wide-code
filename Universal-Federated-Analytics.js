@@ -266,6 +266,9 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
   function _initWebvitals(){
     (/^(\/((index|home(page)?)(\.[a-zA-Z]{2,5})?)?)$/i.test(location.pathname)? oCONFIG.WEBVITALS = !0 : oCONFIG.WEBVITALS = !1)    
     if(oCONFIG.WEBVITALS){
+      /**
+       * This function is called on every page to inject the core webvitals script and add listerners to web-vitals events.
+       */
       (function () {
         var WVscript = document.createElement('script');
         WVscript.src = 'https://unpkg.com/web-vitals@4/dist/web-vitals.attribution.iife.js';
@@ -280,7 +283,9 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
         document.head.appendChild(WVscript);
       })();
 
-
+       /**
+       * This function send core web vitals data to GA4 4 using _sendEvent funtion.
+       */
       function sendToGoogleAnalytics({name, delta, value, id, entries, rating, attribution}) {
         var debugTarget = attribution ? attribution.largestShiftTarget||attribution.element||attribution.eventTarget||'' : '(not set)';
         _sendEvent(name, {
