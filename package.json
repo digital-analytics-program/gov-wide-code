@@ -8,7 +8,7 @@
     "clean": "rm ./Universal-Federated-Analytics-Min.js",
     "lint": "eslint Universal-Federated-Analytics.js",
     "cucumber": "cucumber-js",
-    "cucumber:debug": "node --inspect-brk cucumber-js",
+    "cucumber:debug": "VERBOSE=true node --inspect-brk node_modules/@cucumber/cucumber/bin/cucumber-js",
     "test-site": "docker build -t dap-test-site . && docker run --rm -p 8080:80 --name dap-test-site dap-test-site"
   },
   "repository": {
