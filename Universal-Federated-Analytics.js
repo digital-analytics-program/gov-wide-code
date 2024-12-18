@@ -271,7 +271,7 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
        */
       (function () {
         var WVscript = document.createElement('script');
-        WVscript.src = 'https://unpkg.com/web-vitals@4/dist/web-vitals.attribution.iife.js';
+        WVscript.src = 'https://d3vtlq0ztv2u27.cloudfront.net/web-vitals/dist/web-vitals.attribution.iife.js';
         /**
         * Adds listeners for web vitals events
         */
