@@ -271,7 +271,7 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
        */
       (function () {
         var WVscript = document.createElement('script');
-        WVscript.src = 'https://unpkg.com/web-vitals@4/dist/web-vitals.attribution.iife.js';
+        WVscript.src = 'https://dap.digitalgov.gov/web-vitals/dist/web-vitals.attribution.iife.js';
         /**
         * Adds listeners for web vitals events
         */
@@ -1299,12 +1299,10 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
 
         if ((_param[0].match(new RegExp(checkParams)) != null && _param[0].match(new RegExp(UncheckParams)) != null) || /query|json|default/ig.test(type)) {
           piiRegex.forEach(function (pii) {
-            if ((/^lat$/i.test(_param[0]) && /^(-?[1-8]?\d(?:\.\d{1,18})?|90(?:\.0{1,18})?)$/.test(_val)) || (/^lon$/i.test(_param[0]) && /^(-?(?:1[0-7]|[1-9])?\d(?:\.\d{1,18})?|180(?:\.0{1,18})?)$/.test(_val))) {
-              //if(!/^(lon|lat)$/i.test(_param[0]) || (/^(lon|lat)$/i.test(_param[0]) && (_val && !isFinite(_val)) ) ){
-            }
-            else {
+            if (!((/^lat$/i.test(_param[0]) && /^(-?[1-8]?\d(?:\.\d{1,18})?|90(?:\.0{1,18})?)$/.test(_val)) || (/^lon$/i.test(_param[0]) && /^(-?(?:1[0-7]|[1-9])?\d(?:\.\d{1,18})?|180(?:\.0{1,18})?)$/.test(_val)))) {
               _val = _val.replace(pii.regex, '[REDACTED_' + pii.name + ']');
             }
+            else { return; }
           });
           _param[1] = encodeURIComponent(_val.replace(/\?$/, '')) || _val.replace(/\?$/, '');
           _hitPayloadParts[i] = _param.join('=');
