@@ -5,7 +5,8 @@
   "main": "Universal-Federated-Analytics.js",
   "type": "module",
   "scripts": {
-    "clean": "rm ./Universal-Federated-Analytics-Min.js",
+    "clean": "rm -rf dist",
+    "build": "rollup -c",
     "lint": "eslint Universal-Federated-Analytics.js",
     "cucumber": "cucumber-js",
     "cucumber:debug": "VERBOSE=true node --inspect-brk node_modules/@cucumber/cucumber/bin/cucumber-js",
@@ -24,11 +25,13 @@
   "homepage": "https://github.com/digital-analytics-program/gov-wide-code#readme",
   "devDependencies": {
     "@cucumber/cucumber": "^11.0.0",
+    "@rollup/plugin-terser": "^0.4.4",
     "chai": "^5.1.1",
     "eslint": "^9.8.0",
     "eslint-plugin-compat": "^6.0.0",
     "eslint-plugin-jsdoc": "^50.2.2",
-    "puppeteer": "^23.3.0"
+    "puppeteer": "^23.3.0",
+    "rollup": "^4.29.1"
   },
   "dependencies": {
     "web-vitals": "^4.2.4"
