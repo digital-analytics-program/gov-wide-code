@@ -10,7 +10,7 @@ On September 22, 2023, the Office of Management and Budget (OMB) released a memo
 
 DAP offers a central hosting server for its minified JavaScript file at `https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js`. As of August 2018, the file is gzipped and served compressed by default, but will be served uncompressed where `Accept-Encoding: gzip` is not present in the viewer.
 
-The latest version 8.3 of DAP GA code contains GA4 tracking only. DAP UA data collection and reporting was removed on June 24, 2024 as part of the global sunset of Universal Analytics on July 1, 2024.
+The latest version 8 of DAP GA code contains GA4 tracking only. DAP UA data collection and reporting was removed on June 24, 2024 as part of the global sunset of Universal Analytics on July 1, 2024.
 
 * [`Universal-Federated-Analytics.js`](Universal-Federated-Analytics.js) (full)
 * [`Universal-Federated-Analytics-Min.js`](Universal-Federated-Analytics-Min.js) (minified)
@@ -56,7 +56,7 @@ hit and will be able to track normally all the consecutive hits.
 
 #### Browser support
 
-The DAP code is compatible with a [broad range of browsers](.browserslistrc) supported by the [Google Tag Manager (GTM)}](https://developers.google.com/tag-platform/support/supported-browsers). NOTE: As of July 2024, [GTM and DAP no longer support Internet Explorer](https://support.google.com/tagmanager/answer/4620708#july2nd). On browsers not supported by DAP, user sessions to websites may not be recorded.
+The DAP code is compatible with a [broad range of browsers](.browserslistrc) supported by the [Google Tag Manager (GTM)](https://developers.google.com/tag-platform/support/supported-browsers). NOTE: As of July 2024, [GTM and DAP no longer support Internet Explorer](https://support.google.com/tagmanager/answer/4620708#july2nd). On browsers not supported by DAP, user sessions to websites may not be recorded.
 
 #### Transport security
 

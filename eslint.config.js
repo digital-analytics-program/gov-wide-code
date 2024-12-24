@@ -11,9 +11,6 @@ export default [
     plugins: {
       jsdoc,
     },
-    ignores: [
-      "Universal-Federated-Analytics-Min.js"
-    ],
     rules: {
       ...jsdoc.configs.recommended.rules,
       "jsdoc/check-indentation": "error",
