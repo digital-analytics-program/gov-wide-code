@@ -36,12 +36,12 @@ jobs:
         run: npm ci --timing
       - name: Bundle javascript
         run: npm run build
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: 'dist'
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: dap-cdn-build
           path: dist
-      - name: Generate artifact attestation
-        uses: actions/attest-build-provenance@v2
-        with:
-          subject-path: 'dap-cdn-build'
