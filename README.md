@@ -80,7 +80,7 @@ This whitelists the DAP domain and necessary Google domains as trusted sources f
 
 #### Data integrity
 
-The `dap.digitalgov.gov` domain is currently served by a third party content delivery network (CDN) that serves the current JavaScript referenced in the `master` branch of this GitHub repository.
+The `dap.digitalgov.gov` domain is currently served by a third party content delivery network (CDN) that serves JavaScript from the [latest release](https://github.com/digital-analytics-program/gov-wide-code/releases) in this GitHub repository.
 
 Before any change of the JavaScript being served by the CDN, the owners of this repository will update the file located in the `master` branch of the repo.
 
@@ -108,7 +108,7 @@ Only Digital Analytics Program staff have been granted write access to this repo
 
 #### Prerequisites
 
-* NodeJS > v20.x
+* NodeJS
 * Docker
 
 #### Install dependencies
@@ -125,7 +125,20 @@ This repo uses Eslint for code static analysis. Run the linter with:
 npm run lint
 ```
 
-#### Run integration tests
+#### Bundle the code
+
+To build the production bundle:
+
+```bash
+# Outputs to ./dist
+npm run build
+```
+
+#### Run the test site
+The test site is a static website that can be used to exercise all the features of the DAP library. DAP events generated
+within any running instance of the test site are sent to our GA4 test property.
+
+The test site copies the DAP code from `dist`. Make sure you've built the DAP code and then start up the test site via:
 
 Start up the test site at http://localhost:8080/ with one of the following:
 
@@ -140,7 +153,9 @@ npm run test-site-stg
 npm run test-site-prd
 ```
 
-Then run the tests against the test site:
+#### Run integration tests
+
+The integration tests run against the test site. Make sure the test site is running and then run the tests via:
 
 ```bash
 npm run cucumber

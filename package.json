@@ -1,13 +1,13 @@
 {
   "name": "digital-analytics-program",
-  "version": "4.1.0",
+  "version": "8.5.0",
   "description": "Provides a JavaScript file for US federal agencies to link or embed in their websites to participate in the Digital Analytics Program.",
   "main": "Universal-Federated-Analytics.js",
   "type": "module",
   "scripts": {
     "clean": "rm -rf dist",
     "build": "rollup -c",
-    "lint": "eslint Universal-Federated-Analytics.js",
+    "lint": "eslint src",
     "cucumber": "cucumber-js",
     "cucumber:debug": "VERBOSE=true node --inspect-brk node_modules/@cucumber/cucumber/bin/cucumber-js",
     "test-site-dev": "docker build --no-cache --build-arg DAP_ENV='dev' -t dap-test-site-dev . && docker run --rm -p 8080:80 --name dap-test-site-dev dap-test-site-dev",
