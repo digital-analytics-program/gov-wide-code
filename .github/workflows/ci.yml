@@ -20,6 +20,10 @@ jobs:
   build:
     needs: lint
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      attestations: write
     steps:
       - name: Code Checkout
         uses: actions/checkout@v4
