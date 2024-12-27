@@ -80,11 +80,23 @@ This whitelists the DAP domain and necessary Google domains as trusted sources f
 
 #### Data integrity
 
-The `dap.digitalgov.gov` domain is currently served by a third party content delivery network (CDN) that serves JavaScript from the [latest release](https://github.com/digital-analytics-program/gov-wide-code/releases) in this GitHub repository.
+The `dap.digitalgov.gov` domain is currently served by a third party content delivery network (CDN) that serves JavaScript copied from the [latest release](https://github.com/digital-analytics-program/gov-wide-code/releases) in this GitHub repository.
+The release process is as follows:
+1. The `master` branch is tagged for release.
+2. The build pipeline creates an artifact from the tagged commit. The artifact is a zip file named `dap-distribution` that contains 3 files:
+   - Universal-Federated-Analytics.js (full)
+   - Universal-Federated-Analytics-Min.js (minified by the Terser library)
+   - Universal-Federated-Analytics-Min.js.map (source map)
+3. The DAP team creates and publishes a GitHub release that includes `dap-distribution` as an asset.
+4. The `dap-distribution` asset associated with the new release is uploaded to the CDN.
 
-Before any change of the JavaScript being served by the CDN, the owners of this repository will update the file located in the `master` branch of the repo.
+Confirm that the CDN file matches the file packaged with the release:
+1. Download the file from the CDN https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js.
+2. Download the file from the release (version 8.4 in this example) https://github.com/digital-analytics-program/gov-wide-code/releases/download/v8.4.0/Universal-Federated-Analytics-Min.js
+3. Diff the files
 
-This means that, barring the compromise of GitHub's systems or the CDN's systems, all changes to the code that appears on `dap.digitalgov.gov` should be publicly reflected in [this repository's commit history](https://github.com/digital-analytics-program/gov-wide-code/commits/master).
+Confirm that the file packaged with the release was generated from the tagged commit:
+1. 
 
 #### Appropriate Placement
 
