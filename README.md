@@ -10,11 +10,7 @@ On September 22, 2023, the Office of Management and Budget (OMB) released a memo
 
 DAP offers a central hosting server for its minified JavaScript file at `https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js`. As of August 2018, the file is gzipped and served compressed by default, but will be served uncompressed where `Accept-Encoding: gzip` is not present in the viewer.
 
-The latest version 8.3 of DAP GA code contains GA4 tracking only. DAP UA data collection and reporting was removed on June 24, 2024 as part of the global sunset of Universal Analytics on July 1, 2024.
-
-* [`Universal-Federated-Analytics.js`](Universal-Federated-Analytics.js) (full)
-* [`Universal-Federated-Analytics-Min.js`](Universal-Federated-Analytics-Min.js) (minified)
-* [`Federated.js.map`](Federated.js.map) (source map)
+The latest version 8 of DAP GA code contains GA4 tracking only. DAP UA data collection and reporting was removed on June 24, 2024 as part of the global sunset of Universal Analytics on July 1, 2024.
 
 ### DAP Code Implementation
 
@@ -84,11 +80,23 @@ This whitelists the DAP domain and necessary Google domains as trusted sources f
 
 #### Data integrity
 
-The `dap.digitalgov.gov` domain is currently served by a third party content delivery network (CDN) that serves the current JavaScript referenced in the `master` branch of this GitHub repository.
+The `dap.digitalgov.gov` domain is currently served by a third party content delivery network (CDN) that serves JavaScript copied from the [latest release](https://github.com/digital-analytics-program/gov-wide-code/releases) in this GitHub repository.
+The release process is as follows:
+1. The `master` branch is tagged for release.
+2. The build pipeline creates an artifact from the tagged commit. The artifact is a zip file named `dap-distribution` that contains 3 files:
+   - Universal-Federated-Analytics.js (full)
+   - Universal-Federated-Analytics-Min.js (minified by the Terser library)
+   - Universal-Federated-Analytics-Min.js.map (source map)
+3. The DAP team creates and publishes a GitHub release that includes `dap-distribution` as an asset.
+4. The `dap-distribution` asset associated with the new release is uploaded to the CDN.
 
-Before any change of the JavaScript being served by the CDN, the owners of this repository will update the file located in the `master` branch of the repo.
+Confirm that the CDN file matches the file packaged with the release:
+1. Download the file from the CDN https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js.
+2. Download the file from the release (version 8.4 in this example) https://github.com/digital-analytics-program/gov-wide-code/releases/download/v8.4.0/Universal-Federated-Analytics-Min.js
+3. Diff the files
 
-This means that, barring the compromise of GitHub's systems or the CDN's systems, all changes to the code that appears on `dap.digitalgov.gov` should be publicly reflected in [this repository's commit history](https://github.com/digital-analytics-program/gov-wide-code/commits/master).
+Confirm that the file packaged with the release was generated from the tagged commit:
+1. 
 
 #### Appropriate Placement
 
@@ -112,7 +120,7 @@ Only Digital Analytics Program staff have been granted write access to this repo
 
 #### Prerequisites
 
-* NodeJS > v20.x
+* NodeJS
 * Docker
 
 #### Install dependencies
@@ -129,14 +137,29 @@ This repo uses Eslint for code static analysis. Run the linter with:
 npm run lint
 ```
 
-#### Run integration tests
-Start up the test site at http://localhost:8080/:
+#### Bundle the code
+
+To build the production bundle:
+
+```bash
+# Outputs to ./dist
+npm run build
+```
+
+#### Run the test site
+The test site is a static website that can be used to exercise all the features of the DAP library. DAP events generated
+within any running instance of the test site are sent to our GA4 test property.
+
+The test site copies the DAP code from `dist`. Make sure you've built the DAP code and then start up the test site via:
 
 ```bash
 npm run test-site
 ```
 
-Then run the tests against the test site:
+Now the test site should be running at http://localhost:8080/.
+
+#### Run integration tests
+The integration tests run against the test site. Make sure the test site is running and then run the tests via:
 
 ```bash
 npm run cucumber

@@ -26,7 +26,7 @@ Then("the file download is reported to DAP with interaction type {string}", asyn
         "file_extension": "zip",
         "file_name": "/about.zip",
         "link_domain": "localhost",
-        "link_id": "internaldownload",
+        "link_id": "internalDownload",
         "link_text": "/about.zip",
         "link_url": "http://localhost:8080/about.zip",
       }
