@@ -27,5 +27,5 @@ Given("DAP is configured with autotracking disabled", function () {
 });
 
 When("I load the test site", async function () {
-  await this.page.goto(`http://localhost:8080?${this.dapConfig.toQueryParams()}${process.env.DAP_ENV ? ('&testEnv=' + process.env.DAP_ENV) : ''}`);
+  await this.page.goto(`http://localhost:8080?${this.dapConfig.toQueryParams()}`);
 });

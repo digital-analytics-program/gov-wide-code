@@ -1,32 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-
-<title>DAP test site</title>
-<script>
-  (function() {
-		const queryParams = new URLSearchParams(window.location.search);
-    const dapScriptTag = document.createElement("script");
-		let dapCodeLocation;
-    dapScriptTag.id = "_fed_an_ua_tag";
-    dapScriptTag.async = true;
-
-    if (queryParams.get('testEnv') == 'production') {
-      queryParams.delete('testEnv');
-      dapCodeLocation = 'https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js';
-    } else if (queryParams.get('testEnv') == 'staging') {
-      queryParams.delete('testEnv');
-      dapCodeLocation = 'https://d3vtlq0ztv2u27.cloudfront.net/Universal-Federated-Analytics-Min.js';
-    } else {
-      dapCodeLocation = 'Universal-Federated-Analytics-Min.js';
-    }
-
-		dapScriptTag.src = `${dapCodeLocation}?dapdev=true&${queryParams.toString()}`
-    document.head.appendChild(dapScriptTag);
-  })();
-</script>
+  <title>DAP test site</title>
+  <!-- This is populated by NGINX SSI -->
+  <!--#echo var="header_script_tag" encoding="none"-->
 </head>
 
 <body>

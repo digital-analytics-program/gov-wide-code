@@ -62,13 +62,13 @@ Then("there are no unexpected requests", function () {
     return (new URL(request.url)).host;
   });
 
-  const allowedURLs = ["localhost:8080", "www.googletagmanager.com", "www.google-analytics.com"];
-
-  if (process.env.DAP_ENV == 'production') {
-    allowedURLs.push("dap.digitalgov.gov")
-  } else if (process.env.DAP_ENV == 'staging') {
-    allowedURLs.push("d3vtlq0ztv2u27.cloudfront.net")
-  }
+  const allowedURLs = [
+    "localhost:8080",
+    "d3vtlq0ztv2u27.cloudfront.net",
+    "dap.digitalgov.gov",
+    "www.googletagmanager.com",
+    "www.google-analytics.com"
+  ];
 
   requestURLs.forEach((requestURL) => {
     expect(allowedURLs).to.include(requestURL);

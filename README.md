@@ -131,10 +131,17 @@ npm run lint
 
 #### Run integration tests
 
-Start up the test site at http://localhost:8080/:
+Start up the test site at http://localhost:8080/ with one of the following:
 
 ```bash
-npm run test-site
+# Using the local version of the DAP code
+npm run test-site-dev
+
+# Using the staging environment version of the DAP code
+npm run test-site-stg
+
+# Using the production environment version of the DAP code
+npm run test-site-prd
 ```
 
 Then run the tests against the test site:
