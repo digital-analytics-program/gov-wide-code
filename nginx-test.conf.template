@@ -1,0 +1,71 @@
+server {
+    listen       80;
+    listen  [::]:80;
+    server_name  localhost;
+
+    #access_log  /var/log/nginx/host.access.log  main;
+
+    location / {
+      ssi on;
+      set $dap_code_env '${DAP_ENV}';
+      set $dap_code_location 'Universal-Federated-Analytics-Min.js';
+
+      if ($dap_code_env = 'stg') {
+        set $dap_code_location 'https://d3vtlq0ztv2u27.cloudfront.net/Universal-Federated-Analytics-Min.js';
+      }
+      if ($dap_code_env = 'prd') {
+        set $dap_code_location 'https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js';
+      }
+
+      # Create the script tag to include in each page's header using the
+      # dap_code_location which is defined above
+      set $header_script_tag '
+        <script>
+          (function() {
+            const queryParams = new URLSearchParams(window.location.search);
+            const dapScriptTag = document.createElement("script");
+            const dapCodeLocation = ""
+            dapScriptTag.id = "_fed_an_ua_tag";
+            dapScriptTag.async = true;
+            dapScriptTag.src = "${dap_code_location}" + "?dapdev=true&" + queryParams.toString();
+            document.head.appendChild(dapScriptTag);
+          })();
+        </script>
+      ';
+
+      root   /usr/share/nginx/html;
+      index  index.html index.htm;
+    }
+
+    #error_page  404              /404.html;
+
+    # redirect server error pages to the static page /50x.html
+    #
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+
+    # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+    #
+    #location ~ \.php$ {
+    #    proxy_pass   http://127.0.0.1;
+    #}
+
+    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+    #
+    #location ~ \.php$ {
+    #    root           html;
+    #    fastcgi_pass   127.0.0.1:9000;
+    #    fastcgi_index  index.php;
+    #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
+    #    include        fastcgi_params;
+    #}
+
+    # deny access to .htaccess files, if Apache's document root
+    # concurs with nginx's one
+    #
+    #location ~ /\.ht {
+    #    deny  all;
+    #}
+}
