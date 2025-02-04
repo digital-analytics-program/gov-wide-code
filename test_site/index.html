@@ -1,21 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-
-<title>DAP test site</title>
-<script>
-	(function() {
-		const queryParams = new URLSearchParams(window.location.search);
-		const dapScriptTag = document.createElement("script");
-		dapScriptTag.id = "_fed_an_ua_tag";
-		dapScriptTag.async = true;
-		dapScriptTag.src = `Universal-Federated-Analytics-Min.js?dapdev=true&${queryParams.toString()}`;
-		document.head.appendChild(dapScriptTag);
-	})();
-
-</script>
+  <title>DAP test site</title>
+  <!-- This is populated by NGINX SSI -->
+  <!--#echo var="header_script_tag" encoding="none"-->
 </head>
 
 <body>
@@ -269,8 +259,8 @@
 			<a href="https://ca.linkedin.com/" class="fa fa-linkedin"  onclick="gas4('social',{'link_text':'<link_text>','link_domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','social_network':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
 		</div>
 	  </div>
-	
-	
+
+
 
 </section>
 
@@ -300,8 +290,8 @@
 			<a href="https://ca.linkedin.com/" class="fa fa-linkedin"  onclick="gas4('social',{'link_text':'<link_text>','link_domain':'<link_domain>','link_url':'<link_url>','link_id':'<link_id>','link_classes':'<link_classes>','social_network':'<social_network>','content_type':'<content_type>','section':'<section>'});"></a>
 		</div>
 	  </div>
-	
-	
+
+
 
 </section>
 
@@ -458,7 +448,7 @@ width:90%;
 }
 
 .active, .accordion:hover {
-  background-color: #ccc; 
+  background-color: #ccc;
 }
 
 .panel {
