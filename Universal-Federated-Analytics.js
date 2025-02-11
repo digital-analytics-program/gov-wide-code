@@ -1,7 +1,7 @@
 /***********************************************************************************************************
 U.S. General Services Administration (GSA).
 Digital Analytics Program Government Wide Site Usage Measurement and Tracking. 
-18/12/2024 Version: 8.5
+12/02/2025 Version: 8.6
 ***********************************************************************************************************/
 
 /**
@@ -33,7 +33,7 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
       ANONYMIZE_IP: !0,
       AGENCY: "",
       SUB_AGENCY: "",
-      VERSION: "20241218 v8.5 - GA4",
+      VERSION: "20250212 v8.6 - GA4",
       SITE_TOPIC: "",
       SITE_PLATFORM: "",
       SCRIPT_SOURCE: "",
@@ -48,6 +48,7 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
       MAIN_URL_PROTOCOL_DIMENSION: "protocol",
       MAIN_INTERACTION_TYPE_DIMENSION: "interaction_type",
       MAIN_USING_PARALLEL_DIMENSION: "using_parallel_tracker",
+      MAIN_HOSTNAME_DIMENSION: "hostname_dimension",
       USE_PARALLEL_CUSTOM_DIMENSIONS: !1,
       PARALLEL_AGENCY_DIMENSION: "agency",
       PARALLEL_SUBAGENCY_DIMENSION: "subagency",
@@ -58,6 +59,7 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
       PARALLEL_URL_PROTOCOL_DIMENSION: "protocol",
       PARALLEL_INTERACTION_TYPE_DIMENSION: "interaction_type",
       PARALLEL_USING_PARALLEL_DIMENSION: "using_parallel_tracker",
+      PARALLEL_HOSTNAME_DIMENSION: "hostname_dimension",
       COOKIE_DOMAIN: location.hostname.replace(/^www\./, "").toLowerCase(),
       COOKIE_TIMEOUT: 63072e3,
       SEARCH_PARAMS: "q|query|nasaInclude|k|querytext|keys|qt|search_input|search|globalSearch|goog|s|gsearch|search_keywords|SearchableText|sp_q|qs|psnetsearch|locate|lookup|search_api_views_fulltext|keywords|request|_3_keywords|searchString",
@@ -72,7 +74,8 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
       USE_CUSTOM_URL: !1,
       USE_CUSTOM_TITLE: !1,
       USING_PARALLEL_TRACKER: "no",
-      ACTIVATE_DEV: !1
+      ACTIVATE_DEV: !1,
+      HOSTNAME: location.hostname.replace(/^www\./, "").toLowerCase()
     };
 
   _updateConfig();
@@ -590,9 +593,10 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
           [oCONFIG.MAIN_SCRIPT_SOURCE_URL_DIMENSION]: oCONFIG.SCRIPT_SOURCE.toLowerCase(),
           [oCONFIG.MAIN_CODEVERSION_DIMENSION]: oCONFIG.VERSION.toLowerCase(),
           [oCONFIG.MAIN_URL_PROTOCOL_DIMENSION]: oCONFIG.URL_PROTOCOL.toLowerCase(),
-          [oCONFIG.MAIN_USING_PARALLEL_DIMENSION]: oCONFIG.USING_PARALLEL_TRACKER.toLowerCase()
+          [oCONFIG.MAIN_USING_PARALLEL_DIMENSION]: oCONFIG.USING_PARALLEL_TRACKER.toLowerCase(),
+          [oCONFIG.MAIN_HOSTNAME_DIMENSION]: oCONFIG.HOSTNAME.toLowerCase()
         };
-        ((document.referrer && -1 !== document.referrer.search(location.hostname)) ? (r.page_referrer = _scrubbedURL(document.referrer)) : document.referrer);
+        ((document.referrer && -1 !== document.referrer.search(location.hostname)) ? (r.page_referrer = _scrubbedURL(document.referrer)) : (r.page_referrer = document.referrer));
         var rr = _piiRedactor(_objToQuery(r), "default");
         rr = _queryToJSON(rr);
         rr = _unflattenJSON(rr);
@@ -612,9 +616,10 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
           [oCONFIG.PARALLEL_SCRIPT_SOURCE_URL_DIMENSION]: oCONFIG.SCRIPT_SOURCE.toLowerCase(),
           [oCONFIG.PARALLEL_CODEVERSION_DIMENSION]: oCONFIG.VERSION.toLowerCase(),
           [oCONFIG.PARALLEL_URL_PROTOCOL_DIMENSION]: oCONFIG.URL_PROTOCOL.toLowerCase(),
-          [oCONFIG.PARALLEL_USING_PARALLEL_DIMENSION]: oCONFIG.USING_PARALLEL_TRACKER.toLowerCase()
+          [oCONFIG.PARALLEL_USING_PARALLEL_DIMENSION]: oCONFIG.USING_PARALLEL_TRACKER.toLowerCase(),
+          [oCONFIG.PARALLEL_HOSTNAME_DIMENSION]: oCONFIG.HOSTNAME.toLowerCase()
         };
-        ((document.referrer && -1 !== document.referrer.search(location.hostname)) ? (r.page_referrer = _scrubbedURL(document.referrer)) : document.referrer);
+        ((document.referrer && -1 !== document.referrer.search(location.hostname)) ? (r.page_referrer = _scrubbedURL(document.referrer)) : (r.page_referrer = document.referrer));
         var rr = _piiRedactor(_objToQuery(r), "default");
         rr = _queryToJSON(rr);
         rr = _unflattenJSON(rr);
@@ -628,7 +633,7 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
           page_location: ur,
           page_title: n
         };
-        ((document.referrer && -1 !== document.referrer.search(location.hostname)) ? (r.page_referrer = _scrubbedURL(document.referrer)) : document.referrer);
+        ((document.referrer && -1 !== document.referrer.search(location.hostname)) ? (r.page_referrer = _scrubbedURL(document.referrer)) : (r.page_referrer = document.referrer));
         var rr = _piiRedactor(_objToQuery(r), "default");
         rr = _queryToJSON(rr);
         rr = _unflattenJSON(rr);
@@ -1228,7 +1233,24 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
         } catch (e) {
           _val = decodeURIComponent(_param[1]);
         }
-
+        var _urlPatt = /^https?:\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/i;
+        try {
+          if(_urlPatt.test(_val)){
+            if(/^(dl|page_location)$/.test(_param[0])){
+              _val = _val.replace(/www\./i, '');
+            }
+            else{
+              var ho = _val.replace(/https?:\/\//i, '').split("/")[0];
+              if(/\.(gov|mil)/.test(ho)){
+                _val = _val.replace(/www\./i, '');
+              }
+              
+            }
+          }
+        } catch (error) {
+          
+        }
+        
         if ((_param[0].match(new RegExp(checkParams)) != null || /query|json/ig.test(type)) && _val.indexOf('?') > -1) {
           var paramArray = _val.split('?').splice(1).join('&').split('&');
           var paramSubArray = [];
@@ -1386,13 +1408,13 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
    */
   function _setAllowedQS() {
     var queries = {
-      "default": ["utm_id", "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "utm_source_platform", "utm_creative_format", "utm_marketing_tactic", "gbraid", "wbraid", "_gl", "gclid", "dclid", "gclsrc", "affiliate", "dap-dev-env", "v"],
+      "default": ["utm_id", "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "utm_source_platform", "utm_creative_format", "utm_marketing_tactic", "gbraid", "wbraid", "_gl", "gclid", "dclid", "gclsrc", "affiliate", "dap-dev-env", "v", "lat", "lon"],
       "gsa": ["challenge", "state"],
       "dhs": ["appreceiptnum"],
-      "doc": ["station", "meas", "start", "atlc", "epac", "cpac", "basin", "fdays", "cone", "tswind120", "gm_track", "50wind120", "hwind120", "mltoa34", "swath", "radii", "wsurge", "key_messages", "inundation", "rainqpf", "ero", "gage", "wfo", "spanish_key_messages", "key_messages", "sid", "lan", "office", "pil", "product", "site", "lat", "lon", "issuedby", "wwa"],
+      "doc": ["station", "meas", "start", "atlc", "epac", "cpac", "basin", "fdays", "cone", "tswind120", "gm_track", "50wind120", "hwind120", "mltoa34", "swath", "radii", "wsurge", "key_messages", "inundation", "rainqpf", "ero", "gage", "wfo", "spanish_key_messages", "key_messages", "sid", "lan", "office", "pil", "product", "product1", "site", "issuedby", "wwa"],
       "hhs": ["s_cid", "selectedfacets"],
       "hud": ["postid"],
-      "nasa": ["feature", "productid", "selectedfacets"],
+      "nasa": ["feature", "productid", "selectedfacets", "topic", "titleid"],
       "nps": ["gid", "mapid", "site", "webcam", "id"],
       "nsf": ["meas", "start", "atlc", "epac", "cpac", "basin", "fdays", "cone", "tswind120", "gm_track", "50wind120", "hwind120", "mltoa34", "swath", "radii", "wsurge", "key_messages", "inundation", "rainqpf", "ero", "gage", "wfo", "spanish_key_messages", "key_messages", "sid"],
       "va": ["id"],
