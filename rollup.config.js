@@ -1,7 +1,7 @@
 import terser from '@rollup/plugin-terser';
 
 export default {
-  input: "src/index.js",
+  input: "./Universal-Federated-Analytics.js",
   output: [
     {
       file: './dist/Universal-Federated-Analytics.js',
