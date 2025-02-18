@@ -5,8 +5,10 @@
   "main": "Universal-Federated-Analytics.js",
   "type": "module",
   "scripts": {
-    "clean": "rm ./Universal-Federated-Analytics-Min.js",
+    "clean": "rm -rf dist",
     "lint": "eslint Universal-Federated-Analytics.js",
+    "minify": "terser Universal-Federated-Analytics.js --output dist/Universal-Federated-Analytics-Min.js --config-file minify_options.json",
+    "build": "mkdir -p dist && cp Universal-Federated-Analytics.js dist && npm run minify",
     "cucumber": "cucumber-js",
     "cucumber:debug": "VERBOSE=true node --inspect-brk node_modules/@cucumber/cucumber/bin/cucumber-js",
     "test-site-dev": "docker build --no-cache --build-arg DAP_ENV='dev' -t dap-test-site-dev . && docker run --rm -p 8080:80 --name dap-test-site-dev dap-test-site-dev",
@@ -28,7 +30,8 @@
     "eslint": "^9.8.0",
     "eslint-plugin-compat": "^6.0.0",
     "eslint-plugin-jsdoc": "^50.2.2",
-    "puppeteer": "^23.3.0"
+    "puppeteer": "^23.3.0",
+    "terser": "^5.39.0"
   },
   "dependencies": {
     "web-vitals": "^4.2.4"

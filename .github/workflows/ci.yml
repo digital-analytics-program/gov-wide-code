@@ -3,7 +3,7 @@ on:
   pull_request:
 
 jobs:
-  lint:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Code Checkout
@@ -17,3 +17,5 @@ jobs:
         run: npm ci --timing
       - name: Lint javascript
         run: npm run lint
+      - name: Build distribution
+        run: npm run build
