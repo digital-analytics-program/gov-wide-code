@@ -10,3 +10,4 @@ exclude:
     - test_site/**
     - Dockerfile
     - eslint.config.js
+    - rollup.config.js
