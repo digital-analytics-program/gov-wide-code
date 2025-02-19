@@ -26,5 +26,7 @@ jobs:
           npm run build
           tar -czvf dap-${{ github.ref_name }}.tar.gz dist
       - name: Create draft release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ./create-draft-release.sh ${{ github.ref_name }} dap-${{ github.ref_name }}.tar.gz
