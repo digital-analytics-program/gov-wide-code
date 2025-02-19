@@ -27,4 +27,4 @@ jobs:
           tar -czvf dap-${{ github.ref_name }}.tar.gz dist
       - name: Create draft release
         run: |
-          create-draft-release.sh ${{ github.ref_name }} dap-${{ github.ref_name }}.tar.gz
+          ./create-draft-release.sh ${{ github.ref_name }} dap-${{ github.ref_name }}.tar.gz
