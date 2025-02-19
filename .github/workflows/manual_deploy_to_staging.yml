@@ -1,8 +1,0 @@
-name: Manual deploy to staging
-
-on:
-  workflow_dispatch:
-
-jobs:
-  manual_deploy_to_staging:
-    uses: ./.github/workflows/deploy.yml

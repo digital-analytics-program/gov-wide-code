@@ -10,11 +10,7 @@ On September 22, 2023, the Office of Management and Budget (OMB) released a memo
 
 DAP offers a central hosting server for its minified JavaScript file at `https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js`. As of August 2018, the file is gzipped and served compressed by default, but will be served uncompressed where `Accept-Encoding: gzip` is not present in the viewer.
 
-The latest version 8.6 of DAP GA code contains GA4 tracking only. DAP UA data collection and reporting was removed on June 24, 2024 as part of the global sunset of Universal Analytics on July 1, 2024.
-
-* [`Universal-Federated-Analytics.js`](Universal-Federated-Analytics.js) (full)
-* [`Universal-Federated-Analytics-Min.js`](Universal-Federated-Analytics-Min.js) (minified)
-* [`Federated.js.map`](Federated.js.map) (source map)
+The latest version 8 of DAP GA code contains GA4 tracking only. DAP UA data collection and reporting was removed on June 24, 2024 as part of the global sunset of Universal Analytics on July 1, 2024.
 
 ### DAP Code Implementation
 
@@ -129,9 +125,10 @@ This repo uses Eslint for code static analysis. Run the linter with:
 npm run lint
 ```
 
-#### Run integration tests
+#### Run the test site
 
-Start up the test site at http://localhost:8080/ with one of the following:
+The test site is a static website that can be used to exercise all the features of the DAP library. DAP events generated
+within any running instance of the test site are sent to our GA4 test property.
 
 ```bash
 # Using the local version of the DAP code
@@ -144,7 +141,11 @@ npm run test-site-stg
 npm run test-site-prd
 ```
 
-Then run the tests against the test site:
+The test site should now be running at http://localhost:8080.
+
+#### Run integration tests
+
+The integration tests run against the test site. Make sure the test site is running and then run the tests via:
 
 ```bash
 npm run cucumber

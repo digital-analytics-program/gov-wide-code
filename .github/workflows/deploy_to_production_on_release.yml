@@ -1,0 +1,9 @@
+name: Deploy to production when a release is published
+
+on:
+  release:
+    types: [released]
+
+jobs:
+  deploy_to_production:
+    uses: ./.github/workflows/deploy.yml

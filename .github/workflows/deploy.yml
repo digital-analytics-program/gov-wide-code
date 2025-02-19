@@ -2,6 +2,8 @@ on:
   workflow_call:
 
 jobs:
+  # This 'deploy' job serves as a placeholder until we can set up automated deploys.
+  # The job saves a distribution artifact that must be manually copied to our CDN.
   deploy:
     runs-on: ubuntu-latest
     steps:

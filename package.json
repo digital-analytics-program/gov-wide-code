@@ -11,7 +11,7 @@
     "build": "mkdir -p dist && cp Universal-Federated-Analytics.js dist && npm run minify",
     "cucumber": "cucumber-js",
     "cucumber:debug": "VERBOSE=true node --inspect-brk node_modules/@cucumber/cucumber/bin/cucumber-js",
-    "test-site-dev": "docker build --no-cache --build-arg DAP_ENV='dev' -t dap-test-site-dev . && docker run --rm -p 8080:80 --name dap-test-site-dev dap-test-site-dev",
+    "test-site-dev": "npm run build && docker build --no-cache --build-arg DAP_ENV='dev' -t dap-test-site-dev . && docker run --rm -p 8080:80 --name dap-test-site-dev dap-test-site-dev",
     "test-site-stg": "docker build --no-cache --build-arg DAP_ENV='stg' -t dap-test-site-stg . && docker run --rm -p 8080:80 --name dap-test-site-stg dap-test-site-stg",
     "test-site-prd": "docker build --no-cache --build-arg DAP_ENV='prd' -t dap-test-site-prd . && docker run --rm -p 8080:80 --name dap-test-site-prd dap-test-site-prd"
   },
