@@ -1,9 +1,8 @@
 on:
-  push:
-  pull_request:
+  workflow_call:
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Code Checkout
@@ -15,12 +14,10 @@ jobs:
           cache: 'npm'
       - name: Install node dependencies
         run: npm ci --timing
-      - name: Lint javascript
-        run: npm run lint
       - name: Build distribution
         run: npm run build
-  deploy_staging:
-    needs:
-      - build
-    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
-    uses: ./.github/workflows/deploy.yml
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dap-distribution
+          path: dist
