@@ -7,6 +7,8 @@ on:
 jobs:
   create_draft_release:
     runs-on: ubuntu-latest
+    env:
+      TAG_NAME: ${{ github.ref_name }}
 
     permissions:
       contents: write
@@ -24,9 +26,9 @@ jobs:
       - name: Build distribution
         run: |
           npm run build
-          tar -czvf dap-${{ github.ref_name }}.tar.gz dist
+          tar -czvf dap-"$TAG_NAME".tar.gz -C dist .
       - name: Create draft release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          ./create-draft-release.sh ${{ github.ref_name }} dap-${{ github.ref_name }}.tar.gz
+          ./create-draft-release.sh "$TAG_NAME" dap-"$TAG_NAME".tar.gz
