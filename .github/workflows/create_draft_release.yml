@@ -21,7 +21,7 @@ jobs:
               "tag_name": "${{ github.ref_name }}",
               "name": "DAP ${{ github.ref_name }}",
               "draft": true,
-              "body": "# What\'s new in DAP"
+              "body": "# What is new in DAP"
             }'
       - name: Code Checkout
         uses: actions/checkout@v4
