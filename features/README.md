@@ -24,11 +24,19 @@ Then run the tests against the test site:
 npm run cucumber
 ```
 
-## Running the tests with a debugger attached
+### Running the tests with a debugger attached
 
 ```bash
 npm run cucumber:debug
 ```
+
+### Running the tests and generating a nicely formatted test report
+
+```bash
+npm run cucumber:report
+```
+
+Test report should be available in `output/test-results.html`.
 
 ## Configuring with environment variables
 

@@ -3,7 +3,7 @@ on:
   pull_request:
 
 jobs:
-  lint:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Code Checkout
@@ -17,3 +17,8 @@ jobs:
         run: npm ci --timing
       - name: Lint javascript
         run: npm run lint
+      - name: Run tests
+        # aa-exec applies Ubuntu's AppArmor profile for stable Chrome binaries to the Chrome for Testing binary downloaded by Puppeteer
+        # Without it, Puppeteer fails with error "No usable sandbox!"
+        # See https://pptr.dev/troubleshooting#issues-with-apparmor-on-ubuntu
+        run: npm run test-site-dev & sleep 20; aa-exec --profile=chrome npm run cucumber
