@@ -7,6 +7,7 @@
   "scripts": {
     "clean": "rm ./Universal-Federated-Analytics-Min.js",
     "lint": "eslint Universal-Federated-Analytics.js",
+    "minify": "terser Universal-Federated-Analytics.js --output Universal-Federated-Analytics-Min.js --config-file terser.config.json",
     "cucumber": "cucumber-js",
     "cucumber:debug": "VERBOSE=true node --inspect-brk node_modules/@cucumber/cucumber/bin/cucumber-js",
     "cucumber:report": "cucumber-js --format \"html\":\"output/test-results.html\"",
@@ -29,7 +30,8 @@
     "eslint": "^9.8.0",
     "eslint-plugin-compat": "^6.0.0",
     "eslint-plugin-jsdoc": "^50.2.2",
-    "puppeteer": "^23.3.0"
+    "puppeteer": "^23.3.0",
+    "terser": "^5.46.1"
   },
   "dependencies": {
     "web-vitals": "^4.2.4"
