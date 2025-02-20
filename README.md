@@ -14,7 +14,7 @@ The latest version 8.6 of DAP GA code contains GA4 tracking only. DAP UA data co
 
 * [`Universal-Federated-Analytics.js`](Universal-Federated-Analytics.js) (full)
 * [`Universal-Federated-Analytics-Min.js`](Universal-Federated-Analytics-Min.js) (minified)
-* [`Federated.js.map`](Federated.js.map) (source map)
+* [`Universal-Federated-Analytics-Min.js.map`](Universal-Federated-Analytics-Min.js.map) (source map)
 
 ### DAP Code Implementation
 
@@ -127,6 +127,14 @@ This repo uses Eslint for code static analysis. Run the linter with:
 
 ```bash
 npm run lint
+```
+
+#### Minification
+
+This repo uses Terser for minification. After making changes to Universal-Federated-Analytics.js, regenerate the minified file by running:
+
+```bash
+npm run minify
 ```
 
 #### Run integration tests
