@@ -3,7 +3,7 @@ on:
   pull_request:
 
 jobs:
-  lint:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Code Checkout
@@ -17,3 +17,8 @@ jobs:
         run: npm ci --timing
       - name: Lint javascript
         run: npm run lint
+      - name: Verify minification uses script
+        run: |
+          npm run minify
+          git diff --exit-code Universal-Federated-Analytics-Min.js Universal-Federated-Analytics-Min.js.map
+          
