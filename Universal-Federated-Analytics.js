@@ -1,7 +1,7 @@
 /***********************************************************************************************************
 U.S. General Services Administration (GSA).
 Digital Analytics Program Government Wide Site Usage Measurement and Tracking. 
-12/02/2025 Version: 8.6
+02/07/2025 Version: 8.7
 ***********************************************************************************************************/
 
 /**
@@ -27,13 +27,14 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
 (function () {
   var isSearch = false,
     _allowedQuerystrings = [],
+    _additional_qsp = [],
     oCONFIG = {
       GWT_GA4ID: ["G-CSLL4ZEK4L"],
       FORCE_SSL: !0,
       ANONYMIZE_IP: !0,
       AGENCY: "",
       SUB_AGENCY: "",
-      VERSION: "20250212 v8.6 - GA4",
+      VERSION: "20250702 v8.7 - GA4",
       SITE_TOPIC: "",
       SITE_PLATFORM: "",
       SCRIPT_SOURCE: "",
@@ -191,7 +192,7 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
         } catch (n) { }
       else
         try {
-          var e_n = ((/^(((email|telephone|image|cta|navigation|faq|accordion|social)_)?click|file_download|view_search_results|video_(start|pause|progress|complete|play)|official_USA_site_banner_click|form_(start|submit|progress)|content_view|social_share|error|sort|filter|was_this_helpful_submit)$/gi.test(a)) ? a : 'dap_event');
+          var e_n = ((/^(((email|telephone|image|cta|navigation|faq|accordion|social)_)?click|file_download|view_search_results|video_(start|pause|progress|complete|play)|official_USA_site_banner_click|form_(start|submit|progress)|content_view|share|error|sort|filter|was_this_helpful_submit)$/gi.test(a)) ? a : 'dap_event');
           if (Object.keys(b).length !== 0) { _sendEvent(e_n, b); }
           else { _sendEvent(e_n); }
         } catch (n) { }
@@ -497,6 +498,10 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
         case "sdor":
           oCONFIG.SUBDOMAIN_BASED = _cleanBooleanParam(_value);
           break;
+        case "qsp":
+          for (var c = _value.split(","), d = 0; d < c.length; d++)
+            _additional_qsp.push(c[d].toLowerCase());
+          break;
         default:
           break;
       }
@@ -749,8 +754,29 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
                 _sendEvent("file_download", l);
               }
               else if ("l" === i && !_isDownload(a)) {
-                l = { link_id: a.id, link_url: a.href.replace(/[#?&].*/, ""), link_domain: a.hostname.replace(/^www\./i, ""), link_text: a.text.replace(/(?:[\r\n]+)+/g, "").trim(), link_classes: a.className, outbound: true, interaction_type: t };
-                _sendEvent("click", l);
+                l = { link_id: a.id, link_classes: a.className, outbound: true, interaction_type: t };
+                if(/^https?:\/\/(www\.)?addtoany\.com/i.test(a.href) && /^(a2a_(button|i))/i.test(a.className))
+                {
+                  l.method = a.href.match(/\/add_to\/([^?]*)/i)[1];
+                  l.content_name = a.href.match(/linkname=(.*?)(([&#?])link(url|note|media)=|$)/i)[1];
+                  l.shared_via = "add to any: "+l.method;
+                  
+                  if(a.href.match(/linkmedia=(.*?)(([&#?])link(url|name|note)=|$)/i)){
+                    l.content_type = "media";
+                    l.content_url = a.href.match(/linkmedia=(.*?)(([&#?])link(url|name|note)=|$)/i)[1];
+                  }
+                  else{
+                    l.content_type = "content";
+                    l.content_url = a.href.match(/linkurl=(.*?)(([&#?])link(name|note|media)=|$)/i)[1];
+                  }
+
+                  _sendEvent("share", l);ß
+
+                }
+                else{
+                  l.link_domain = a.hostname.replace(/^www\./i, ""), l.link_url = a.href.replace(/[#?&].*/, ""), l.link_text= a.text.replace(/(?:[\r\n]+)+/g, "").trim();
+                  _sendEvent("click", l);
+                }
               }
               else if ("m" === i) {
                 c = a.href.match(/[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/);
@@ -1421,7 +1447,7 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
       "dod": ["p"],
       "opm": ["l", "soc", "jt", "j", "rmi", "smin", "hp", "g", "d", "a"]
     };
-    _allowedQuerystrings = queries.default.concat(queries[oCONFIG.AGENCY.toLowerCase()]).concat(oCONFIG.SEARCH_PARAMS.toLowerCase().split("|"));
+    _allowedQuerystrings = queries.default.concat(queries[oCONFIG.AGENCY.toLowerCase()]).concat(oCONFIG.SEARCH_PARAMS.toLowerCase().split("|")).concat(_additional_qsp);
   }
 
   /**
