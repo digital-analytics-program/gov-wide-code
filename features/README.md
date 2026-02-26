@@ -15,7 +15,7 @@ the test HTML page instead of the local version as described below.
 Start up the test site at http://localhost:8080/:
 
 ```bash
-npm run test-site
+npm run test-site-dev
 ```
 
 Then run the tests against the test site:
