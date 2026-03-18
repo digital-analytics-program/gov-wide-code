@@ -20,3 +20,12 @@ Feature: A site can load the DAP code with varying levels of customization
     | agency | GSA |
     | site_topic | analytics |
     | site_platform | cloud.gov |
+
+  Scenario: Load a DAP-enabled page with only agency uses the default custom dimensions
+    Given DAP is configured for agency "GSA"
+    When I load the test site
+    Then DAP will set custom dimensions
+      | agency | GSA |
+      | subagency | LOCALHOST |
+      | site_topic | unspecified:localhost |
+      | site_platform | unspecified:localhost |

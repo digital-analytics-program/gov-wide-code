@@ -2,7 +2,18 @@ import { Then } from "@cucumber/cucumber";
 import * as chai from 'chai'
 const expect = chai.expect;
 
+async function getDataLayerEvent(page, eventName) {
+  return page.evaluate((eventName) => {
+    return [...window.dataLayer]
+      .reverse()
+      .find(item => item[0] === 'event' && item[1] === eventName);
+  }, eventName);
+}
+
 Then("DAP will set custom dimensions", async function (table) {
+  await this.page.waitForFunction(() => {
+    return Array.isArray(window.dataLayer) && window.dataLayer.some(item => item[0] === 'config');
+  });
   const configCommand = await this.page.evaluate(() => {
     return window.dataLayer.find(item => item[0] === 'config');
   });
@@ -12,9 +23,7 @@ Then("DAP will set custom dimensions", async function (table) {
 });
 
 Then("the file download is reported to DAP with interaction type {string}", async function (interactionType) {
-  const event = await this.page.evaluate(() => {
-    return window.dataLayer.find(item => item[0] === 'event' && item[1] === 'file_download');
-  });
+  const event = await getDataLayerEvent(this.page, 'file_download');
   expect(event).to.deep.equal(
     {
       '0': 'event',
@@ -35,8 +44,22 @@ Then("the file download is reported to DAP with interaction type {string}", asyn
 });
 
 Then("the file download is not reported to DAP", async function () {
-  const event = await this.page.evaluate(() => {
-    return window.dataLayer.find(item => item[0] === 'event' && item[1] === 'file_download');
-  });
+  const event = await getDataLayerEvent(this.page, 'file_download');
+  expect(event).to.be.undefined;
+});
+
+Then("the dataLayer contains the event {string}", async function (eventName, table) {
+  await this.page.waitForFunction((eventName) => {
+    return Array.isArray(window.dataLayer) && window.dataLayer.some(item => item[0] === 'event' && item[1] === eventName);
+  }, {}, eventName);
+  const event = await getDataLayerEvent(this.page, eventName);
+  expect(event).to.exist;
+  expect(event["0"]).to.equal("event");
+  expect(event["1"]).to.equal(eventName);
+  expect(event["2"]).to.include(table.rowsHash());
+});
+
+Then("the dataLayer does not contain the event {string}", async function (eventName) {
+  const event = await getDataLayerEvent(this.page, eventName);
   expect(event).to.be.undefined;
 });

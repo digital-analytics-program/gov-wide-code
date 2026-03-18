@@ -27,5 +27,11 @@ Given("DAP is configured with autotracking disabled", function () {
 });
 
 When("I load the test site", async function () {
-  await this.page.goto(`http://localhost:8080?${this.dapConfig.toQueryParams()}`);
+  await this.page.goto(`http://localhost:8080?${this.dapConfig.toQueryParams()}`, {
+    waitUntil: 'domcontentloaded',
+    timeout: 15000
+  });
+  await this.page.waitForFunction(() => Array.isArray(window.dataLayer), {
+    timeout: 15000
+  });
 });
