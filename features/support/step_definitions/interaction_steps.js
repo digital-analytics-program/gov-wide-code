@@ -1,5 +1,9 @@
 import { When } from "@cucumber/cucumber";
 
+When("I execute script {string}", async function (script) {
+  await this.page.evaluate((s) => eval(s), script);
+});
+
 When("I click on a file to download it", async function () {
   await this.page.locator('#internalDownload').click();
 });
