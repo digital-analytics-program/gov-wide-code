@@ -20,3 +20,13 @@ Feature: A site can load the DAP code with varying levels of customization
     | agency | GSA |
     | site_topic | analytics |
     | site_platform | cloud.gov |
+
+  Scenario: Load a DAP-enabled page and check the built-in customer dimensions
+    Given DAP is configured for agency "GSA"
+    When I load the test site
+    Then DAP will set custom dimensions
+      | script_source          | http://localhost:8080/universal-federated-analytics-min.js |
+      | version                | 20250702 v8.7 - ga4                                        |
+      | protocol               | http:                                                      |
+      | hostname_dimension     | localhost                                                  |
+      | using_parallel_tracker | no                                                         |
