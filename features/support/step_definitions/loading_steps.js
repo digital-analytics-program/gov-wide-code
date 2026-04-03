@@ -18,6 +18,14 @@ Given("DAP is configured with site platform {string}", function (siteplatform) {
   this.dapConfig.siteplatform = siteplatform;
 });
 
+Given("DAP is configured with parallel GA4 property {string}", function (parallel_id) {
+  this.dapConfig.pga4 = parallel_id;
+});
+
+Given("DAP is configured to set custom dimensions on the parallel tracker", function () {
+  this.dapConfig.parallelcd = true;
+});
+
 Given("DAP is configured with autotracking enabled", function () {
   this.dapConfig.autotracker = true;
 });

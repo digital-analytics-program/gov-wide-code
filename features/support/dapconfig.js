@@ -5,6 +5,8 @@ class DAPConfig {
   siteplatform;
   autotracker;
   cto;
+  pga4;
+  parallelcd;
 
   constructor(agency) {
     this.agency = agency;
