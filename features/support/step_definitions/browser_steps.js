@@ -57,6 +57,21 @@ Then("there is a GA4 request", function () {
   expect(ga4Request).to.exist;
 });
 
+Then("there is a GA4 request reporting event {string} with parameter {string} containing {string}", function (eventName, paramName, value) {
+  const ga4Request = this.requests.find(request => {
+    try {
+      const url = new URL(request.url);
+      return url.host === "www.google-analytics.com"
+        && url.pathname === "/g/collect"
+        && url.searchParams.has("en", eventName)
+        && url.searchParams.has(paramName) && url.searchParams.get(paramName).includes(value);
+    } catch (e) {
+      return false;
+    }
+  });
+  expect(ga4Request).to.exist;
+});
+
 Then("there are no unexpected requests", function () {
   const requestURLs = this.requests.map((request) => {
     return (new URL(request.url)).host;

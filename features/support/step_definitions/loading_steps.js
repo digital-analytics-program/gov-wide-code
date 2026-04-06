@@ -26,6 +26,11 @@ Given("DAP is configured with autotracking disabled", function () {
   this.dapConfig.autotracker = false;
 });
 
+Given("the page URL has query parameter {string} set to {string}", function (key, value) {
+  this.pageParams = this.pageParams || {};
+  this.pageParams[key] = value;
+});
+
 When("I load the test site", async function () {
-  await this.page.goto(`http://localhost:8080?${this.dapConfig.toQueryParams()}`);
+  await this.page.goto(`http://localhost:8080?${this.dapConfig.toQueryParams()}&${new URLSearchParams(this.pageParams).toString()}`);
 });

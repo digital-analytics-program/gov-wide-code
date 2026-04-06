@@ -2,12 +2,17 @@ import { Then } from "@cucumber/cucumber";
 import * as chai from 'chai'
 const expect = chai.expect;
 
-Then("DAP will set custom dimensions", async function (table) {
+Then("the config call for the DAP property has {string} containing {string}", async function (key, substring) {
   const configCommand = await this.page.evaluate(() => {
-    return window.dataLayer.find(item => item[0] === 'config');
+    return window.dataLayer.find(item => item[0] === 'config' && item[1] === "G-9TNNMGP8WJ");
   });
-  expect(configCommand["0"]).to.equal("config");
-  expect(configCommand["1"]).to.equal("G-9TNNMGP8WJ");
+  expect(configCommand["2"][key]).to.include(substring);
+});
+
+Then("DAP will set custom dimensions for the DAP property", async function (table) {
+  const configCommand = await this.page.evaluate(() => {
+    return window.dataLayer.find(item => item[0] === 'config' && item[1] === "G-9TNNMGP8WJ");
+  });
   expect(configCommand["2"]).to.include(table.rowsHash());
 });
 
@@ -39,4 +44,12 @@ Then("the file download is not reported to DAP", async function () {
     return window.dataLayer.find(item => item[0] === 'event' && item[1] === 'file_download');
   });
   expect(event).to.be.undefined;
+});
+
+Then("a {string} event is sent to DAP with parameters", async function (eventName, table) {
+  const event = await this.page.evaluate((name) => {
+    return window.dataLayer.find(item => item[0] === 'event' && item[1] === name);
+  }, eventName);
+  expect(event).to.exist;
+  expect(event["2"]).to.include(table.rowsHash());
 });
