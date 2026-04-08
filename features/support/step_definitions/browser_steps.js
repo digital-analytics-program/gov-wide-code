@@ -3,6 +3,9 @@ import puppeteer from 'puppeteer';
 import * as chai from 'chai'
 const expect = chai.expect;
 
+chai.config.showDiff = true;
+chai.config.truncateThreshold = 0;
+
 function delay(milliseconds) {
   return new Promise((resolve) => {
     setTimeout(resolve, milliseconds);
@@ -24,6 +27,23 @@ Given("I load an empty browser", async function () {
       .on('requestfailed', request =>
         console.log(`${request.failure().errorText} ${request.url()}`))
   }
+});
+
+Given("I capture beacon requests before page load", async function () {
+  await this.page.evaluateOnNewDocument(() => {
+    window._beaconCapture = [];
+    const orig = navigator.sendBeacon.bind(navigator);
+    navigator.sendBeacon = function (url, data) {
+      window._beaconCapture.push({ url, data: data || '' });
+      return orig(url, data);
+    };
+  });
+});
+
+Then("a beacon is sent with post data containing {string}", async function (substring) {
+  const captures = await this.page.evaluate(() => window._beaconCapture);
+  const allData = captures.map(b => decodeURIComponent(b.data || '')).join('\n');
+  expect(allData).to.include(substring);
 });
 
 Given("I set the browser to intercept outbound requests", async function () {
@@ -57,19 +77,13 @@ Then("there is a GA4 request", function () {
   expect(ga4Request).to.exist;
 });
 
-Then("there is a GA4 request reporting event {string} with parameter {string} containing {string}", function (eventName, paramName, value) {
-  const ga4Request = this.requests.find(request => {
-    try {
-      const url = new URL(request.url);
-      return url.host === "www.google-analytics.com"
-        && url.pathname === "/g/collect"
-        && url.searchParams.has("en", eventName)
-        && url.searchParams.has(paramName) && url.searchParams.get(paramName).includes(value);
-    } catch (e) {
-      return false;
-    }
-  });
-  expect(ga4Request).to.exist;
+Then("there is a GA4 request with parameters", function (table) {
+  const expectedParams = table.rowsHash();
+  const ga4RequestParams = this.requests
+    .filter(request => request.url.startsWith("https://www.google-analytics.com/g/collect"))
+    .map(request => Object.fromEntries(new URL(request.url).searchParams));
+
+  expect(ga4RequestParams).to.containSubset([expectedParams]);
 });
 
 Then("there are no unexpected requests", function () {

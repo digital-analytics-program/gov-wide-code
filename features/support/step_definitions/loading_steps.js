@@ -18,6 +18,26 @@ Given("DAP is configured with site platform {string}", function (siteplatform) {
   this.dapConfig.siteplatform = siteplatform;
 });
 
+Given("DAP is configured with parallel GA4 property {string}", function (parallel_id) {
+  this.dapConfig.pga4 = parallel_id;
+});
+
+Given("DAP is configured to set custom dimensions on the parallel tracker", function () {
+  this.dapConfig.parallelcd = true;
+});
+
+Given("DAP is configured with cookie timeout of {int} months", function (months) {
+  this.dapConfig.cto = months;
+});
+
+Given("DAP is configured with custom search parameter {string}", function (param) {
+  this.dapConfig.sp = param;
+});
+
+Given("DAP is configured with YouTube tracking enabled", function () {
+  this.dapConfig.yt = true;
+});
+
 Given("DAP is configured with autotracking enabled", function () {
   this.dapConfig.autotracker = true;
 });
@@ -33,4 +53,10 @@ Given("the page URL has query parameter {string} set to {string}", function (key
 
 When("I load the test site", async function () {
   await this.page.goto(`http://localhost:8080?${this.dapConfig.toQueryParams()}&${new URLSearchParams(this.pageParams).toString()}`);
+});
+
+When("I load the test page {string}", async function (path) {
+  const params = new URLSearchParams(this.pageParams).toString();
+  const url = `http://localhost:8080/${path}?${this.dapConfig.toQueryParams()}${params ? '&' + params : ''}`;
+  await this.page.goto(url);
 });

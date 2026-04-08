@@ -63,4 +63,23 @@ Feature: DAP redacts PII
     And I set the browser to intercept outbound requests
     When I load the test site
     And I wait 5 seconds
-    Then there is a GA4 request reporting event "page_view" with parameter "dl" containing "[REDACTED_EMAIL]"
+    Then there is a GA4 request with parameters
+      | en | page_view        |
+      | dl | http://localhost:8080/?query=[REDACTED_EMAIL] |
+
+  Scenario: PII redaction is applied to parallel GA4 property
+    Given DAP is configured for agency "HHS"
+    And DAP is configured with parallel GA4 property "G-111111"
+    And the page URL has query parameter "search" set to "user@example.com"
+    And I set the browser to intercept outbound requests
+    When I load the test site
+    And I wait 5 seconds
+    Then there is a GA4 request with parameters
+      | tid | G-111111 |
+      | en  | page_view |
+      | dl  | http://localhost:8080/?query=[REDACTED_EMAIL] |
+
+  Scenario: PII redaction is not applied to non-DAP properties
+    Given I capture beacon requests before page load
+    When I load the test page "agency-tracking.html"
+    And I send a GA4 test beacon to property "G-SITEOWN1" with post data "
