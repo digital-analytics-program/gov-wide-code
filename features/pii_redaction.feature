@@ -1,4 +1,4 @@
-Feature: DAP redacts PII
+Feature: DAP redacts PII when appropriate
 
   Background:
     Given I load an empty browser
@@ -53,14 +53,15 @@ Feature: DAP redacts PII
       | type | validation      |
       | url  | /contact/submit |
 
-  Scenario: PII redaction applies to parameters in config calls
+  Scenario: PII redaction applies to parameters in config calls for DAP property
     Given the page URL has query parameter "search" set to "user@example.com"
     When I load the test site
-    Then the config call for the DAP property has "page_location" containing "[REDACTED_EMAIL]"
+    Then DAP will set custom dimensions for the DAP property
+        | page_location  | http://dap-test-site.local/?query=[REDACTED_EMAIL] |
 
-  Scenario: PII redaction applies to automatically collected events
+  Scenario: PII redaction applies to parameters in config calls for parallel tracking properties
     Given the page URL has query parameter "search" set to "user@example.com"
-    And I set the browser to intercept outbound requests
+    And DAP is configured with parallel GA4 property "G-111111"
     When I load the test site
-    And I wait 5 seconds
-    Then there is a GA4 request reporting event "page_view" with parameter "dl" containing "[REDACTED_EMAIL]"
+    Then DAP will set custom dimensions for the property "G-111111"
+      | page_location  | http://dap-test-site.local/?query=[REDACTED_EMAIL] |

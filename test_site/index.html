@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="icon" href="data:,">
 
   <title>DAP test site</title>
   <!-- This is populated by NGINX SSI -->
@@ -25,10 +26,10 @@
 					<p class="usa-banner__header-text">
 						An official website of the United States government
 					</p>
-					<p class="usa-banner__header-action">Here’s how you know</p>
+					<p class="usa-banner__header-action">Here's how you know</p>
 				</div>
 				<button type="button" class="usa-accordion__button usa-banner__button" aria-expanded="false" aria-controls="gov-banner-default-default" id="banner-button">
-					<span class="usa-banner__button-text">Here’s how you know</span>
+					<span class="usa-banner__button-text">Here's how you know</span>
 				</button>
 			</div>
 		</div>
@@ -136,6 +137,7 @@
 	<a href="/policy/about/">/policy/about/</a><br />
 	<a href="/poicy/about">/poicy/about</a><br />
 	<a href="/policy/about">/policy/about</a><br />
+    <a href="/404.html">/404.html</a><br />
 
 	<h4>(Same Domain & SubDomain) - Absolute Path</h4>
 	<a href="https://www.dap-test-site.app.cloud.gov/about.php">https://www.dap-test-site.app.cloud.gov/about.php</a><br />
@@ -159,7 +161,7 @@
 <section>
 	<h2>External Links</h2>
 	<h4>(Different Domain) - Absolute Path </h4><p>
-	<a href="http://www.gsa.gov/travelpolicy">http://www.gsa.gov/travelpolicy</a><br />
+	<a href="http://www.gsa.gov/travelpolicy" target="_blank" rel="noopener noreferrer">http://www.gsa.gov/travelpolicy</a><br />
 	<a href="http://www.gsa.gov/travelpolicy/home.aspx?id=12#top">http://www.gsa.gov/travelpolicy/home.aspx?id=12#top</a><br />
 	<a href="http://www.domain.com/about.php">http://www.domain.com/about.php</a><br />
 	<a href="http://www.domain.com/about/">http://www.domain.com/about/ S1</a><br />
