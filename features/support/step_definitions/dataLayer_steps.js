@@ -2,54 +2,92 @@ import { Then } from "@cucumber/cucumber";
 import * as chai from 'chai'
 const expect = chai.expect;
 
-Then("the config call for the DAP property has {string} containing {string}", async function (key, substring) {
-  const configCommand = await this.page.evaluate(() => {
-    return window.dataLayer.find(item => item[0] === 'config' && item[1] === "G-9TNNMGP8WJ");
-  });
-  expect(configCommand["2"][key]).to.include(substring);
-});
+const TEST_PROPERTY_ID = "G-9TNNMGP8WJ";
+
+/**
+ * Converts the string values from the Cucumber data table to match the types of the actual values in the DAP config/event objects.
+ */
+function convertDataTableTypesToMatchActual(table, actual) {
+  return Object.fromEntries(
+    Object.entries(table.rowsHash()).map(([k, v]) => {
+      const actualValue = actual[k];
+      if (typeof actualValue === 'number') return [k, Number(v)];
+      if (typeof actualValue === 'boolean') return [k, v === 'true'];
+      return [k, v];
+    })
+  );
+}
 
 Then("DAP will set custom dimensions for the DAP property", async function (table) {
-  const configCommand = await this.page.evaluate(() => {
-    return window.dataLayer.find(item => item[0] === 'config' && item[1] === "G-9TNNMGP8WJ");
-  });
-  expect(configCommand["2"]).to.include(table.rowsHash());
+  const configCommand = await this.page.evaluate((propertyId) => {
+    return window.mockDataLayer.find(item => item[0] === 'config' && item[1] === propertyId);
+  }, TEST_PROPERTY_ID);
+  expect(configCommand).to.exist;
+  const expected = convertDataTableTypesToMatchActual(table, configCommand["2"]);
+  expect(configCommand["2"]).to.containSubset(expected);
 });
 
-Then("the file download is reported to DAP with interaction type {string}", async function (interactionType) {
-  const event = await this.page.evaluate(() => {
-    return window.dataLayer.find(item => item[0] === 'event' && item[1] === 'file_download');
-  });
-  expect(event).to.deep.equal(
-    {
-      '0': 'event',
-      '1': 'file_download',
-      '2': {
-        "interaction_type": interactionType,
-        "send_to": 'GSA_GA4_ENOR0',
-        "event_name_dimension": 'file_download',
-        "file_extension": "zip",
-        "file_name": "/about.zip",
-        "link_domain": "localhost",
-        "link_id": "internalDownload",
-        "link_text": "/about.zip",
-        "link_url": "http://localhost:8080/about.zip",
-      }
-    }
-  );
+Then("DAP will set the {string} dimension to a string matching {string}", async function (key, regex) {
+  const configCommand = await this.page.evaluate((propertyId) => {
+    return window.mockDataLayer.find(item => item[0] === 'config' && item[1] === propertyId);
+  }, TEST_PROPERTY_ID);
+  expect(configCommand["2"][key]).to.match(new RegExp(regex));
 });
 
-Then("the file download is not reported to DAP", async function () {
-  const event = await this.page.evaluate(() => {
-    return window.dataLayer.find(item => item[0] === 'event' && item[1] === 'file_download');
-  });
-  expect(event).to.be.undefined;
+Then("DAP will set custom dimensions for the property {string}", async function (propertyId, table) {
+  const configCommand = await this.page.evaluate((propertyId) => {
+    return window.mockDataLayer.find(item => item[0] === 'config' && item[1] === propertyId);
+  }, propertyId);
+  expect(configCommand).to.exist;
+  const expected = convertDataTableTypesToMatchActual(table, configCommand["2"]);
+  expect(configCommand["2"]).to.containSubset(expected);
+});
+
+Then("DAP will configure property {string} without custom dimensions", async function (propertyId) {
+  const configCommand = await this.page.evaluate((propertyId) => {
+    return window.mockDataLayer.find(item => item[0] === 'config' && item[1] === propertyId);
+  }, propertyId);
+  expect(configCommand["2"]).to.not.include.keys("agency", "subagency", "script_source", "version", "protocol", "hostname_dimension", "using_parallel_tracker");
+});
+
+Then("the {string} property belongs to the {string} group", async function (propertyId, groupName) {
+  const configEvents = await this.page.evaluate((propertyId) => {
+    return window.mockDataLayer.filter(item => item[0] === 'config' && item[1] === propertyId);
+  }, propertyId);
+  expect(configEvents).to.not.be.empty;
+  const groups = configEvents.flatMap(config => config[2]?.groups ?? []);
+  expect(groups).to.include(groupName);
+});
+
+Then("the {string} property does not belong to the {string} group", async function (property, group) {
+  const configEvents = await this.page.evaluate((id) => {
+    return window.mockDataLayer.filter(item => item[0] === 'config' && item[1] === id);
+  }, property);
+  expect(configEvents).to.not.be.empty;
+  const groups = configEvents.flatMap(config => config[2]?.groups ?? []);
+  expect(groups).to.not.include(group);
 });
 
 Then("a {string} event is sent to DAP with parameters", async function (eventName, table) {
-  const event = await this.page.evaluate((name) => {
-    return window.dataLayer.find(item => item[0] === 'event' && item[1] === name);
+  const event = await this.page.evaluate((eventName) => {
+    return window.mockDataLayer.find(item => item[0] === 'event' && item[1] === eventName);
   }, eventName);
   expect(event).to.exist;
-  expect(event["2"]).to.include(table.rowsHash());
+  const expected = convertDataTableTypesToMatchActual(table, event[2]);
+  expect(event["2"]).to.containSubset(expected);
 });
+
+Then("no {string} event is sent to DAP", async function (eventName) {
+  const event = await this.page.evaluate((eventName) => {
+    return window.mockDataLayer.find(item => item[0] === 'event' && item[1] === eventName);
+  }, eventName);
+  expect(event).to.be.undefined;
+});
+
+Then("there are {int} {string} events sent to DAP", async function (count, eventName) {
+  const events = await this.page.evaluate((name) => {
+    return window.mockDataLayer.filter(item => item[0] === 'event' && item[1] === name);
+  }, eventName);
+  expect(events).to.have.lengthOf(count);
+});
+
