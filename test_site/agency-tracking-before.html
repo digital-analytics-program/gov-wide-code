@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+  <title>Agency tracking test page</title>
+
+  <!-- Site's own GA4 tag (non-DAP), loaded before the federated code -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SITEOWN1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SITEOWN1');
+  </script>
+
+  <!-- This is populated by NGINX SSI -->
+  <!--#echo var="header_script_tag" encoding="none"-->
+</head>
+
+<body>
+  <p>Agency tracking test page</p>
+</body>
+</html>
