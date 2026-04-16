@@ -94,7 +94,7 @@ This means that, barring the compromise of GitHub's systems or the CDN's systems
 
 The Digital Analytics Program Javascript code must be applied to public-facing websites. Public-facing websites are defined as websites whose primary intended users are not Federal government employees or contractors.
 
-#### Authenticated or "Priviledged" Pages
+#### Authenticated or "Privileged" Pages
 
 Agencies are expected to add DAP code to sign-in pages that serve as the entry point to authenticated content on public-facing sites. Implementation of the DAP code beyond this entry point on authenticated pages is permitted on a case-by-case basis only, with DAP's approval and testing as a prerequisite.
 
