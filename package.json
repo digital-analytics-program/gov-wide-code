@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/digital-analytics-program/gov-wide-code#readme",
   "devDependencies": {
-    "@cucumber/cucumber": "^11.3.0",
+    "@cucumber/cucumber": "^12.8.1",
     "chai": "^6.2.2",
     "eslint": "^9.8.0",
     "eslint-plugin-compat": "^6.0.0",
