@@ -74,21 +74,21 @@ Together, HTTPS and HSTS offer a strong, necessary level of transport security a
 
 #### Content Security Policy
 
-A Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks to your website, including Cross-Site Scripting (XSS) and data injection attacks. If your site has a CSP, you will need to relax it slightly to allow the DAP code to load and function properly.
+A [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP) (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks to your website, including Cross-Site Scripting (XSS) and data injection attacks. If your site has a CSP, you will need to relax it slightly to allow the DAP code to load and function properly.
 
 If you are loading the centrally-hosted DAP script with the default configuration, you will need to add the following directives to your CSP:
 
 |Directive|Content| Justification                                                                                                        |
 |-|-|----------------------------------------------------------------------------------------------------------------------|
-|`script-src`|`https://dap.digitalgov.gov https://www.googletagmanager.com`| The DAP script is served from `dap.digitalgov.gov` and it loads the GA4 tag library from `www.googletagmanager.com`. |
-|`connect-src`|`https://www.google-analytics.com`| The GA4 tag connects to `www.google-analytics.com` to send analytics data from your site to Google Analytics.        |
+|<span style="white-space:nowrap">script-src|https://dap.digitalgov.gov https://www.googletagmanager.com| The DAP script is served from `dap.digitalgov.gov` and it loads the GA4 tag library from `www.googletagmanager.com`. |
+|<span style="white-space:nowrap">connect-src|https://www.google-analytics.com| The GA4 tag connects to `www.google-analytics.com` to send analytics data from your site to Google Analytics.        |
 
 If you are self-hosting the DAP code, then you can leave off the `dap.digitalgov.gov` domain from the `script-src` directive. Note that the DAP code attempts to load an additional third-party script from our https://dap.digitalgov.gov server and
-it will fail to load if you don't include our server in your CSP. This additional, optional script is for tracking [Core Web Vitals](https://web.dev/articles/vitals#core_web_vitals) and DAP will work fine without it. 
+it will fail to load if you don't include our server in your CSP. This additional, optional script is for tracking [Core Web Vitals](https://web.dev/articles/vitals#core_web_vitals) and DAP will work without it. 
 
 If you have configured YouTube tracking (with the `yt` query parameter set to `true`), you will also need to add `https://www.youtube.com` to your `script-src` directive, because DAP uses the [YouTube Iframe API](https://www.youtube.com/iframe_api) to track interaction with YouTube videos.
 
-Note that Google [documentation](https://developers.google.com/tag-platform/security/guides/csp#google_analytics_4_google_analytics) claims that additional directives are needed for the GA4 tag, but the DAP team has not found that to be the case. This is the CSP that we use on https://analytics.usa.gov/, as an example. 
+Note that Google [documentation](https://developers.google.com/tag-platform/security/guides/csp#google_analytics_4_google_analytics) claims that additional directives are needed for the GA4 tag, but the DAP team has not found that to be the case. What we've described here is what we use on https://analytics.usa.gov/, as an example. 
 If your team encounters any situation where the additional directives seem to be necessary, we'd love to hear about it at [dap@gsa.gov](mailto:dap@gsa.gov).
 
 #### Data integrity
