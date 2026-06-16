@@ -276,6 +276,13 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
       (function () {
         var WVscript = document.createElement('script');
         WVscript.src = 'https://dap.digitalgov.gov/web-vitals/dist/web-vitals.attribution.iife.js';
+        // Inherit the crossorigin setting from the DAP script tag so the
+        // dynamically injected web-vitals script also loads on pages that set
+        // Cross-Origin-Embedder-Policy: require-corp. See #167.
+        var dapTag = document.getElementById('_fed_an_ua_tag');
+        if (dapTag && dapTag.hasAttribute('crossorigin')) {
+          WVscript.setAttribute('crossorigin', dapTag.getAttribute('crossorigin'));
+        }
         /**
         * Adds listeners for web vitals events
         */
