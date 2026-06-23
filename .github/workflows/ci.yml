@@ -23,6 +23,9 @@ jobs:
         run: |
           npm run minify
           git diff --exit-code Universal-Federated-Analytics-Min.js Universal-Federated-Analytics-Min.js.map
+      - name: Install browser for Puppeteer
+        # Installs the matching version of Chrome required by your specific Puppeteer version
+        run: npx puppeteer browsers install chrome
       - name: Run tests
         # aa-exec applies Ubuntu's AppArmor profile for stable Chrome binaries to the Chrome for Testing binary downloaded by Puppeteer
         # Without it, Puppeteer fails with error "No usable sandbox!"
