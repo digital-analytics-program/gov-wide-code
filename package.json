@@ -30,7 +30,7 @@
     "eslint": "^9.8.0",
     "eslint-plugin-compat": "^6.0.0",
     "eslint-plugin-jsdoc": "^50.2.2",
-    "puppeteer": "^23.3.0",
+    "puppeteer": "^25.2.0",
     "terser": "^5.46.1"
   },
   "dependencies": {
