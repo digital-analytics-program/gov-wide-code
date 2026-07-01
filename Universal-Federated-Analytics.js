@@ -1,7 +1,7 @@
 /***********************************************************************************************************
 U.S. General Services Administration (GSA).
 Digital Analytics Program Government Wide Site Usage Measurement and Tracking. 
-02/07/2025 Version: 8.7
+07/01/2026 Version: 8.8
 ***********************************************************************************************************/
 
 /**
@@ -34,7 +34,7 @@ Digital Analytics Program Government Wide Site Usage Measurement and Tracking.
       ANONYMIZE_IP: !0,
       AGENCY: "",
       SUB_AGENCY: "",
-      VERSION: "20250702 v8.7 - GA4",
+      VERSION: "20260107 v8.8 - GA4",
       SITE_TOPIC: "",
       SITE_PLATFORM: "",
       SCRIPT_SOURCE: "",
